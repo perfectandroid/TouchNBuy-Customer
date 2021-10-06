@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="vertical"
+        android:background="@drawable/top_bg">
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="3">
+                <ImageView
+                    android:id="@+id/im"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="0.5"
+                    android:src="@drawable/navmenu" />
+                <TextView
+                    android:id="@+id/tv_header"
+                    android:layout_width="0dp"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:textColor="@color/white"
+                    android:text=""
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.6" />
+                <RelativeLayout
+                    android:id="@+id/rl_notification"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4">
+                    <ImageView
+                        android:id="@+id/im_notification"
+                        android:layout_width="40dp"
+                        android:layout_height="30dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/notifications" />
+
+                    <TextView
+                        android:id="@+id/tv_notification"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginBottom="4dp"
+                        android:gravity="center"
+                        android:text="0"
+                        android:background="@drawable/roundbg"
+                        android:textColor="@color/white"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/rly_olio_navigation_cart"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4">
+                    <ImageView
+                        android:id="@+id/imcart"
+                        android:layout_width="40dp"
+                        android:layout_height="30dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/shoppingcart" />
+                    <TextView
+                        android:id="@+id/tvcart"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginBottom="7dp"
+                        android:layout_marginLeft="25dp"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:background="@drawable/roundbg"
+                        android:textColor="@color/white"
+                        android:text="0"
+                        android:textSize="10dp" />
+                </RelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
+        <EditText
+            android:id="@+id/etSearch"
+            android:padding="5dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/searchbg"
+            android:drawableLeft="@drawable/ic_search"
+            android:drawablePadding="5dp"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search for Products."/>
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            android:layout_weight=".4"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_title_hd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryExtraDark"
+                android:textSize="20dp"
+                android:text="Scan or insert barcode on the item and please add it to your cart."
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="40dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginBottom="20dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="20dp"
+                android:padding="30dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/llinsert"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_margin="20dp"
+                    android:gravity="center"
+                    android:background="@drawable/ll_curved"
+                    >
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/barcodeinsert"
+                        />
+
+                    <Button
+                        android:id="@+id/btn_insertcode_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg"
+                        android:text="Insert Code"
+                        android:layout_weight="1"
+                        android:textColor="@color/white"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/llscan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_margin="20dp"
+                    android:gravity="center"
+                    android:background="@drawable/ll_curved"
+                    >
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/barcodescan"
+                        />
+                    <Button
+                        android:id="@+id/btn_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg"
+                        android:text="Scan Code"
+                        android:layout_weight="1"
+                        android:textColor="@color/white"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/tv_result"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,66 @@
+<resources>
+    <!--
+    <string name="app_name">Shop Away</string>
+-->
+    <!--
+    <string name="app_name">Familymart</string>
+-->
+    <string name="app_name">Pulikkottil Hypermarket</string>
+    <!--
+     -->
+    <!--     <string name="app_name">Touch n Buy</string>-->
+
+
+    <!--    <string name="app_name">JZT CART</string>-->
+
+    <!--    <string name="app_name">NeethiMed</string>-->
+
+
+    <string name="Termscondi">\t\tPLEASE READ THE TERMS AND CONDITIONS BEFORE ACCESSING THIS APP. WE OPERATE THIS APP FOR PROMOTING AND SELLING THE PRODUCTS AND SERVICES. BY USING THIS APP, YOU SIGNIFY YOUR ACCEPTANCE OF THESE CONDITIONS IN RETURN FOR WHICH WE WILL PROVIDE YOU WITH ACCESS. FROM TIME TO TIME WE MAY MODIFY THE CONDITIONS SO PLEASE CONTINUE TO REVIEW THE CONDITIONS OF USE WHENEVER ACCESSING OR USING THIS APP. IF AT ANY TIME YOU DO NOT WISH TO ACCEPT THESE CONDITIONS THEN YOU MAY NOT USE THIS APP.
+        \n\n\t\tWE MAY UPDATE THESE TERMS AND CONDITIONS FROM TIME TO TIME BY POSTING THE UPDATED TERMS AND CONDITIONS ON OUR APP IN PLACE OF THESE. THE CHANGES WILL APPLY TO THE USE OF THE APP AFTER WE HAVE GIVEN NOTICE. IF YOU DO NOT WISH TO ACCEPT THE NEW TERMS AND CONDITIONS, YOU SHOULD NOT CONTINUE TO ORDER FROM THE APP. IF YOU CONTINUE TO USE THE APP AFTER THE DATE ON WHICH THE CHANGE COMES INTO EFFECT, YOUR USE OF THE APP INDICATES YOUR AGREEMENT TO BE BOUND BY THE NEW TERMS AND CONDITIONS.
+    </string>
+    <string name="Aboutus">With a wide range of products and over 1000 brands in this, you will find everything you are looking for within a few taps of your finger. Our efficient e-commerce platform is where your costumers can shop from home. Right from fresh Fruits and Vegetables, Rice and Dals, Spices and Seasonings to Packaged products and all other needful commodities – we have it all. Choose from a wide range of options in every category, exclusively handpicked to help you find the best quality available at the lowest prices. Select a time slot for delivery and your order will be delivered right to your doorstep or come pick your items at the counter on the time mentioned. You can pay cash on delivery. We guarantee you an elevated shopping experience for your customers those who are staying home!</string>
+    <string name="Privacy"><b>Images shown are only for representative purposes only.</b>\n\n<b>In the case of Perishable Goods:</b>
+    \t\t\n Fruits, Vegetables &amp; Perishables ordered would be delivered only in the first attempt. In order to ensure that you get fresh fruits and vegetables, we will not be making reattempts to deliver your fruits and veggies in case you miss your slot. Rest of grocery items from Supermart would be delivered through reattempt in case you miss your slot.
+    \n\n<b>In the case of Lifestyle goods:</b>
+    \t\t\nManufacturing Defects can be Refunded or Replaced within 2 days of purchase. We are concerned about our customers. Hence, any size issues or comfort issues you can exchange your product with any other you wish to take home. The product should be unused, unwashed, unsoiled, without any stains and with non-tampered quality check seals/ warranty seals (wherever applicable).
+        \n\n<b>Price variation:</b>
+        \t\t\nPrice mentioned may vary time to time and if any variation in price after order placement will be intimated accordingly.
+       \n\n<b>Availability of stock: </b>
+         \t\t\nStock availability depends on actuals and we are putting our maximum to update the stock data up to date.
+    \n\n<b>In the case of electronic goods:</b>
+    \t\t\nFor Electrical and Electronics products, any damage/fault in items, customers may contact corresponding customer care.</string>
+    <string name="home">HOME</string>
+    <string name="rs">0.00 </string>
+    <!--
+    <string name="rs">\u20B9 0.00 </string>
+-->
+    <string name="BankKey">-500</string>
+    <string name="faq"><b>What is In-shop?</b>
+            \t\t\nIt is a feature which only can be used in the premise of the store. you can use this feature while shopping at the store. They can add the products as they add it to the cart. This enables you to avoid long queues and hassle-free billing and enhances the shopping experience at the store.
+            \n\n<b>What is counter delivery?</b>
+            \t\t\nIf you place an order, the app helps you in fixing a convenient time and pick your delivery on time. Also, this instantly notifies you at each stage of product delivery, this includes packing time, completed time etc.. this enables you to schedule your pick up accordingly.
+            \n\n<b>What is home delivery?</b>
+            \t\t\nAfter placing an order through this app home delivery becomes the easiest. You have the option to set the time for delivery which is optional. This will help you to prioritize your time. Also, This saves the delivery agent enough time and leaves you completely satisfied.
+            \n\n<b>How counter delivery works?</b>
+            \t\t\nAfter placing the custom order staffs can check your convenient time of pickup through the app. This enables the staff to ready your delivery on time.
+            \n\n<b>How will they find our store?</b>
+            \t\t\nYou will get the details of a nearby store using this app. You get to know the stores near you by searching it with different criteria, that is by entering an area or PIN code you are looking to shop.</string>
+    <string name="faq1"><b>How to cancel my order?</b>
+            \t\t\nVisit your selected item list and cancel the order as preferred in My Orders.
+            \n\n<b>How do I update my personal details?</b>
+            \t\t\nTo update your personal details, head to the Account Details page in My Account once logged in.
+            \n\n<b>What happens if I forget my password?</b>
+            \t\t\n If you forget your password, simply click the Forgotten your password? link found on the Login page. We will then email you a link to where you can update your password. Please note that this link expires after 24 hours.
+            \n\n<b>How does family mart ensure its products are safe?</b>
+            \t\t\nOur most important role is to provide our valued customers with safe, quality products. We work closely with our suppliers to have a tight product approval process whilst we work to keep you informed of product issues that may result in withdrawals and recalls.</string>
+    <string-array name="array_search">
+        <item>Store Name</item>
+        <item>Area Name</item>
+        <item>Pincode</item>
+    </string-array>
+
+    <string name="some_error_occurred">Some error occurred...</string>
+    <string name="transaction_cancelled_by_user">Transaction cancelled by user</string>
+    <string name="tetms_and_condition">Terms And Conditions</string>
+</resources>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+    //////////////yellow//////////////////
+
+
+<!--    <color name="colorPrimaryDark">#FFDC00</color>-->
+<!--    <color name="colorPrimary">#FFDC00</color>-->
+<!--    <color name="colorPrimaryExtraDark">#C8AD03</color>-->
+<!--    <color name="blue">#FBF9E2</color>-->
+<!--    <color name="textcolour">#404041</color>-->
+
+    //////////////blue//////////////////
+<!--    <color name="colorPrimary">#8FBEE0</color>-->
+<!--    <color name="colorPrimaryExtraDark">#516A7C</color>-->
+<!--    <color name="colorPrimaryDark">#779FBC</color>-->
+<!--    <color name="blue">#D8E9FA</color>-->
+<!--    <color name="textcolour">#FFFFFF</color>-->
+
+    //////////////pink//////////////////
+    <color name="colorPrimary">#F67988</color>
+    <color name="colorPrimaryExtraDark">#F44D86</color>
+    <color name="colorPrimaryDark">#F65789</color>
+    <color name="blue">#F7A586</color>
+    <color name="textcolour">#FFFFFF</color>
+
+
+
+    <color name="colorAccent">#FF337D</color>
+    <color name="orange">#E2A02A</color>
+    <color name="green">#2C9C2F</color>
+    <color name="grey">#C0BCBC</color>
+    <color name="greydark">#3C3A3A</color>
+    <color name="greylight">#E2DDDD</color>
+    <color name="greylight1">#F5E9E9</color>
+    <color name="black">#000000</color>
+    <color name="header_color">#fcfcfc</color>
+    <color name="colorhint">#da495d</color>
+    <color name="color_activity_transparent">#00000000</color>
+    <color name="red">#D81B1B</color>
+    <color name="Salmon">#FFADAD</color>
+    <color name="white">#FFFFFF</color>
+    <color name="whitelight">#97FFFFFF</color>
+    <color name="maroonalpha">#e17b7977</color>
+    <color name="bluelight">#CDE6FF</color>
+    <color name="violet">#350B81</color>
+    <color name="color_bar">#8FBEE0</color>
+
+    <color name="bottom_background">#8FBEE0</color>
+    <color name="bottom_icon_tint">#FF9800</color>
+    <color name="blue_color">#1B75BB</color>
+
+    <color name="gift_voucher">#8FBee0</color>
+    <color name="greylight2">#EAE8E8</color>
+    <color name="greylight3">#F6F4F4</color>
+
+    <color name="color_border">#A8AAAC</color>
+
+<!--    <color name="gradient_start">#FB578E</color>-->
+<!--    <color name="gradient_end">#FCAA8B</color>-->
+    <color name="textcolour1">#da495d</color>
+    <color name="presc_bgcolor">#D6E3F8</color>
+    <color name="reward_bgcolor">#E4E0F8</color>
+    <color name="greydark1">#635C5C</color>
+
+    <color name="color_pbstatus">#35D140</color>
+
+</resources>

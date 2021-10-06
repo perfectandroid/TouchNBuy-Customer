@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/greylight2">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:id="@+id/rly_lily_cart_view_head_layout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/greylight">
+
+                <LinearLayout
+
+                    android:id="@+id/rly_lily_checkout_view_head_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/img_lily_about_us_back_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:paddingLeft="10dp"
+                        android:src="@drawable/icstore" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/greydark" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/store_tv"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:ems="10"
+                            android:gravity="left|center"
+                            android:padding="10dp"
+                            android:textColor="@color/black" />
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+
+
+            <LinearLayout
+                android:id="@+id/lvTopCartCount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/greylight2"
+                android:padding="5dp">
+                <TextView
+                    android:id="@+id/tvCartCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textColor="@color/black"
+                    android:text="Total Items : "
+                    android:layout_weight="1"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tvclear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:layout_margin="5dp"
+                    android:gravity="right"
+                    android:visibility="visible"
+                    android:layout_weight="0.05"
+                    android:textColor="@color/red"
+                    android:text="Clear All"/>
+            </LinearLayout>
+
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="1dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_above="@+id/change_location_bottom_navigation"
+                    android:padding="1dp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_cartlist"
+                        android:layout_gravity="bottom"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:ignore="MissingConstraints" />
+                    <LinearLayout
+                        android:id="@+id/emptyCart"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp" />
+
+                        <ImageView
+                            android:id="@+id/imLogo"
+                            android:layout_width="match_parent"
+                            android:layout_height="300dp"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="30dp"
+                            android:layout_marginLeft="30dp"
+                            android:src="@drawable/emptycartgf"/>
+                        <TextView
+                            android:id="@+id/tv_cartisempty"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="10dp"
+                            android:gravity="center"
+                            android:text="Your cart is empty!"
+                            android:textColor="@color/black"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_additemstoitnow"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="40dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="30dp"
+                            android:gravity="center"
+                            android:text="Add items to it now."
+                            android:textColor="@color/black"
+                            android:textSize="13sp" />
+
+                        <Button
+                            android:id="@+id/btShopNow"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="100dp"
+                            android:padding="10dp"
+                            android:layout_marginTop="30dp"
+                            android:layout_marginRight="100dp"
+                            android:background="@drawable/bt_curved"
+                            android:gravity="center"
+                            android:text="Shop now"
+                            android:textColor="@color/textcolour" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:id="@+id/change_location_bottom_navigation"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="vertical">
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/grey"/>
+                    <LinearLayout
+                        android:id="@+id/change_location_navigation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:orientation="horizontal"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:id="@+id/bttoalamount"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="16dp"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:textColor="@color/black"/>
+                                <TextView
+                                    android:id="@+id/bttoalsvdamount"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:textSize="14dp"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/black" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/btcheckout"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:layout_weight="2.2"
+                                android:background="@drawable/top_bg"
+                                android:gravity="center"
+                                android:text="Proceed"
+                                android:textColor="@color/textcolour"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+
+
+
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:id="@+id/ll_bottomnavigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="bottom"
+            android:visibility="gone"
+            android:layout_alignParentBottom="true">
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/navigation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:background="@color/colorPrimary"
+                app:itemBackground="@color/colorPrimary"
+                android:foreground="?attr/selectableItemBackground"
+                app:itemIconTint="@drawable/selector"
+                app:itemTextColor="@drawable/selector"
+                app:menu="@menu/navigation"
+                android:visibility="visible"/>
+
+
+        </LinearLayout>
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="1dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvtsort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_gravity="center"
+                android:text="Sort By"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:textSize="18sp" />
+            <ImageView
+                android:id="@+id/imclose"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:layout_margin="10dp"
+                android:layout_weight=".2"
+                android:src="@drawable/ic_close"/>
+        </LinearLayout>
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginBottom="10dp"
+           android:orientation="vertical">
+           <RadioGroup
+               android:id="@+id/rgPrice"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_margin="20dp" >
+
+               <RadioButton
+                   android:id="@+id/radio0"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Price -- Low to High"
+                   android:textSize="15dp"/>
+
+               <RadioButton
+                   android:id="@+id/radio1"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Price -- High to Low"
+                   android:textSize="15dp"/>
+
+           </RadioGroup>
+       </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorPrimaryDark"
+            android:orientation="horizontal"
+            android:weightSum="1">
+            <LinearLayout
+                android:id="@+id/ll_clear"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".5"
+                android:background="@color/colorPrimaryDark"
+                android:gravity="center">
+
+
+                <TextView
+                    android:id="@+id/clear"
+                    android:drawablePadding="10dp"
+                    android:textColor="@color/white"
+                    android:text="Clear"
+                    android:textSize="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="7dp"
+                android:layout_marginTop="7dp"
+                android:layout_weight=".005"
+                android:background="#fff" />
+
+            <LinearLayout
+                android:id="@+id/ll_apply"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".5"
+                android:background="@color/colorPrimaryDark"
+                android:gravity="center">
+
+                <TextView
+                    android:drawablePadding="10dp"
+                    android:textColor="@color/white"
+                    android:text="Apply"
+                    android:textSize="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
+

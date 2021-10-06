@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Activity.AboutUsActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="vertical"
+        android:background="@drawable/top_bg"
+        tools:ignore="MissingConstraints">
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="3">
+                <ImageView
+                    android:id="@+id/im"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="0.5"
+                    android:src="@drawable/navmenu" />
+                <TextView
+                    android:id="@+id/tv_header"
+                    android:layout_width="0dp"
+                    android:textStyle="bold"
+                    android:textSize="18dp"
+                    android:textColor="@color/textcolour"
+                    android:text="About Us"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.6" />
+                <RelativeLayout
+                    android:id="@+id/rl_notification"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4">
+                    <ImageView
+                        android:id="@+id/im_notification"
+                        android:layout_width="40dp"
+                        android:layout_height="30dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/notifications" />
+
+                    <TextView
+                        android:id="@+id/tv_notification"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginBottom="4dp"
+                        android:gravity="center"
+                        android:text="0"
+                        android:background="@drawable/roundbg"
+                        android:textColor="@color/white"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/rly_olio_navigation_cart"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4">
+                    <ImageView
+                        android:id="@+id/imcart"
+                        android:layout_width="40dp"
+                        android:layout_height="30dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/shoppingcart" />
+                    <TextView
+                        android:id="@+id/tvcart"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginBottom="7dp"
+                        android:layout_marginLeft="25dp"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:background="@drawable/roundbg"
+                        android:textColor="@color/white"
+                        android:text="0"
+                        android:textSize="10dp" />
+                </RelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
+        <EditText
+            android:id="@+id/etSearch"
+            android:padding="5dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/searchbg"
+            android:drawableLeft="@drawable/ic_search"
+            android:drawablePadding="5dp"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search for Products."/>
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="4dp"
+        android:id="@+id/rl_main"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_above="@+id/ll_bottomnavigation">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                //old layout visivile gone
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/ll_curved"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:textSize="16dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
+                        android:background="@color/colorPrimary"
+                        android:text="  SUPPORT"/>
+                    <TextView
+                        android:id="@+id/feedback"
+                        android:layout_width="match_parent"
+                        android:textColor="@android:color/black"
+                        android:layout_height="40dp"
+                        android:textSize="16dp"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"
+                        android:text="Give Feedback"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:visibility="gone"
+                    android:layout_marginLeft="@dimen/dimen_20dp">
+
+                    <ImageView
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:padding="5sp"
+                        android:src="@drawable/aboutus_new" />
+
+                    <TextView
+                        android:id="@+id/tv_about"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_gravity="center"
+                        android:text="About Us"
+                        android:textSize="17sp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+
+                <ImageView
+                    android:id="@+id/imbanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"/>
+
+                <TextView
+                    android:id="@+id/tv_about_us"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="20dp"
+                    android:textSize="@dimen/dimen_15dp"
+                    android:textColor="@color/black"
+
+                    />
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"/>
+
+                <TextView
+                    android:id="@+id/tv_about_us_version"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="20dp"
+                    android:textSize="@dimen/dimen_15dp"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ll_curved"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:textSize="16dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
+                        android:background="@color/colorPrimary"
+                        android:text="  INFO"/>
+                    <TextView
+                        android:id="@+id/rate_us"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:textSize="16dp"
+                        android:textColor="@android:color/black"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:text="Rate Us"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:background="@android:color/darker_gray"
+                        android:layout_height="1dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/about_us"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:textSize="16dp"
+                            android:textColor="@android:color/black"
+                            android:gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="About Us"/>
+
+                        <TextView
+                            android:id="@+id/about_us_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginRight="10dp"
+                            android:visibility="gone"
+                            android:textSize="14dp"
+                            android:text="@string/Aboutus"/>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:background="@android:color/darker_gray"
+                        android:layout_height="1dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/privacy_policy"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:textSize="16dp"
+                            android:textColor="@android:color/black"
+                            android:gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="Privacy Policy"/>
+
+                        <TextView
+                            android:id="@+id/privacy_policy_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginRight="10dp"
+                            android:visibility="gone"
+                            android:textSize="14dp"
+                            android:text="@string/Privacy"/>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:background="@android:color/darker_gray"
+                        android:layout_height="1dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/terms_and_condition"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:textSize="16dp"
+                            android:textColor="@android:color/black"
+                            android:gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="Terms &amp; Condition"/>
+
+                        <TextView
+                            android:id="@+id/terms_and_condition_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginRight="10dp"
+                            android:visibility="gone"
+                            android:textSize="14dp"
+                            android:text="@string/Termscondi"/>
+
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:background="@android:color/darker_gray"
+                        android:layout_height="1dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/faq"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:textSize="16dp"
+                            android:textColor="@android:color/black"
+                            android:gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="FAQ"/>
+
+                        <TextView
+                            android:id="@+id/faq_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginRight="10dp"
+                            android:visibility="gone"
+                            android:textSize="14dp"/>
+
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:background="@android:color/darker_gray"
+                        android:layout_height="1dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/Version"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:textSize="16dp"
+                            android:textColor="@android:color/black"
+                            android:gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="Version"/>
+
+                        <TextView
+                            android:id="@+id/klll"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|end"
+                            android:layout_marginRight="10dp"
+                            android:textSize="16dp"
+                            android:text="2.2.0 "/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:background="@color/white"
+                    android:layout_height="20dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:visibility="gone"
+                    android:textColor="@color/colorPrimaryExtraDark"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:text="  LICENSED TO : "/>
+
+                <ImageView
+                    android:layout_width="200dp"
+                    android:layout_height="100dp"
+                    android:visibility="gone"
+                    android:src="@drawable/cochinshipyard"
+                    android:layout_gravity="center"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_technlgy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15dp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:text="  TECHNOLOGY PARTNER : "/>
+
+                    <ImageView
+                        android:id="@+id/imCompanylogo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/white"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/ll_bottomnavigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="bottom"
+            android:visibility="gone"
+            android:layout_alignParentBottom="true">
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/navigation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:background="@color/colorPrimary"
+                app:itemBackground="@color/colorPrimary"
+                android:foreground="?attr/selectableItemBackground"
+                app:itemIconTint="@drawable/selector"
+                app:itemTextColor="@drawable/selector"
+                app:menu="@menu/navigation"
+                app:labelVisibilityMode="unlabeled"
+                android:visibility="visible"/>
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

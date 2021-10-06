@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_search"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/searchbg"
+            android:layout_weight="0.2">
+        <EditText
+            android:id="@+id/etsearch"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:hint="Search for products.."
+            android:lines="1"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:inputType="text"
+            android:textColorHint="@color/grey"
+            android:paddingLeft="10dp"
+            android:background="@drawable/searchbg"
+            android:drawableLeft="@drawable/ic_search"
+            android:layout_weight="1"
+            android:drawablePadding="10dp"
+            android:paddingRight="10dp"/>
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="35dp"
+                android:backgroundTint="#F9F8FA"
+                android:layout_weight=".5"
+                android:paddingRight="10dp"
+                android:src="@drawable/ic_mic_black_off"
+                android:id="@+id/imSpeak"
+                android:visibility="gone"/>
+            <ImageView
+                android:id="@+id/imClear"
+                android:layout_width="50dp"
+                android:layout_height="35dp"
+                android:layout_weight=".5"
+                android:visibility="gone"
+                android:src="@drawable/ic_close"/>
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/imsearch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_search"
+            android:background="@drawable/searchbg"/>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_searchlist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        android:scrollbars="vertical" />
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:divider="@color/white"
+        android:layout_below="@+id/lv_storeList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

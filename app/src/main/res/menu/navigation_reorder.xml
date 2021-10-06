@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_category"
+        android:icon="@drawable/icc_category"
+        android:title="" />
+<!--        android:title="Category" />-->
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/icc_home"
+        android:title="" />
+<!--        android:title="Home" />-->
+
+    <item
+        android:id="@+id/navigation_favorite"
+        android:icon="@drawable/icc_favorite"
+        android:title="" />
+<!--        android:title="Favorite" />-->
+
+    <item
+        android:id="@+id/navigation_quit"
+        android:icon="@drawable/icn_quit"
+        android:title="" />
+<!--        android:title="Quit" />-->
+
+</menu>

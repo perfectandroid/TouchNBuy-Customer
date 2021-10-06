@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".Activity.GiftVoucherActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:orientation="vertical"
+            android:background="@drawable/top_bg"
+            tools:ignore="MissingConstraints">
+            <!--android:background="@drawable/welcome"-->
+<!--            android:background="@color/color_bar"-->
+            <RelativeLayout
+                android:id="@+id/relativeLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+                    <ImageView
+                        android:id="@+id/im"
+                        android:layout_width="0dp"
+                        android:layout_height="35dp"
+                        android:layout_weight="0.5"
+                        android:src="@drawable/navmenu" />
+                    <TextView
+                        android:id="@+id/tv_header"
+                        android:layout_width="0dp"
+                        android:textStyle="bold"
+                        android:textSize="20dp"
+                        android:textColor="@color/textcolour"
+                        android:text="Rewards"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.6" />
+                    <RelativeLayout
+                        android:id="@+id/rl_notification"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.4">
+                        <ImageView
+                            android:id="@+id/im_notification"
+                            android:layout_width="40dp"
+                            android:layout_height="30dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/notifications"
+                            android:visibility="gone"/>
+
+                        <TextView
+                            android:id="@+id/tv_notification"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginLeft="25dp"
+                            android:layout_marginBottom="4dp"
+                            android:gravity="center"
+                            android:text="0"
+                            android:background="@drawable/roundbg"
+                            android:textColor="@color/white"
+                            android:textSize="10dp"
+                            android:visibility="gone"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/rly_olio_navigation_cart"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.4">
+                        <ImageView
+                            android:id="@+id/imcart"
+                            android:layout_width="40dp"
+                            android:layout_height="30dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/shoppingcart"
+                            android:visibility="gone" />
+                        <TextView
+                            android:id="@+id/tvcart"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginBottom="7dp"
+                            android:layout_marginLeft="25dp"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:background="@drawable/roundbg"
+                            android:textColor="@color/white"
+                            android:text="0"
+                            android:textSize="10dp"
+                            android:visibility="gone"/>
+                    </RelativeLayout>
+                </LinearLayout>
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="vertical"
+                android:layout_below="@+id/relativeLayout1"
+                android:gravity="center">
+
+
+                <TextView
+                    android:id="@+id/tv_rewards_amnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="4dp"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="@color/white"
+                    android:textSize="50dp"
+                    android:visibility="visible"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_total_rewards"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="4dp"
+                    android:gravity="center"
+                    android:text="Balance To Redeem"
+                    android:textColor="@color/white"
+                    android:textSize="17dp"
+                    android:visibility="visible"
+                    android:textStyle="normal" />
+
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="120dp"
+                android:src="@drawable/trophy_gift"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:layout_alignParentBottom="true"/>
+
+
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+<TextView
+    android:id="@+id/tv_GiftCoupons"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:textSize="15dp"
+    android:drawableRight="@drawable/downarrow"
+    android:textColor="@color/black"
+    android:textStyle="bold"
+    android:text="Gift Coupons"/>
+                <com.perfect.easyshopplus.Utility.FullLenghtRecyclerview
+                    android:id="@+id/rv_rewards"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tv_MyRewards"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"                    android:drawableRight="@drawable/downarrow"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:text="My Rewards"/>
+                <com.perfect.easyshopplus.Utility.FullLenghtRecyclerview
+                    android:id="@+id/rv_scratch_rewards"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+            </LinearLayout>
+
+
+        </ScrollView>
+
+
+
+
+
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

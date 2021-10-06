@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="vertical"
+    android:background="@drawable/top_bg">
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="3">
+            <ImageView
+                android:id="@+id/im"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_weight="0.5"
+                android:src="@drawable/navmenu" />
+            <TextView
+                android:id="@+id/tv_header"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Upload Prescription"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_weight="1.6" />
+            <RelativeLayout
+                android:id="@+id/rl_notification"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4">
+                <ImageView
+                    android:id="@+id/im_notification"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/notifications" />
+
+                <TextView
+                    android:id="@+id/tv_notification"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginBottom="4dp"
+                    android:gravity="center"
+                    android:text="0"
+                    android:background="@drawable/roundbg"
+                    android:textColor="@color/white"
+                    android:textSize="10dp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rly_olio_navigation_cart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4">
+                <ImageView
+                    android:id="@+id/imcart"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/shoppingcart" />
+                <TextView
+                    android:id="@+id/tvcart"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginBottom="7dp"
+                    android:layout_marginLeft="25dp"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:background="@drawable/roundbg"
+                    android:textColor="@color/white"
+                    android:text="0"
+                    android:textSize="10dp" />
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+    <EditText
+        android:id="@+id/etSearch"
+        android:padding="5dp"
+        android:layout_margin="5dp"
+        android:visibility="gone"
+        android:background="@drawable/searchbg"
+        android:drawableLeft="@drawable/ic_search"
+        android:drawablePadding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Search for Products."/>
+</LinearLayout>
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="top">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imgv1"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:visibility="visible"
+            android:scaleType="fitXY"
+            android:src="@drawable/upload_gif"
+            android:layout_margin="20dp"/>
+
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true">
+
+            <Button
+                android:id="@+id/btnBrowse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Browse"
+                android:textAllCaps="false"
+                android:layout_gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/textcolour"
+                android:background="@drawable/gradient_bg"
+                android:layout_marginBottom="5sp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"/>
+            <Button
+                android:id="@+id/btnUpload"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Upload"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryExtraDark"
+                android:background="@drawable/gradient_border"
+                android:textAllCaps="false"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5sp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
+</LinearLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="4dp"
+    android:id="@+id/rl_main"
+    android:layout_marginLeft="2.5dp"
+    android:layout_marginRight="2.5dp"
+    android:layout_marginTop="2.5dp"
+    android:layout_marginBottom="2.5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:ignore="MissingConstraints">
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:id="@+id/lnLayout"
+    android:layout_margin="1dp"
+    android:background="@color/white"
+    android:gravity="center">
+<!--    <com.perfect.easyshopplus.Utility.CircleImageView-->
+<!--        app:civ_border_color="@color/greylight"-->
+<!--        app:civ_border_width="1dp"-->
+<!--        app:civ_shadow="true"-->
+<!--        android:id="@+id/imCat"-->
+<!--        android:layout_margin="5dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="90dp"-->
+<!--        android:scaleType="fitXY"-->
+<!--        android:src="@drawable/items"/>-->
+    <ImageView
+        android:id="@+id/imCat"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/items"/>
+
+    <TextView
+        android:id="@+id/tvPrdName"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="5dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:padding="2dp"
+        android:textSize="13dp" />
+
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.3">
+        <ImageView
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/arrowblue"/>
+    </LinearLayout>
+</LinearLayout>
+</androidx.cardview.widget.CardView>

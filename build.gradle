@@ -1,0 +1,25 @@
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.2.1'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+//        maven { url "https://phonepe.bintray.com/PhonePeIntentSDK" }
+        maven {url "https://phonepe.mycloudrepo.io/public/repositories/phonepe-intentsdk-android"}
+        maven { url 'https://jitpack.io' }
+
+
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

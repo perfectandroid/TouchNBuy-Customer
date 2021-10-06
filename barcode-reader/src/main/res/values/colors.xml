@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="scanner_line">#00ceff</color>
+    <color name="colorPrimary">#05579E</color>
+    <color name="colorPrimaryDark">#458ecc</color>
+    <color name="colorAccent">#D81B60</color>
+</resources>
