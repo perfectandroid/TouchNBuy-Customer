@@ -49,7 +49,7 @@
             android:layout_margin="20dp"
             android:paddingRight="10dp"
             android:paddingLeft="10dp"
-            android:text="Please enter the code was sent in your phone number"
+            android:text="Please enter the verification code was sent to 9876543210"
             android:textColor="@color/greydark"
             android:textSize="15sp" />
 

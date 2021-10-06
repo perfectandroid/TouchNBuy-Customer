@@ -2882,6 +2882,45 @@ public class SplashActivity extends AppCompatActivity {
                                 BranchEmaileditor.putString("BranchEmail", jobj.getString("BranchEmail"));
                                 BranchEmaileditor.commit();
 
+
+                                SharedPreferences ScratchCard = getApplicationContext().getSharedPreferences(Config.SHARED_PREF382, 0);
+                                SharedPreferences.Editor ScratchCardeditor = ScratchCard.edit();
+                                ScratchCardeditor.putString("ScratchCard", jobj.getString("GiftVoucher"));
+                                ScratchCardeditor.commit();
+
+                                SharedPreferences PrivilageCardEnable = getApplicationContext().getSharedPreferences(Config.SHARED_PREF429, 0);
+                                SharedPreferences.Editor PrivilageCardEnableeditor = PrivilageCardEnable.edit();
+                                PrivilageCardEnableeditor.putString("PrivilageCardEnable", jobj.getString("PrivilageCardEnable"));
+                                PrivilageCardEnableeditor.commit();
+
+                                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("localpref", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                JSONArray jsonpayment = jobj.getJSONArray("OnlinePaymentMethods");
+
+                                if (jsonpayment.length() != 0 && !jsonpayment.equals(null)) {
+                                    JSONArray PAYARRAY = new JSONArray();
+                                    for (int i = 0; i <= jsonpayment.length(); i++) {
+                                        try {
+                                            JSONObject jobjt = jsonpayment.getJSONObject(i);
+                                            String id = jobjt.getString("ID_PaymentMethod");
+                                            String PaymentName = jobjt.getString("PaymentName");
+                                            try {
+                                                JSONObject jsonObject = new JSONObject();
+                                                jsonObject.put("id", id);
+                                                jsonObject.put("PaymentName", PaymentName);
+                                                PAYARRAY.put(jsonObject);
+                                                Log.e("response1234567", "" + PAYARRAY.toString());
+                                                editor.putString("pref_data", PAYARRAY.toString()).commit();
+                                            } catch (JSONException json) {
+                                                Log.e("mmmm",""+json);
+                                            }
+                                        } catch (Exception e) {
+                                            Log.e("mmmm",""+e);
+                                        }
+
+                                    }
+                                }
+
 //                                SharedPreferences OnlinePaymentpref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF54, 0);
 //                                SharedPreferences OnlinePaymentmeth1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF62, 0);
 //                                String BASEURL = OnlinePaymentmeth1.getString("OnlinePaymentMethods", null);

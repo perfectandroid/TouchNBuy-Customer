@@ -27,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.perfect.easyshopplus.R;
 import com.perfect.easyshopplus.Retrofit.ApiInterface;
 import com.perfect.easyshopplus.Utility.Config;
@@ -34,6 +35,7 @@ import com.perfect.easyshopplus.Utility.Helper;
 import com.perfect.easyshopplus.Utility.InternetUtil;
 import com.perfect.easyshopplus.Utility.PicassoTrustAll;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -983,6 +985,7 @@ public class CustLoginActivity extends AppCompatActivity implements View.OnClick
                             if(jObject.getString("StatusCode").equals("0")){
 
                                 JSONObject jobj = jObject.getJSONObject("SingleStoreDetails");
+
                                 SharedPreferences homedeliverySP = getApplicationContext().getSharedPreferences(Config.SHARED_PREF27, 0);
                                 SharedPreferences.Editor homedeliverySPeditor = homedeliverySP.edit();
                                 homedeliverySPeditor.putString("homedelivery", jobj.getString("HomeDelivery"));
@@ -1082,11 +1085,43 @@ public class CustLoginActivity extends AppCompatActivity implements View.OnClick
                                 BranchEmaileditor.putString("BranchEmail", jobj.getString("BranchEmail"));
                                 BranchEmaileditor.commit();
 
-//                                SharedPreferences OnlinePaymentpref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF54, 0);
-//                                SharedPreferences OnlinePaymentmeth1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF62, 0);
-//                                String BASEURL = OnlinePaymentmeth1.getString("OnlinePaymentMethods", null);
-//                                Log.e(TAG,"BASEURL   2282    "+BASEURL + "    "+OnlinePaymentpref1.getString("OnlinePayment", null));
+                                SharedPreferences ScratchCard = getApplicationContext().getSharedPreferences(Config.SHARED_PREF382, 0);
+                                SharedPreferences.Editor ScratchCardeditor = ScratchCard.edit();
+                                ScratchCardeditor.putString("ScratchCard", jobj.getString("GiftVoucher"));
+                                ScratchCardeditor.commit();
 
+                                SharedPreferences PrivilageCardEnable = getApplicationContext().getSharedPreferences(Config.SHARED_PREF429, 0);
+                                SharedPreferences.Editor PrivilageCardEnableeditor = PrivilageCardEnable.edit();
+                                PrivilageCardEnableeditor.putString("PrivilageCardEnable", jobj.getString("PrivilageCardEnable"));
+                                PrivilageCardEnableeditor.commit();
+
+                                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("localpref", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                JSONArray jsonpayment = jobj.getJSONArray("OnlinePaymentMethods");
+
+                                if (jsonpayment.length() != 0 && !jsonpayment.equals(null)) {
+                                    JSONArray PAYARRAY = new JSONArray();
+                                    for (int i = 0; i <= jsonpayment.length(); i++) {
+                                        try {
+                                            JSONObject jobjt = jsonpayment.getJSONObject(i);
+                                            String id = jobjt.getString("ID_PaymentMethod");
+                                            String PaymentName = jobjt.getString("PaymentName");
+                                            try {
+                                                JSONObject jsonObject = new JSONObject();
+                                                jsonObject.put("id", id);
+                                                jsonObject.put("PaymentName", PaymentName);
+                                                PAYARRAY.put(jsonObject);
+                                                Log.e("response1234567", "" + PAYARRAY.toString());
+                                                editor.putString("pref_data", PAYARRAY.toString()).commit();
+                                            } catch (JSONException json) {
+                                                Log.e("mmmm",""+json);
+                                            }
+                                        } catch (Exception e) {
+                                            Log.e("mmmm",""+e);
+                                        }
+
+                                    }
+                                }
 
                                // if(singlestore.equals("1")) {
                                     Intent intent = new Intent(CustLoginActivity.this, HomeActivity.class);

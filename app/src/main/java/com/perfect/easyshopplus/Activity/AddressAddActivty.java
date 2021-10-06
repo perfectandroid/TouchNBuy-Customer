@@ -246,6 +246,7 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
 
     LinearLayout ll_privilegesummary;
     TextView privilege_tv,privilege_tvamnt;
+    TextView tv_label_custname,tv_custname,tv_label_privi_address,tv_privi_address,tv_privi_payamount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -475,10 +476,12 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                     if (Double.parseDouble(privilegeamount)<Double.parseDouble(finalamountSave)){
                         String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(privilegeamount));
                         tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                        tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                         SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                         txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                     }else {
                         tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
+                        tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                         SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                         txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                     }
@@ -498,10 +501,12 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                     if (Double.parseDouble(privilegeamount)<Double.parseDouble(finalamountSave)){
                         String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(privilegeamount));
                         tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                        tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                         SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                         txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                     }else {
                         tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
+                        tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                         SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                         txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                     }
@@ -591,6 +596,7 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
 //                                String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(et_your_redeem.getText().toString()));
                                 String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - TotalredemnPrivilege);
                                 tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                                tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                                 SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                                 txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                                 Log.e(TAG,"4201   finalamountnew       "+finalamountnew);
@@ -598,21 +604,43 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                                 redeem_tvamnt.setText(""+f.format(Double.parseDouble(redeemamount)));
                             }else {
                                 Log.e(TAG,"Exception  42028   Check Amount");
-                                Toast.makeText(getApplicationContext(),"Check Reward Amount",Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(getApplicationContext(),"Check Reward Amount",Toast.LENGTH_SHORT).show();
+                                AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
+                                builder.setMessage("Check Reward Amount")
+                                        .setCancelable(false)
+                                        .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                            }
+                                        });
+                                AlertDialog alert = builder.create();
+                                alert.show();
+
                                 redeemamount  = "0";
                                 String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(privilegeamount));
                                 tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                                tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                                 SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                                 txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                                 redeem_tvamnt.setText("0.00");
                             }
                         }else {
                             Log.e(TAG,"finalamtchkRedeem   4742   "+finalamtchkRedeem+"   "+finalamountSave);
-                            Toast.makeText(getApplicationContext(),"Redeem Amount should be less than Payment amount",Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(getApplicationContext(),"Redeem Amount should be less than Payment amount",Toast.LENGTH_SHORT).show();
+
+                            AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
+                            builder.setMessage("Redeem Amount should be less than Payment amount")
+                                    .setCancelable(false)
+                                    .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                        }
+                                    });
+                            AlertDialog alert = builder.create();
+                            alert.show();
                             redeemamount  = "0";
                             String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(privilegeamount));
 //                            tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
                             tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                            tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                             SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
 //                            txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                             txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
@@ -628,11 +656,21 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                    //
                 }else {
                     Log.e(TAG,"Exception  42036   Check Amount");
-                    Toast.makeText(getApplicationContext(),"Check Amount",Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(getApplicationContext(),"Check Amount",Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
+                    builder.setMessage("Check Amount")
+                            .setCancelable(false)
+                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
                     redeemamount  = "0";
                     String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(privilegeamount));
 //                    tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
                     tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                    tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                     SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
 //                    txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                     txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
@@ -664,32 +702,55 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
 //                                String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(et_your_redeem.getText().toString()));
                                 String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - TotalredemnPrivilege);
                                 tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                                tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                                 SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                                 txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
 //                                Log.e(TAG,"4201   finalamountnew       "+finalamountnew);
                                 DecimalFormat f = new DecimalFormat("##.00");
                               //  redeem_tvamnt.setText(""+f.format(Double.parseDouble(redeemamount)));
+                                privilege_tvamnt.setText(""+f.format(Double.parseDouble(privilegeamount)));
                             }else {
 //                                Log.e(TAG,"Exception  42028   Check Amount");
-                                Toast.makeText(getApplicationContext(),"Check Privilege card",Toast.LENGTH_SHORT).show();
+                              //  Toast.makeText(getApplicationContext(),"Check Card Amount",Toast.LENGTH_SHORT).show();
+                                AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
+                                builder.setMessage("Check Card Amount")
+                                        .setCancelable(false)
+                                        .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                            }
+                                        });
+                                AlertDialog alert = builder.create();
+                                alert.show();
                                 privilegeamount  = "0";
                                 String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(redeemamount));
                                 tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                                tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                                 SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                                 txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                                 //redeem_tvamnt.setText("0.00");
+                                privilege_tvamnt.setText("0.00");
                             }
                         }else {
 //                            Log.e(TAG,"finalamtchkRedeem   4742   "+finalamtchkRedeem+"   "+finalamountSave);
-                            Toast.makeText(getApplicationContext(),"Redeem Amount should be less than Payment amount",Toast.LENGTH_SHORT).show();
+                         //   Toast.makeText(getApplicationContext(),"Redeem Amount should be less than Payment amount",Toast.LENGTH_SHORT).show();
+                            AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
+                            builder.setMessage("Check Card Amount should be less than Payment amount")
+                                    .setCancelable(false)
+                                    .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                        }
+                                    });
+                            AlertDialog alert = builder.create();
+                            alert.show();
                             privilegeamount  = "0";
                             String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(redeemamount));
 //                            tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
                             tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                            tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                             SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
 //                            txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                             txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
-                          //  redeem_tvamnt.setText("0.00");
+                            privilege_tvamnt.setText("0.00");
 
                         }
 
@@ -700,15 +761,26 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                   //  privilegeamount = "0";
 
                     Log.e(TAG,"Exception  42036   Check Amount");
-                    Toast.makeText(getApplicationContext(),"Check Amount",Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(getApplicationContext(),"Check Amount",Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
+                    builder.setMessage("Check Card Amount")
+                            .setCancelable(false)
+                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
                     privilegeamount  = "0";
                     String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(redeemamount));
 //                    tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
                     tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                    tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                     SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
 //                    txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                     txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
-                 //   redeem_tvamnt.setText("0.00");
+                    privilege_tvamnt.setText("0.00");
+
                 }
                 Utils.hideKeyboard(AddressAddActivty.this);
 
@@ -1204,6 +1276,14 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
         ll_privilege_apply = findViewById(R.id.ll_privilege_apply);
         imClear = findViewById(R.id.imClear);
 
+        tv_label_custname = findViewById(R.id.tv_label_custname);
+        tv_custname = findViewById(R.id.tv_custname);
+        tv_label_privi_address = findViewById(R.id.tv_label_privi_address);
+        tv_privi_address = findViewById(R.id.tv_privi_address);
+        tv_privi_payamount = findViewById(R.id.tv_privi_payamount);
+        ll_privilegesummary = findViewById(R.id.ll_privilegesummary);
+        privilege_tvamnt = findViewById(R.id.privilege_tvamnt);
+
     }
 
     private void setViews() {
@@ -1281,6 +1361,7 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
 
         }
         tv_amountpay.setText(/*string+" "+*/finalamount+" /-");
+        tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamount)));
         SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
         txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamount)));
 
@@ -1948,14 +2029,21 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                 et_your_privilage.setText("");
                 ll_privilege_apply.setVisibility(View.GONE);
                 privilegeamount = "0.00";
+                tv_custname.setText("");
+                tv_privi_address.setText("");
+                tv_your_privilage.setText("");
+                tv_privi_payamount.setText("");
+                ll_privilegesummary.setVisibility(View.GONE);
 
                 if (Double.parseDouble(redeemamount)<Double.parseDouble(finalamountSave)){
                     String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(redeemamount));
                     tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                    tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                     SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                     txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                 }else {
                     tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
+                    tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                     SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                     txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                 }
@@ -1973,18 +2061,26 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
 
                 ll_privilege_apply.setVisibility(View.GONE);
                 ll_check_privilage.setVisibility(View.GONE);
+                ll_privilegesummary.setVisibility(View.GONE);
                 et_your_privilage.setText("");
                 privilegeamount = "0";
                 et_accno.setText("");
                 imClear.setVisibility(View.INVISIBLE);
+                tv_custname.setText("");
+                tv_privi_address.setText("");
+                tv_your_privilage.setText("");
+                tv_privi_payamount.setText("");
+                privilege_tvamnt.setText("0.00");
 
                 if (Double.parseDouble(redeemamount)<Double.parseDouble(finalamountSave)){
                     String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(redeemamount));
                     tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                    tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                     SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                     txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                 }else {
                     tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
+                    tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                     SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                     txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                 }
@@ -1996,6 +2092,9 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
     }
 
     private void getPrivilegeOtp(String accNo) {
+
+//        JSONArray jarray = null;
+//        otpPopUp(jarray);
 
         try {
 
@@ -2030,7 +2129,7 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                     try {
                         SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF1, 0);
                       //  requestObject1.put("AccNumber", "001001000154");
-
+                        requestObject1.put("FK_LoginCus",pref.getString("userid", null));
                         requestObject1.put("AccNumber", accNo);
                         requestObject1.put("ReqMode", "1");
 
@@ -2052,24 +2151,24 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                                     JSONObject jobj = jObject.getJSONObject("CustomerbalanceInfo");
                                     Log.e(TAG,"20492  "+jobj.getString("ResponseMessage"));
 
-                                    if (jobj.getString("ResponseCode").equals("0")){
+                               //     if (jobj.getString("ResponseCode").equals("0")){
 
                                         JSONArray jarray = jobj.getJSONArray("BalanceList");
 
                                         Log.e(TAG,"jarray  20493  "+jarray);
                                         otpPopUp(jarray);
-                                    }else {
-                                        String respMsg = jobj.getString("ResponseMessage");
-                                        AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
-                                        builder.setMessage(respMsg)
-                                                .setCancelable(false)
-                                                .setPositiveButton(OK, new DialogInterface.OnClickListener() {
-                                                    public void onClick(DialogInterface dialog, int id) {
-                                                    }
-                                                });
-                                        AlertDialog alert = builder.create();
-                                        alert.show();
-                                    }
+//                                    }else {
+//                                        String respMsg = jobj.getString("ResponseMessage");
+//                                        AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
+//                                        builder.setMessage(respMsg)
+//                                                .setCancelable(false)
+//                                                .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+//                                                    public void onClick(DialogInterface dialog, int id) {
+//                                                    }
+//                                                });
+//                                        AlertDialog alert = builder.create();
+//                                        alert.show();
+//                                    }
                                 }else {
                                     String statusMsg = jObject.getString("EXMessage");
                                     AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
@@ -2101,7 +2200,6 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
             }
         }catch (Exception e){
 
-
         }
 
 
@@ -2110,7 +2208,9 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
     private void otpPopUp(JSONArray jarray) {
 
 
+        Log.e(TAG,"jarray  2115   " +jarray);
         try {
+            JSONObject jsonObject=jarray.getJSONObject(0);
             AlertDialog.Builder builder = new AlertDialog.Builder(AddressAddActivty.this);
             LayoutInflater inflater1 = (LayoutInflater) AddressAddActivty.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View layout = inflater1.inflate(R.layout.otp_popup_privilege, null);
@@ -2132,8 +2232,12 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
 
             SharedPreferences pref4 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF103, 0);
             etotp.setHint(pref4.getString("EnterOTP", null));
+//            String maskAccountNumber = ("8075283549").replaceAll("\\w(?=\\w{4})", "*");
+            String maskAccountNumber = jsonObject.getString("CusMobile").replaceAll("\\w(?=\\w{4})", "*");
+            String AccNumber = jsonObject.getString("AccNumber");
+            String ID_CustomerAcc = jsonObject.getString("ID_CustomerAcc");
 
-            tv_enter_otp.setText("Please enter the code was sent in your phone number");
+            tv_enter_otp.setText("Please enter the verification code was sent to "+maskAccountNumber);
 
             SharedPreferences pref5 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF102, 0);
             tv_popupchange.setText(pref5.getString("EnterYourOTP", null));
@@ -2149,7 +2253,7 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                 public void onDataEntered(Pinview pinview, boolean fromUser) {
 
                     Log.e(TAG,"Pinview   243   "+pinview.getValue());
-                    setOTPLogin(pinview.getValue().toString(),alertDialog);
+                    setOTPLogin(pinview.getValue().toString(),AccNumber,ID_CustomerAcc,alertDialog);
 
                 }
             });
@@ -2168,27 +2272,161 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
 
     }
 
-    private void setOTPLogin(String toString, AlertDialog alertDialog) {
+    private void setOTPLogin(String strOtp, String AccNumber,String ID_CustomerAcc ,AlertDialog alertDialog) {
 
-        if (toString.equals("1234")){
-            ll_check_privilage.setVisibility(View.VISIBLE);
-            ll_privilege_apply.setVisibility(View.VISIBLE);
-            try {
-                alertDialog.dismiss();
-                Log.e(TAG,"20671  9");
-                tv_your_privilage.setText("Privilege Card : 20");
-                et_your_privilage.setHint("Enter Amount");
-                privilegePoints =  Double.parseDouble("20");
-            }catch (Exception e){
-                Log.e(TAG,"20673  "+e.toString());
-            }
-           // ll_check_privilage.setVisibility(View.VISIBLE);
+//        if (toString.equals("1234")){
+//            ll_check_privilage.setVisibility(View.VISIBLE);
+//            ll_privilege_apply.setVisibility(View.VISIBLE);
+//            try {
+//                alertDialog.dismiss();
+//                Log.e(TAG,"20671  9");
+//                tv_your_privilage.setText("Available Balance : 20");
+//                et_your_privilage.setHint("Enter Amount");
+//                privilegePoints =  Double.parseDouble("20");
+//            }catch (Exception e){
+//                Log.e(TAG,"20673  "+e.toString());
+//            }
+//           // ll_check_privilage.setVisibility(View.VISIBLE);
+//
+//        }else {
+//            Log.e(TAG,"20672  ");
+//            Toast.makeText(getApplicationContext(),"Invalid OTP",Toast.LENGTH_SHORT).show();
+//            ll_check_privilage.setVisibility(View.GONE);
+//            ll_privilege_apply.setVisibility(View.GONE);
+//            pinview.clearValue();
+//        }
 
-        }else {
-            Log.e(TAG,"20672  ");
-            Toast.makeText(getApplicationContext(),"Invalid OTP",Toast.LENGTH_SHORT).show();
-            ll_check_privilage.setVisibility(View.GONE);
-            ll_privilege_apply.setVisibility(View.GONE);
+        SharedPreferences baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
+        SharedPreferences imgpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF57, 0);
+        String BASEURL = baseurlpref.getString("BaseURL", null);
+        String IMAGEURL = imgpref.getString("ImageURL", null);
+        if (new InternetUtil(this).isInternetOn()) {
+            progressDialog = new ProgressDialog(this, R.style.Progress);
+            progressDialog.setProgressStyle(android.R.style.Widget_ProgressBar);
+            progressDialog.setCancelable(false);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setIndeterminateDrawable(this.getResources()
+                    .getDrawable(R.drawable.progress));
+            progressDialog.show();
+            try{
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .sslSocketFactory(getSSLSocketFactory())
+                        .hostnameVerifier(getHostnameVerifier())
+                        .build();
+                Gson gson = new GsonBuilder()
+                        .setLenient()
+                        .create();
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(BASEURL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create(gson))
+                        .client(client)
+                        .build();
+                ApiInterface apiService = retrofit.create(ApiInterface.class);
+                final JSONObject requestObject1 = new JSONObject();
+                try {
+                    SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF1, 0);
+                    //  requestObject1.put("AccNumber", "001001000154");
+
+                    requestObject1.put("AccNumber", AccNumber);
+                    requestObject1.put("ReqMode", "2");
+                    requestObject1.put("OTP", strOtp);
+                    requestObject1.put("FK_LoginCus",pref.getString("userid", null));
+                    requestObject1.put("CusID_balance", ID_CustomerAcc);
+
+                    Log.e(TAG,"requestObject1   2240  "+requestObject1);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), requestObject1.toString());
+                Call<String> call = apiService.getCusBalanceList(body);
+                call.enqueue(new Callback<String>() {
+                    @Override public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                        try {
+                            progressDialog.dismiss();
+                            Log.e(TAG,"2252 1  "+response.body());
+                            JSONObject jObject = new JSONObject(response.body());
+                            ll_privilegesummary.setVisibility(View.GONE);
+                            if(jObject.getString("StatusCode").equals("0")){
+                                JSONObject jobj = jObject.getJSONObject("CustomerbalanceInfo");
+                                Log.e(TAG,"2252 2  "+jobj.getString("ResponseMessage"));
+
+                                if (jobj.getString("ResponseCode").equals("0")){
+                                    ll_privilegesummary.setVisibility(View.VISIBLE);
+                                    JSONArray jarray = jobj.getJSONArray("BalanceList");
+                                    JSONObject jsonObject=jarray.getJSONObject(0);
+
+                                    Log.e(TAG,"jarray  2252 3  "+jarray);
+                                    ll_check_privilage.setVisibility(View.VISIBLE);
+                                    ll_privilege_apply.setVisibility(View.VISIBLE);
+
+                                    alertDialog.dismiss();
+                                    Log.e(TAG,"20671  9");
+                                    tv_custname.setText(""+jsonObject.getString("CusName"));
+                                    tv_privi_address.setText(""+jsonObject.getString("Address1"));
+                                    tv_your_privilage.setText("Available Balance : "+Utils.getDecimelFormate(Double.parseDouble(jsonObject.getString("Balance"))));
+                                    et_your_privilage.setHint("Enter Amount");
+                                    privilegePoints =  Double.parseDouble(""+jsonObject.getString("Balance"));
+
+                                }else {
+                                    ll_privilegesummary.setVisibility(View.GONE);
+                                    Log.e(TAG,"20672  ");
+                                    ll_check_privilage.setVisibility(View.GONE);
+                                    ll_privilege_apply.setVisibility(View.GONE);
+                                    pinview.clearValue();
+
+//                                    String respMsg = jobj.getString("ResponseMessage");
+                                    String statusMsg = jObject.getString("EXMessage");
+                                    AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
+                                    builder.setMessage(statusMsg)
+                                            .setCancelable(false)
+                                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                }
+                                            });
+                                    AlertDialog alert = builder.create();
+                                    alert.show();
+
+
+                                }
+                            }else {
+
+                                Log.e(TAG,"20672  ");
+                                ll_check_privilage.setVisibility(View.GONE);
+                                ll_privilege_apply.setVisibility(View.GONE);
+                                ll_privilegesummary.setVisibility(View.GONE);
+                                pinview.clearValue();
+
+                                String statusMsg = jObject.getString("EXMessage");
+                                AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
+                                builder.setMessage(statusMsg)
+                                        .setCancelable(false)
+                                        .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                            }
+                                        });
+                                AlertDialog alert = builder.create();
+                                alert.show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            progressDialog.dismiss();
+                            ll_privilegesummary.setVisibility(View.GONE);
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        progressDialog.dismiss();
+                        ll_privilegesummary.setVisibility(View.GONE);
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }  }else {
+            Intent in = new Intent(this,NoInternetActivity.class);
+            startActivity(in);
         }
     }
 

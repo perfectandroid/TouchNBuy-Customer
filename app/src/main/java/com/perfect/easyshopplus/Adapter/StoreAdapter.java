@@ -260,6 +260,13 @@ public class StoreAdapter extends RecyclerView.Adapter {
                                 ScratchCardeditor.putString("ScratchCard", jsonObject.getString("GiftVoucher"));
                                 ScratchCardeditor.commit();
 
+                                SharedPreferences PrivilageCardEnable = context.getSharedPreferences(Config.SHARED_PREF429, 0);
+                                SharedPreferences.Editor PrivilageCardEnableeditor = PrivilageCardEnable.edit();
+                                PrivilageCardEnableeditor.putString("PrivilageCardEnable", jsonObject.getString("PrivilageCardEnable"));
+                                PrivilageCardEnableeditor.commit();
+
+
+
                                 SharedPreferences sharedPreferences = context.getSharedPreferences("localpref", MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 jsonObject = jsonArray.getJSONObject(position);
@@ -289,10 +296,7 @@ public class StoreAdapter extends RecyclerView.Adapter {
                                 }
 
 
-                            SharedPreferences PrivilageCardEnable = context.getSharedPreferences(Config.SHARED_PREF429, 0);
-                            SharedPreferences.Editor PrivilageCardEnableeditor = PrivilageCardEnable.edit();
-                            PrivilageCardEnableeditor.putString("PrivilageCardEnable", jsonObject.getString("PrivilageCardEnable"));
-                            PrivilageCardEnableeditor.commit();
+
 //
 //                                Intent intent = new Intent(context, OutShopActivity.class);
 //                                intent.putExtra("from", "store");
