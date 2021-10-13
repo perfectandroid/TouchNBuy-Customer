@@ -1334,8 +1334,6 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
                     requestObject1.put("FK_PaymentMethod",strPaymentId);
                     requestObject1.put("Bank_Key", getResources().getString(R.string.BankKey));
 
-
-
                     Log.e(TAG,"requestObject1   516    "+requestObject1);
 
 
