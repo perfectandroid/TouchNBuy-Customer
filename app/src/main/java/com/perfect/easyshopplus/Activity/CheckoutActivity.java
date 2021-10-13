@@ -1,6 +1,7 @@
 package com.perfect.easyshopplus.Activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -19,10 +20,13 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.billdesk.sdk.PaymentOptions;
 import com.goodiebag.pinview.Pinview;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -35,11 +39,14 @@ import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -64,6 +71,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.perfect.easyshopplus.Activity.billdesks.SampleCallBack;
+import com.perfect.easyshopplus.Adapter.AdapterPaymentOptions;
 import com.perfect.easyshopplus.Adapter.NavMenuAdapter;
 import com.perfect.easyshopplus.DB.DBHandler;
 import com.perfect.easyshopplus.R;
@@ -71,8 +80,11 @@ import com.perfect.easyshopplus.Retrofit.ApiInterface;
 import com.perfect.easyshopplus.Servicess.GpsTracker;
 import com.perfect.easyshopplus.Utility.Config;
 import com.perfect.easyshopplus.Utility.InternetUtil;
+import com.perfect.easyshopplus.Utility.ItemClickListener;
 import com.perfect.easyshopplus.Utility.PicassoTrustAll;
 import com.perfect.easyshopplus.Utility.Utils;
+import com.razorpay.Checkout;
+import com.razorpay.PaymentResultListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -94,10 +106,12 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -117,7 +131,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class CheckoutActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class CheckoutActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener , ItemClickListener, PaymentResultListener {
 
     ProgressDialog progressDialog;
     EditText etSearch, etdate,ettime, etremark;
@@ -181,6 +195,7 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
     int flagRedeem  = 0;
     int flagOrderSummary = 0;
     int flagPrivilege = 0;
+    int flagPayType = 0;
     TextView txt_payamount,txt_savedyou;
 
     String StoreName_s,OrderNumber_s;
@@ -203,6 +218,28 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
     TextView privilege_tv,privilege_tvamnt;
     TextView tv_label_custname,tv_custname,tv_label_privi_address,tv_privi_address,tv_privi_payamount;
     String  OK;
+    String Pc_PrivilageCardEnable = "false";
+    String Pc_AccNumber = "";
+    String Pc_ID_CustomerAcc = "0";
+
+    TextView tv_paymenttype;
+    RecyclerView recyc_paymenttype;
+    LinearLayout ll_paymenttype;
+    CardView card_paymenttype;
+    JSONArray jsonArrayPay;
+    String Pleaseselectanypaymentoption;
+
+    String strPaymentId="";
+    String strPaymenttype="";
+    String MerchantID = null;
+    String TransactionID = null;
+    String SecurityID = null;
+
+    final int UPI_PAYMENT = 0;
+
+    String ThereissometechnicalissuesPleaseuseanotherpaymentoptions,PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdevice;
+    String Paymentfailed,PaymentSuccessfully;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,6 +264,8 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
         setHomeNavMenu1();
 
         Log.e(TAG,"TAG  142 Start");
+
+        card_paymenttype.setVisibility(View.VISIBLE);
 
        /* SharedPreferences RequiredShoppinglistpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF45, 0);
         if(RequiredShoppinglistpref.getString("RequiredShoppinglist", null).equals("false")){
@@ -260,6 +299,9 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
         tvuser.setText("Welcome "+pref2.getString("username", null));
         db=new DBHandler(this);
         tvcart.setText(String.valueOf(db.selectCartCount()));
+
+        SharedPreferences paymenttype = getApplicationContext().getSharedPreferences(Config.SHARED_PREF213, 0);
+        tv_paymenttype.setText(paymenttype.getString("paymenttype", ""));
 
         SharedPreferences Subtotalsp = getApplicationContext().getSharedPreferences(Config.SHARED_PREF162, 0);
         String Subtotal = Subtotalsp.getString("Subtotal", "");
@@ -306,6 +348,25 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
         tvstorenote.setText(pref8.getString("DeliveryCriteria", null));
         SharedPreferences pref9 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF60, 0);
         strTimeSlotCheck=pref9.getString("TimeSlotCheck", null);
+
+        SharedPreferences Pleaseselectanypaymentoptionsp = getApplicationContext().getSharedPreferences(Config.SHARED_PREF264, 0);
+        Pleaseselectanypaymentoption = (Pleaseselectanypaymentoptionsp.getString("Pleaseselectanypaymentoption", ""));
+
+        SharedPreferences ThereissometechnicalissuesPleaseuseanotherpaymentoptionsSP = getApplicationContext().getSharedPreferences(Config.SHARED_PREF262, 0);
+        ThereissometechnicalissuesPleaseuseanotherpaymentoptions = (ThereissometechnicalissuesPleaseuseanotherpaymentoptionsSP.getString("ThereissometechnicalissuesPleaseuseanotherpaymentoptions", ""));
+
+        SharedPreferences PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdeviceSP = getApplicationContext().getSharedPreferences(Config.SHARED_PREF263, 0);
+        PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdevice = (PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdeviceSP.getString("PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdevice", ""));
+
+        SharedPreferences PaymentSuccessfullysp = getApplicationContext().getSharedPreferences(Config.SHARED_PREF329, 0);
+        PaymentSuccessfully  = PaymentSuccessfullysp.getString("PaymentSuccessfully","");
+
+        SharedPreferences Paymentfailedsp = getApplicationContext().getSharedPreferences(Config.SHARED_PREF330, 0);
+        Paymentfailed = Paymentfailedsp.getString("Paymentfailed","");
+
+
+
+        paymentcondition();
 
         mLocationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
         // checkLocation(); //check whether location service is
@@ -560,6 +621,7 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                                 Log.e(TAG,"4201   finalamountnew       "+finalamountnew);
                                 DecimalFormat f = new DecimalFormat("##.00");
                                 redeem_tvamnt.setText(""+f.format(Double.parseDouble(redeemamount)));
+                                Toast.makeText(getApplicationContext(),"Reward Amount Successfully Updated",Toast.LENGTH_SHORT).show();
                             }else {
                                 Log.e(TAG,"Exception  42028   Check Amount");
                                 // Toast.makeText(getApplicationContext(),"Check Reward Amount",Toast.LENGTH_SHORT).show();
@@ -667,6 +729,7 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                                 DecimalFormat f = new DecimalFormat("##.00");
                                 //  redeem_tvamnt.setText(""+f.format(Double.parseDouble(redeemamount)));
                                 privilege_tvamnt.setText(""+f.format(Double.parseDouble(privilegeamount)));
+                                Toast.makeText(getApplicationContext(),"Card Amount Successfully Updated",Toast.LENGTH_SHORT).show();
                             }else {
 //                                Log.e(TAG,"Exception  42028   Check Amount");
                                 //  Toast.makeText(getApplicationContext(),"Check Card Amount",Toast.LENGTH_SHORT).show();
@@ -807,6 +870,7 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                         try {
                             progressDialog.dismiss();
                             JSONObject jObject = new JSONObject(response.body());
+                            Log.e(TAG,"response   813  "+response.body());
                             if(jObject.getString("StatusCode").equals("0")){
                                 JSONObject jobj = jObject.getJSONObject("GiftVoucherListInfo");
 
@@ -933,6 +997,13 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
         tv_privi_payamount = findViewById(R.id.tv_privi_payamount);
         ll_privilegesummary = findViewById(R.id.ll_privilegesummary);
         privilege_tvamnt = findViewById(R.id.privilege_tvamnt);
+
+        tv_paymenttype = findViewById(R.id.tv_paymenttype);
+        recyc_paymenttype = findViewById(R.id.recyc_paymenttype);
+        ll_paymenttype = findViewById(R.id.ll_paymenttype);
+        card_paymenttype = findViewById(R.id.card_paymenttype);
+
+
     }
 
     private void setRegViews() {
@@ -957,6 +1028,7 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
         tv_privilagereward.setOnClickListener(this);
         tv_get_otp.setOnClickListener(this);
         imClear.setOnClickListener(this);
+        tv_paymenttype.setOnClickListener(this);
     }
 
     private void setViews() {
@@ -1051,8 +1123,16 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                 dateSelector();
                 break;
             case R.id.ll_orderconfirm:
-                if (cbRedeem.isChecked()){
-                    finalamount = String.valueOf(Double.parseDouble(finalamountSave)-Double.parseDouble(redeemamount));
+
+                Log.e(TAG,"MerchantID   1375     "+MerchantID);
+                Log.e(TAG,"TransactionID  1375   "+TransactionID);
+                Log.e(TAG,"SecurityID   1375     "+SecurityID);
+                Log.e(TAG,"strPaymentId   1375     "+strPaymentId);
+
+
+                if (cbRedeem.isChecked() || !privilegeamount.equals("")){
+                   // finalamount = String.valueOf(Double.parseDouble(finalamountSave)-Double.parseDouble(redeemamount));
+                    finalamount = String.valueOf(Double.parseDouble(finalamountSave)-(Double.parseDouble(redeemamount)+Double.parseDouble(privilegeamount)));
                 }else {
                     finalamount = finalamountSave;
                 }
@@ -1064,11 +1144,24 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                     String LocationNotFound = LocationNotFoundsp.getString("LocationNotFound", "");
                     Toast.makeText(getApplicationContext(),LocationNotFound,Toast.LENGTH_SHORT).show();
                 }else {
-                    if(strTimeSlotCheck.equals("true")){
-                        AsOnDateApplicableChecking(); }
-                    else{
-                        holidayCheck();
+                    if(!strPaymentId.equals("")){
+                        if(strTimeSlotCheck.equals("true")){
+                            AsOnDateApplicableChecking(); }
+                        else{
+                            holidayCheck();
+                        }
+                    }else {
+                        AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutActivity.this);
+                        builder.setMessage(Pleaseselectanypaymentoption+". ")
+                                .setCancelable(false)
+                                .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                    }
+                                });
+                        AlertDialog alert = builder.create();
+                        alert.show();
                     }
+
                 }
                 break;
             case R.id.tv_notification:
@@ -1141,6 +1234,21 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
 
                 break;
 
+            case R.id.tv_paymenttype:
+
+                if (flagPayType == 0){
+                    flagPayType = 1;
+                    ll_paymenttype.setVisibility(View.GONE);
+                    tv_paymenttype.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_down, 0);
+                }else {
+                    flagPayType = 0;
+                    ll_paymenttype.setVisibility(View.VISIBLE);
+                    tv_paymenttype.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_top, 0);
+                }
+                break;
+
+
+
             case R.id.tv_privilagereward:
                 if (flagPrivilege == 0){
                     flagPrivilege = 1;
@@ -1165,6 +1273,9 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                 tv_your_privilage.setText("");
                 tv_privi_payamount.setText("");
                 ll_privilegesummary.setVisibility(View.GONE);
+                Pc_PrivilageCardEnable = "false";
+                Pc_AccNumber = "";
+                Pc_ID_CustomerAcc = "0";
 
                 if (Double.parseDouble(redeemamount)<Double.parseDouble(finalamountSave)){
                     String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(redeemamount));
@@ -1202,6 +1313,9 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                 tv_your_privilage.setText("");
                 tv_privi_payamount.setText("");
                 privilege_tvamnt.setText("0.00");
+                Pc_PrivilageCardEnable = "false";
+                Pc_AccNumber = "";
+                Pc_ID_CustomerAcc = "0";
 
                 if (Double.parseDouble(redeemamount)<Double.parseDouble(finalamountSave)){
                     String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(redeemamount));
@@ -1278,7 +1392,7 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
 
                                 if(jObject.getString("StatusCode").equals("0")){
                                     JSONObject jobj = jObject.getJSONObject("CustomerbalanceInfo");
-                                    Log.e(TAG,"20492  "+jobj.getString("ResponseMessage"));
+                                   // Log.e(TAG,"20492  "+jobj.getString("ResponseMessage"));
 
                                     //     if (jobj.getString("ResponseCode").equals("0")){
 
@@ -1478,10 +1592,11 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                             JSONObject jObject = new JSONObject(response.body());
                             ll_privilegesummary.setVisibility(View.GONE);
                             if(jObject.getString("StatusCode").equals("0")){
+                                Pc_PrivilageCardEnable = "true";
                                 JSONObject jobj = jObject.getJSONObject("CustomerbalanceInfo");
-                                Log.e(TAG,"2252 2  "+jobj.getString("ResponseMessage"));
+                              //  Log.e(TAG,"2252 2  "+jobj.getString("ResponseMessage"));
 
-                                if (jobj.getString("ResponseCode").equals("0")){
+                                //if (jobj.getString("ResponseCode").equals("0")){
                                     ll_privilegesummary.setVisibility(View.VISIBLE);
                                     JSONArray jarray = jobj.getJSONArray("BalanceList");
                                     JSONObject jsonObject=jarray.getJSONObject(0);
@@ -1497,28 +1612,30 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                                     tv_your_privilage.setText("Available Balance : "+Utils.getDecimelFormate(Double.parseDouble(jsonObject.getString("Balance"))));
                                     et_your_privilage.setHint("Enter Amount");
                                     privilegePoints =  Double.parseDouble(""+jsonObject.getString("Balance"));
+                                    Pc_AccNumber =  jsonObject.getString("AccNumber");
+                                    Pc_ID_CustomerAcc =  jsonObject.getString("ID_CustomerAcc");
 
-                                }else {
-                                    ll_privilegesummary.setVisibility(View.GONE);
-                                    Log.e(TAG,"20672  ");
-                                    ll_check_privilage.setVisibility(View.GONE);
-                                    ll_privilege_apply.setVisibility(View.GONE);
-                                    pinview.clearValue();
-
-//                                    String respMsg = jobj.getString("ResponseMessage");
-                                    String statusMsg = jObject.getString("EXMessage");
-                                    AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutActivity.this);
-                                    builder.setMessage(statusMsg)
-                                            .setCancelable(false)
-                                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int id) {
-                                                }
-                                            });
-                                    AlertDialog alert = builder.create();
-                                    alert.show();
-
-
-                                }
+//                                }else {
+//                                    ll_privilegesummary.setVisibility(View.GONE);
+//                                    Log.e(TAG,"20672  ");
+//                                    ll_check_privilage.setVisibility(View.GONE);
+//                                    ll_privilege_apply.setVisibility(View.GONE);
+//                                    pinview.clearValue();
+//
+////                                    String respMsg = jobj.getString("ResponseMessage");
+//                                    String statusMsg = jObject.getString("EXMessage");
+//                                    AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutActivity.this);
+//                                    builder.setMessage(statusMsg)
+//                                            .setCancelable(false)
+//                                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+//                                                public void onClick(DialogInterface dialog, int id) {
+//                                                }
+//                                            });
+//                                    AlertDialog alert = builder.create();
+//                                    alert.show();
+//
+//
+//                                }
                             }else {
 
                                 Log.e(TAG,"20672  ");
@@ -2461,8 +2578,15 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                 requestObject1.put("ID_SalesOrder",prefFK_SalesOrderNew.getString("FK_SalesOrder_new","0"));
                 requestObject1.put("RedeemRequest",RedeemRequest);
 
+                requestObject1.put("PrivilageCardEnable",Pc_PrivilageCardEnable);
+                requestObject1.put("PrivCardAmount",privilegeamount);
+                requestObject1.put("AccNumber",Pc_AccNumber);
+                requestObject1.put("ID_CustomerAcc",Pc_ID_CustomerAcc);
+
 
                 Log.e(TAG,"requestObject1  1249    "+requestObject1);
+
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -2504,6 +2628,10 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                         SharedPreferences OKsp = getApplicationContext().getSharedPreferences(Config.SHARED_PREF104, 0);
                         String OK = (OKsp.getString("OK", ""));
                         if(jObject.getString("StatusCode").equals("3")){
+
+                            DBHandler db=new DBHandler(CheckoutActivity.this);
+                            db.deleteallCart();
+
                             JSONObject jobj = jObject.getJSONObject("SalesOrderDetails");
 
                             OrderNumber_s = jobj.getString("OrderNumber");
@@ -2520,21 +2648,123 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                             prefFK_SalesOrdereditorNew.putString("FK_SalesOrder_new", jobj.getString("FK_SalesOrder"));
                             prefFK_SalesOrdereditorNew.commit();
 
+//
+//                            Toast.makeText(getApplicationContext(), jobj.getString("ResponseMessage"),Toast.LENGTH_LONG).show();
+//                            DBHandler db=new DBHandler(CheckoutActivity.this);
+//                            db.deleteallCart();
+//                            SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
+//                            Intent intent = new Intent(CheckoutActivity.this,ThanksActivity.class);
+//                            intent.putExtra("StoreName", pref1.getString("StoreName", null));
+//                            intent.putExtra("OrderNumber",jobj.getString("OrderNumber"));
+//                            intent.putExtra("strPaymenttype","COD");
+//                            intent.putExtra("finalamount",finalamount);
+//                            startActivity(intent);
+//
+//
+//                            //startActivity(new Intent(CheckoutActivity.this, ThanksActivity.class));
+//                            finish();
 
-                            Toast.makeText(getApplicationContext(), jobj.getString("ResponseMessage"),Toast.LENGTH_LONG).show();
-                            DBHandler db=new DBHandler(CheckoutActivity.this);
-                            db.deleteallCart();
-                            SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
-                            Intent intent = new Intent(CheckoutActivity.this,ThanksActivity.class);
-                            intent.putExtra("StoreName", pref1.getString("StoreName", null));
-                            intent.putExtra("OrderNumber",jobj.getString("OrderNumber"));
-                            intent.putExtra("strPaymenttype","COD");
-                            intent.putExtra("finalamount",finalamount);
-                            startActivity(intent);
+
+//                            Cash On Delivery-1
+//                            Bill Desk-2
+//                            Bill Plz-3
+//                            Razorpay-4
+//                            Google Pay-5
+
+//                                if(strPaymenttype.equals("COD")){
+                            if(strPaymentId.equals("1")){
+//                                    startActivity(new Intent(AddressAddActivty.this, ThanksActivity.class));
+//                                    SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
+//                                    Intent intent = new Intent(AddressAddActivty.this,ThanksActivity.class);
+//                                    intent.putExtra("StoreName", pref1.getString("StoreName", null));
+//                                    intent.putExtra("OrderNumber",jobj.getString("OrderNumber"));
+//                                    intent.putExtra("strPaymenttype",strPaymenttype);
+//                                    intent.putExtra("finalamount",finalamount);
+//
+//
+//                                    startActivity(intent);
+//
+//                                    finish();
+
+                                updatePayments(OrderNumber_s,FK_SalesOrder,strPaymentId,"","0","","0",finalamount,"0");
+                            }
+                            // else if(strPaymenttype.equals("ONLINE")){
+                            else if(strPaymentId.equals("4")){
 
 
-                            //startActivity(new Intent(CheckoutActivity.this, ThanksActivity.class));
-                            finish();
+
+
+                                try {
+                                    //   doOrderConfirm();
+                                    startrazerPayment("perfect solution", "demo testing", 1, "perfectsolution@gmail.com", "9497093212");
+                                }catch (Exception e){
+
+                                    AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutActivity.this);
+                                    builder.setMessage(ThereissometechnicalissuesPleaseuseanotherpaymentoptions+". ")
+                                            .setCancelable(false)
+                                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                }
+                                            });
+                                    AlertDialog alert = builder.create();
+                                    alert.show();
+                                }
+                            }
+//                                else if(strPaymenttype.equals("UPI")){
+                            else if(strPaymentId.equals("5")){
+                                try {
+                                    //  doOrderConfirm();
+                                    SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
+                                    SharedPreferences pref6 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF59, 0);
+                                    payUsingUpi(pref1.getString("StoreName", null), pref6.getString("UPIID", null), "Order Payment", ""+finalamount);
+                                }catch (Exception e){
+                                    AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutActivity.this);
+                                    // builder.setTitle("Terms & Conditions");
+                                    builder.setMessage(PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdevice+". ")
+                                            .setCancelable(false)
+                                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                }
+                                            });
+                                    AlertDialog alert = builder.create();
+                                    alert.show();
+                                }
+                            }
+//                                else if (strPaymenttype.equals("PAYU Biz")) {
+                            else if(strPaymentId.equals("10")){
+                                try {
+//                                    startPayubiz(finalamount);
+                                }catch (Exception e){
+                                    AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutActivity.this);
+                                    // builder.setTitle("Terms & Conditions");
+                                    builder.setMessage(PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdevice+". ")
+                                            .setCancelable(false)
+                                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                }
+                                            });
+                                    AlertDialog alert = builder.create();
+                                    alert.show();
+                                }
+                            }
+//                                else if (strPaymenttype.equals("Bill Desk")) {
+                            else if (strPaymentId.equals("2")) {
+                                try {
+                                    // orderConfirmation();
+                                    startBillDesk(finalamount);
+                                }catch (Exception e){
+                                    AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutActivity.this);
+                                    // builder.setTitle("Terms & Conditions");
+                                    builder.setMessage(PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdevice+". ")
+                                            .setCancelable(false)
+                                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                }
+                                            });
+                                    AlertDialog alert = builder.create();
+                                    alert.show();
+                                }
+                            }
                         }
                         else if(jObject.getString("StatusCode").equals("10")){
                             JSONObject jobj = jObject.getJSONObject("SalesOrderDetails");
@@ -2563,7 +2793,7 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                             AlertDialog alert = builder.create();
                             alert.show();
                         }
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                         progressDialog.dismiss();
                     }
@@ -3092,6 +3322,777 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
     }
+
+
+    public void paymentcondition(){
+
+//        SharedPreferences Inshoppref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF43, 0);
+//        if(Inshoppref.getString("RequiredInshop", null).equals("false")){
+        SharedPreferences OnlinePaymentmeth1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF62, 0);
+        String BASEURL = OnlinePaymentmeth1.getString("OnlinePaymentMethods", null);
+        Log.e(TAG,"BASEURLSSSSS   2283    "+BASEURL);
+
+
+
+//        SharedPreferences.Editor OnlinePaymenteditor = OnlinePaymentpref.edit();
+//        OnlinePaymenteditor.putString("OnlinePayment", jobj.getString("OnlinePayment"));
+//        OnlinePaymenteditor.commit();
+
+        //  SharedPreferences sharedPreferences = getSharedPreferences("localpref", MODE_PRIVATE);
+        SharedPreferences OnlinePaymentpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF62, 0);
+        String value = OnlinePaymentpref.getString("OnlinePaymentMethods", null);
+        Log.e(TAG,"OnlinePaymentpref   2293    "+value);
+        try {
+            jsonArrayPay = new JSONArray(value);
+
+
+            AdapterPaymentOptions adapter = new AdapterPaymentOptions(CheckoutActivity.this, jsonArrayPay);
+            LinearLayoutManager horizontalLayoutManagaer
+                    = new LinearLayoutManager(CheckoutActivity.this, LinearLayoutManager.VERTICAL, false);
+            recyc_paymenttype.setLayoutManager(horizontalLayoutManagaer);
+            recyc_paymenttype.setAdapter(adapter);
+            adapter.setClickListener(CheckoutActivity.this);
+
+
+        } catch (Exception e) {
+            Log.e(TAG,"Exception   2322    "+e.toString());
+        }
+    }
+
+    @Override
+    public void onClick(int position, String paymentName) {
+
+        Log.e(TAG,"4616  "+position+ "  "+paymentName);
+
+        try {
+            JSONObject jsonObject = jsonArrayPay.getJSONObject(position);
+            strPaymenttype=jsonObject.getString("PaymentName");
+            // strPaymentId=jsonObject.getString("ID_PaymentMethod");
+           // SelstrPaymentId=jsonObject.getString("ID_PaymentMethod");
+            IsOnlinePay = jsonObject.getString("IsOnlinePay");
+            MerchantID =  jsonObject.getString("MerchantID");
+            TransactionID =  jsonObject.getString("TransactionID");
+            SecurityID =  jsonObject.getString("SecurityID");
+            strPaymentId = jsonObject.getString("ID_PaymentMethod");
+            //  getMerchantKeys();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void updatePayments(String id_salesOrder, String FK_SalesOrder,String fk_paymentMethod, String uniqueTxnID, String payDescription,
+                                String authStatuss, String payResponseId, String txnAmount, String txnType) {
+
+        Log.e(TAG,"455   id_salesOrder       "+id_salesOrder);
+        Log.e(TAG,"455   FK_SalesOrder       "+FK_SalesOrder);
+        Log.e(TAG,"455   fk_paymentMethod    "+fk_paymentMethod);
+        Log.e(TAG,"455   uniqueTxnID         "+uniqueTxnID);
+        Log.e(TAG,"455   payDescription      "+payDescription);
+        Log.e(TAG,"455   authStatus          "+authStatuss);
+        Log.e(TAG,"455   payResponseId       "+payResponseId);
+        Log.e(TAG,"455   txnAmount           "+txnAmount);
+        Log.e(TAG,"455   txnType             "+txnType);
+
+        SharedPreferences baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
+        SharedPreferences imgpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF57, 0);
+        String BASEURL = baseurlpref.getString("BaseURL", null);
+        String IMAGEURL = imgpref.getString("ImageURL", null);
+        if (new InternetUtil(this).isInternetOn()) {
+            progressDialog = new ProgressDialog(this, R.style.Progress);
+            progressDialog.setProgressStyle(android.R.style.Widget_ProgressBar);
+            progressDialog.setCancelable(false);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setIndeterminateDrawable(this.getResources()
+                    .getDrawable(R.drawable.progress));
+            progressDialog.show();
+            try{
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .sslSocketFactory(getSSLSocketFactory())
+                        .hostnameVerifier(getHostnameVerifier())
+                        .build();
+                Gson gson = new GsonBuilder()
+                        .setLenient()
+                        .create();
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(BASEURL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create(gson))
+                        .client(client)
+                        .build();
+                ApiInterface apiService = retrofit.create(ApiInterface.class);
+                final JSONObject requestObject1 = new JSONObject();
+                try {
+                    DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+                    Calendar cal = Calendar.getInstance();
+                    String currentdate = dateFormat.format(cal.getTime());
+                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
+
+
+                    SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF1, 0);
+                    SharedPreferences pref2 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF7, 0);
+                    SharedPreferences pref3= getApplicationContext().getSharedPreferences(Config.SHARED_PREF9, 0);
+                    SharedPreferences pref4= getApplicationContext().getSharedPreferences(Config.SHARED_PREF20, 0);
+
+
+//					uniqueTxnID = "";
+//					authStatus = "";
+//					txnAmount = "";
+//					txnType  ="";
+
+                    requestObject1.put("ID_SalesOrder", FK_SalesOrder);
+                    requestObject1.put("FK_PaymentMethod", fk_paymentMethod);
+                    requestObject1.put("PayTransactionID",uniqueTxnID);
+                    requestObject1.put("PayDescription", payDescription);
+                    requestObject1.put("PayStatus", authStatuss);
+                    requestObject1.put("PayResponseId",payResponseId );
+                    requestObject1.put("Amount",txnAmount );
+                    requestObject1.put("TransType", txnType);
+
+
+                    Log.e(TAG,"requestObject1   516    "+requestObject1);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), requestObject1.toString());
+                Call<String> call = apiService.PaymentDetailUpdate(body);
+                call.enqueue(new Callback<String>() {
+                    @Override public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                        try {
+                            progressDialog.dismiss();
+                            Log.e(TAG,"response   1675  "+response.body());
+
+
+//							{"GateWayResult":{"Status":true,"TransDateTime":"25-08-2021 11:14:31","TransType":"01","TransactionId":"BDSK11112","TranStatus":"0300",
+//									"TranAmnt":"00000002.00","ResponseCode":"0","ResponseMessage":"Transaction Verified"},"StatusCode":0,"EXMessage":null}
+
+
+                            JSONObject jObject = new JSONObject(response.body());
+                            JSONObject jobj = jObject.getJSONObject("SalesOrderDetails");
+                            if(jObject.getString("StatusCode").equals("0")){
+
+                                Log.e(TAG,"authStatus   567 1   "+authStatuss+"   ");
+                                startActivity(new Intent(CheckoutActivity.this, ThanksActivity.class));
+                                SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
+                                Intent intent = new Intent(CheckoutActivity.this,ThanksActivity.class);
+                                intent.putExtra("StoreName", pref1.getString("StoreName", null));
+                                intent.putExtra("OrderNumber",jobj.getString("OrderNumber"));
+                                intent.putExtra("strPaymenttype",strPaymenttype);
+                                intent.putExtra("finalamount",finalamount);
+//
+//
+                                startActivity(intent);
+
+                                finish();
+
+
+                            }else {
+                                AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutActivity.this);
+                                builder.setMessage(jobj.getString("ResponseMessage"))
+                                        .setCancelable(false)
+                                        .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                startActivity(new Intent(CheckoutActivity.this, HomeActivity.class));
+                                            }
+                                        });
+                                AlertDialog alert = builder.create();
+                                alert.show();
+                            }
+
+//
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            progressDialog.dismiss();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        progressDialog.dismiss();
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else {
+            Intent in = new Intent(this, NoInternetActivity.class);
+            startActivity(in);
+        }
+
+
+
+    }
+
+    public void startrazerPayment(String companyname,String discription,int amount,String email,String contactnumber){
+        final Activity activity = this;
+
+        final Checkout co = new Checkout();
+
+        try {
+            JSONObject options = new JSONObject();
+            options.put("name", companyname);
+            options.put("description", discription);
+            //You can omit the image option to fetch the image from dashboard
+            options.put("image", "https://s3.amazonaws.com/rzp-mobile/images/rzp.png");
+            int amt = amount*100;
+            options.put("currency", "INR");
+            options.put("amount", amt);
+
+            JSONObject preFill = new JSONObject();
+            preFill.put("email", email);
+            preFill.put("contact", contactnumber);
+
+            options.put("prefill", preFill);
+
+            co.open(activity, options);
+
+
+        } catch (Exception e) {
+            SharedPreferences Errorinpayment = getApplicationContext().getSharedPreferences(Config.SHARED_PREF328, 0);
+
+            Toast.makeText(activity, Errorinpayment.getString("Errorinpayment","")+" : " + e.getMessage(), Toast.LENGTH_SHORT)
+                    .show();
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * The name of the function has to be
+     * onPaymentSuccess
+     * Wrap your code in try catch, as shown, to ensure that this method runs correctly
+     */
+    @Override
+    public void onPaymentSuccess(String razorpayPaymentID) {
+        try {
+            //holidayCheck();
+            Toast.makeText(this, PaymentSuccessfully+": " + razorpayPaymentID, Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(CheckoutActivity.this, ThanksActivity.class));
+            SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
+            Intent intent = new Intent(CheckoutActivity.this,ThanksActivity.class);
+            intent.putExtra("StoreName", pref1.getString("StoreName", null));
+            intent.putExtra("OrderNumber",OrderNumber_s);
+            intent.putExtra("FK_SalesOrder",FK_SalesOrder);
+            intent.putExtra("strPaymenttype",strPaymenttype);
+            intent.putExtra("finalamount",finalamount);
+
+
+            startActivity(intent);
+
+            finish();
+
+        } catch (Exception e) {
+            Log.e("error in razor pay", "Exception in onPaymentSuccess", e);
+        }
+    }
+
+    /**
+     * The name of the function has to be
+     * onPaymentError
+     * Wrap your code in try catch, as shown, to ensure that this method runs correctly
+     */
+    @Override
+    public void onPaymentError(int code, String response) {
+        try {
+            Toast.makeText(this, Paymentfailed+": " + code + " " + response, Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e) {
+            Log.e("error in razor pay", "Exception in onPaymentError", e);
+        }
+    }
+
+    public void payUsingUpi(  String name,String upiId, String note, String amount) {
+
+        Random rnd = new Random();
+        String transNumber  = String.valueOf(rnd.nextInt(999999));
+        Log.e(TAG,"transNumber    2553   "+transNumber);
+        Uri uri =
+                new Uri.Builder()
+                        .scheme("upi")
+                        .authority("pay")
+                        .appendQueryParameter("pa",upiId)
+                        .appendQueryParameter("pn", name)
+                        .appendQueryParameter("mc", "")
+                        .appendQueryParameter("tr", transNumber)
+                        .appendQueryParameter("tn", note)
+                        .appendQueryParameter("am", amount)
+                        .appendQueryParameter("cu", "INR")
+//                        .appendQueryParameter("url", "your-transaction-url")
+                        .build();
+//        Intent intent = new Intent(Intent.ACTION_VIEW);
+//        intent.setData(uri);
+//        intent.setPackage(GOOGLE_PAY_PACKAGE_NAME);
+//        startActivityForResult(intent, GOOGLE_PAY_REQUEST_CODE);
+
+        Intent upiPayIntent = new Intent(Intent.ACTION_VIEW);
+        upiPayIntent.setData(uri);
+
+        Intent chooser = Intent.createChooser(upiPayIntent,"Choose Pay");
+
+        if (null != chooser.resolveActivity(getPackageManager())){
+            startActivityForResult(chooser,UPI_PAYMENT);
+        }else {
+            Toast.makeText(getApplicationContext(),"No UPI App found,Please install to continue",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e(TAG,"resultCode   2692       "+resultCode+"   "+requestCode);
+        Log.e(TAG, "data 2692      "+data );
+        /*
+       E/main: response -1
+       E/UPI: onActivityResult: txnId=AXI4a3428ee58654a938811812c72c0df45&responseCode=00&Status=SUCCESS&txnRef=922118921612
+       E/UPIPAY: upiPaymentDataOperation: txnId=AXI4a3428ee58654a938811812c72c0df45&responseCode=00&Status=SUCCESS&txnRef=922118921612
+       E/UPI: payment successfull: 922118921612
+         */
+        switch (requestCode) {
+
+            case 0:
+
+
+                if ((RESULT_OK == resultCode) || (resultCode == 11)) {
+                    if (data != null) {
+                        String trxt = data.getStringExtra("response");
+                        Log.e("UPI", "onActivityResult: " + trxt);
+                        ArrayList<String> dataList = new ArrayList<>();
+                        dataList.add(trxt);
+                        upiPaymentDataOperation(dataList);
+                    } else {
+                        Log.e("UPI", "onActivityResult: " + "Return data is null");
+                        ArrayList<String> dataList = new ArrayList<>();
+                        dataList.add("nothing");
+                        upiPaymentDataOperation(dataList);
+                    }
+                }
+                if ((RESULT_OK == resultCode) || (resultCode == 202)) {
+                    if (data != null) {
+
+                        Log.e("UPI", "onActivityResult: 2040   " + data);
+
+                    } else {
+                        Log.e("UPI", "onActivityResult: 2043    " + data);
+                    }
+                }
+
+                else {
+                    //when user simply back without payment
+                    Log.e("UPI", "onActivityResult: " + "Return data is null");
+                    ArrayList<String> dataList = new ArrayList<>();
+                    dataList.add("nothing");
+                    upiPaymentDataOperation(dataList);
+                }
+                break;
+            case 201:
+                Log.e(TAG,"requestCode   2692       "+resultCode+"   "+requestCode);
+
+                if (requestCode == 201) {
+
+                    Log.e(TAG, "data    : 26921    " + data);
+
+//                    Bundle bundle = data.getExtras();
+//                    Log.e(TAG, "bundle    : 2692    " + bundle.getString("status").toString().split("\\|"));
+//                    Log.e(TAG, "result    : 2692    " + bundle.getString("status"));
+                    if (data != null) {
+                        Log.e(TAG, "status: 2727    " +  data.getStringExtra("status"));
+
+
+                    } else {
+                        Log.e("UPI", "onActivityResult: 2043    " + data);
+                    }
+                }else{
+
+                }
+                break;
+        }
+
+        Log.e(TAG,"resultCode   2061   "+resultCode+"   "+requestCode);
+    }
+
+    private void upiPaymentDataOperation(ArrayList<String> data) {
+        if (isConnectionAvailable(CheckoutActivity.this)) {
+            String str = data.get(0);
+            Log.e(TAG,"OrderNumber_s      2737      "+OrderNumber_s);
+            Log.e(TAG,"FK_SalesOrder      2737      "+FK_SalesOrder);
+            Log.e("UPIPAY", "upiPaymentDataOperation1: " + data);
+            Log.e("UPIPAY", "upiPaymentDataOperation2: " + str);
+            String[] separated = str. split("&");
+
+
+
+            String paymentCancel = "";
+            if (str == null) str = "discard";
+
+            String status = "";
+            String approvalRefNo = "";
+            String response[] = str.split("&");
+            for (int i = 0; i < response.length; i++) {
+                String equalStr[] = response[i].split("=");
+                if (equalStr.length >= 2) {
+                    if (equalStr[0].toLowerCase().equals("Status".toLowerCase())) {
+                        status = equalStr[1].toLowerCase();
+                    } else if (equalStr[0].toLowerCase().equals("ApprovalRefNo".toLowerCase()) || equalStr[0].toLowerCase().equals("txnRef".toLowerCase())) {
+                        approvalRefNo = equalStr[1];
+                    }
+                } else {
+                    paymentCancel = "Payment cancelled by user.";
+                }
+            }
+            SharedPreferences Transactionsuccessful = getApplicationContext().getSharedPreferences(Config.SHARED_PREF325, 0);
+            SharedPreferences Paymentcancelledbyuser = getApplicationContext().getSharedPreferences(Config.SHARED_PREF326, 0);
+            SharedPreferences TransactionfailedPleasetryagain = getApplicationContext().getSharedPreferences(Config.SHARED_PREF327, 0);
+
+
+            if (status.equals("success")) {
+                //Code to handle successful transaction here.
+                // holidayCheck();
+//
+//                Toast.makeText(AddressAddActivty.this, Transactionsuccessful.getString("Transactionsuccessful", "")+".", Toast.LENGTH_SHORT).show();
+//                Log.e("UPI", "payment successfull: " + approvalRefNo);
+//                startActivity(new Intent(AddressAddActivty.this, ThanksActivity.class));
+//                SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
+//                Intent intent = new Intent(AddressAddActivty.this,ThanksActivity.class);
+//                intent.putExtra("StoreName", pref1.getString("StoreName", null));
+//                intent.putExtra("OrderNumber",OrderNumber_s);
+//                intent.putExtra("FK_SalesOrder",FK_SalesOrder);
+//                intent.putExtra("strPaymenttype",strPaymenttype);
+//                intent.putExtra("finalamount",finalamount);
+//
+//
+//                startActivity(intent);
+//
+//                finish();
+
+                String[] septxnId = separated[0]. split("=");
+                String[] septxnRef = separated[1]. split("=");
+                String[] sepStatus = separated[2]. split("=");
+                String[] sepresponseCode = separated[3]. split("=");
+
+                Log.e("septxnId", "upiPaymentDataOperation31: " + septxnId[1]);
+                Log.e("septxnRef", "upiPaymentDataOperation32: " + septxnRef[1]);
+                Log.e("sepStatus", "upiPaymentDataOperation33: " + sepStatus[1]);
+                Log.e("sepresponseCode", "upiPaymentDataOperation33: " + sepresponseCode[1]);
+
+
+                updatePayments(OrderNumber_s,FK_SalesOrder,strPaymentId,septxnId[1],"0","","0",finalamount,"0");
+            } else if ("Payment cancelled by user.".equals(paymentCancel)) {
+                Toast.makeText(CheckoutActivity.this, Paymentcancelledbyuser.getString("Paymentcancelledbyuser","")+".", Toast.LENGTH_SHORT).show();
+                Log.e("UPI", "Cancelled by user: " + approvalRefNo);
+                AlertMessage(Paymentcancelledbyuser.getString("Paymentcancelledbyuser",""));
+
+            } else {
+                Toast.makeText(CheckoutActivity.this, TransactionfailedPleasetryagain.getString("TransactionfailedPleasetryagain","")+".", Toast.LENGTH_SHORT).show();
+                Log.e("UPI", "failed payment: " + approvalRefNo);
+                AlertMessage(TransactionfailedPleasetryagain.getString("TransactionfailedPleasetryagain",""));
+            }
+        } else {
+            Log.e("UPI", "Internet issue: ");
+            SharedPreferences Nointernetconnection = getApplicationContext().getSharedPreferences(Config.SHARED_PREF282, 0);
+            Toast.makeText(CheckoutActivity.this, Nointernetconnection.getString("Nointernetconnection",""), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void AlertMessage(String msg) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(CheckoutActivity.this);
+        builder.setMessage(""+msg)
+                .setCancelable(false)
+                .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        startActivity(new Intent(CheckoutActivity.this, HomeActivity.class));
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+
+    public static boolean isConnectionAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
+            if (netInfo != null && netInfo.isConnected()
+                    && netInfo.isConnectedOrConnecting()
+                    && netInfo.isAvailable()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void startBillDesk(String finalamount) {
+
+
+
+
+        try {
+
+            DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+            Calendar cal = Calendar.getInstance();
+            String currentdate = dateFormat.format(cal.getTime());
+            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
+            String currenttime= sdf.format(cal.getTime()) ;
+            String StrDeliveryDate;
+            String DeliveryTime;
+            if (!etdate.getText().toString().isEmpty()) {
+                String DeliveryDate = etdate.getText().toString();
+                DateFormat inputFormat = new SimpleDateFormat("dd-MM-yyyy");
+                DateFormat outputFormat = new SimpleDateFormat("MM-dd-yyyy");
+                Date date = inputFormat.parse(DeliveryDate);
+                StrDeliveryDate = outputFormat.format(date);
+            }else{
+                StrDeliveryDate =currentdate;
+            }
+
+
+            String strRemark =  etremark.getText().toString();
+
+//            inExpressdelivery,strLongitude,strLatitude
+
+//            requestObject1.put("ExpressDelivery", inExpressdelivery);
+//            requestObject1.put("SOLongitude", strLongitude);
+//            requestObject1.put("SOLattitude", strLatitude);
+
+            SharedPreferences ShareStrDeliveryDate = getApplicationContext().getSharedPreferences(Config.SHARED_PREF373, 0);
+            SharedPreferences.Editor StrDeliveryDateeditor = ShareStrDeliveryDate.edit();
+            StrDeliveryDateeditor.putString("StrDeliveryDate", StrDeliveryDate);
+            StrDeliveryDateeditor.commit();
+
+
+            SharedPreferences SharestrRemark = getApplicationContext().getSharedPreferences(Config.SHARED_PREF375, 0);
+            SharedPreferences.Editor strRemarkeditor = SharestrRemark.edit();
+            strRemarkeditor.putString("strRemark", strRemark);
+            strRemarkeditor.commit();
+
+            SharedPreferences ShareinExpressdelivery = getApplicationContext().getSharedPreferences(Config.SHARED_PREF376, 0);
+            SharedPreferences.Editor inExpressdeliveryeditor = ShareinExpressdelivery.edit();
+            inExpressdeliveryeditor.putInt("inExpressdelivery", 0);
+            inExpressdeliveryeditor.commit();
+
+            SharedPreferences SharestrLongitude = getApplicationContext().getSharedPreferences(Config.SHARED_PREF377, 0);
+            SharedPreferences.Editor strLongitudeeditor = SharestrLongitude.edit();
+            strLongitudeeditor.putString("strLongitude", strLongitude);
+            strLongitudeeditor.commit();
+
+            SharedPreferences SharestrLatitude = getApplicationContext().getSharedPreferences(Config.SHARED_PREF378, 0);
+            SharedPreferences.Editor strLatitudeeditor = SharestrLatitude.edit();
+            strLatitudeeditor.putString("strLatitude", strLatitude);
+            strLatitudeeditor.commit();
+
+            SharedPreferences ConfirmOrderNo = getApplicationContext().getSharedPreferences(Config.SHARED_PREF402, 0);
+            SharedPreferences.Editor ConfirmOrderNoeditor = ConfirmOrderNo.edit();
+            ConfirmOrderNoeditor.putString("ConfirmOrderNo", OrderNumber_s);
+            ConfirmOrderNoeditor.commit();
+
+            SharedPreferences prefstrPaymentId = getApplicationContext().getSharedPreferences(Config.SHARED_PREF403, 0);
+            SharedPreferences.Editor prefstrPaymentIdeditor = prefstrPaymentId.edit();
+            prefstrPaymentIdeditor.putString("strPaymentId", strPaymentId);
+            prefstrPaymentIdeditor.commit();
+
+            SharedPreferences prefFK_SalesOrder = getApplicationContext().getSharedPreferences(Config.SHARED_PREF404, 0);
+            SharedPreferences.Editor prefFK_SalesOrdereditor = prefFK_SalesOrder.edit();
+            prefFK_SalesOrdereditor.putString("FK_SalesOrder", FK_SalesOrder);
+            prefFK_SalesOrdereditor.commit();
+
+
+            if (fileimage !=null){
+                SharedPreferences Sharesfileimage = getApplicationContext().getSharedPreferences(Config.SHARED_PREF379, 0);
+                SharedPreferences.Editor fileimageeditor = Sharesfileimage.edit();
+                fileimageeditor.putString("fileimage", fileimage.toString());
+                fileimageeditor.commit();
+            }else {
+                SharedPreferences Sharesfileimage = getApplicationContext().getSharedPreferences(Config.SHARED_PREF379, 0);
+                SharedPreferences.Editor fileimageeditor = Sharesfileimage.edit();
+                fileimageeditor.putString("fileimage", "");
+                fileimageeditor.commit();
+            }
+
+            Log.e(TAG,"1640      strPaymenttype  "+strPaymenttype+"     finalamount      "+finalamount);
+
+            SharedPreferences SharesstrPaymenttype = getApplicationContext().getSharedPreferences(Config.SHARED_PREF380, 0);
+            SharedPreferences.Editor strPaymenttypeeditor = SharesstrPaymenttype.edit();
+            strPaymenttypeeditor.putString("strPaymenttype", strPaymenttype);
+            strPaymenttypeeditor.commit();
+
+            SharedPreferences Sharesfinalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF381, 0);
+            SharedPreferences.Editor finalamounteditor = Sharesfinalamount.edit();
+            finalamounteditor.putString("finalamount", finalamount);
+            finalamounteditor.commit();
+
+            SharedPreferences redeemAmount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF387, 0);
+            SharedPreferences.Editor redeemAmounteditor = redeemAmount.edit();
+            redeemAmounteditor.putString("redeemAmount", redeemamount);
+            redeemAmounteditor.commit();
+
+//            if (MerchantID.equals("null")){
+//                Log.e(TAG,"MerchantID   1614   "+MerchantID);
+//            }else {
+//                VerifyChecksum();
+//            }
+
+            Log.e("TransactionID ","   1622    "+TransactionID);
+            Log.e("MerchantID ","   1622    "+MerchantID);
+            Log.e("SecurityID ","   1622    "+SecurityID);
+            VerifyChecksum();
+
+
+////            String strPGMsg = "BDSKUATY|ARP10234|NA|2.00|NA|NA|NA|INR|NA|R|bdskuaty|NA|NA|F|NA|NA|NA|NA|NA|NA|NA|http://www.domain.com/response.jsp|892409133";
+//            String strPGMsg = "|ARP1553593909862|NA|2|NA|NA|NA|INR|NA|R|airmtst|NA|NA|F|NA|NA|NA|NA|NA|NA|NA|https://uat.billdesk.com/pgidsk/pgmerc/pg_dump.jsp|892409133";
+//            String strTokenMsg = null;
+//            SampleCallBack objSampleCallBack = new SampleCallBack();
+//AIRMTST
+//            Intent sdkIntent = new Intent(this, PaymentOptions.class);
+//            sdkIntent.putExtra("msg",strPGMsg);
+//            if(strTokenMsg != null && strTokenMsg.length() > strPGMsg.length()) {
+//
+//                sdkIntent.putExtra("token",strTokenMsg);
+//            }
+//            sdkIntent.putExtra("user-email","test@bd.com");
+//            sdkIntent.putExtra("user-mobile","9800000000");
+//            sdkIntent.putExtra("callback",objSampleCallBack);
+//
+//            startActivity(sdkIntent);
+
+
+        }catch (Exception e){
+
+            Log.e(TAG,"Exception   37   "+e.toString());
+        }
+
+
+
+//        startActivityForResult(sdkIntent,202);
+
+//        Intent i = new Intent(this,TestActivity.class);
+//        startActivityForResult(i,202);
+
+    }
+
+    private void VerifyChecksum() {
+        SharedPreferences baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
+        SharedPreferences imgpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF57, 0);
+        String BASEURL = baseurlpref.getString("BaseURL", null);
+        String IMAGEURL = imgpref.getString("ImageURL", null);
+        if (new InternetUtil(this).isInternetOn()) {
+            progressDialog = new ProgressDialog(this, R.style.Progress);
+            progressDialog.setProgressStyle(android.R.style.Widget_ProgressBar);
+            progressDialog.setCancelable(false);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setIndeterminateDrawable(this.getResources()
+                    .getDrawable(R.drawable.progress));
+            progressDialog.show();
+            try{
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .sslSocketFactory(getSSLSocketFactory())
+                        .hostnameVerifier(getHostnameVerifier())
+                        .build();
+                Gson gson = new GsonBuilder()
+                        .setLenient()
+                        .create();
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(BASEURL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create(gson))
+                        .client(client)
+                        .build();
+                ApiInterface apiService = retrofit.create(ApiInterface.class);
+                final JSONObject requestObject1 = new JSONObject();
+                try {
+
+                    SharedPreferences pref2 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF7, 0);
+
+                    // requestObject1.put("TransactionID", "2563");
+//                    requestObject1.put("MerchantID", "AIRMTST");
+//                    requestObject1.put("Amount","2");
+//                    requestObject1.put("SecurityID", "airmtst");
+
+
+                    SharedPreferences pref4 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF4, 0);
+                    SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF1, 0);
+                    SharedPreferences pref5 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
+                    SharedPreferences pref3 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF2, 0);
+
+                    requestObject1.put("MerchantID", Utils.encryptStart(MerchantID));
+                    requestObject1.put("Amount",Utils.encryptStart(finalamount));
+                    requestObject1.put("SecurityID", Utils.encryptStart(SecurityID));
+                    requestObject1.put("MobileNumber", Utils.encryptStart(pref4.getString("userphoneno", null)));
+                    requestObject1.put("UserID", Utils.encryptStart(pref1.getString("userid", null)));
+                    requestObject1.put("CustName", Utils.encryptStart(pref3.getString("username", null)));
+                    requestObject1.put("StoreName", Utils.encryptStart(pref5.getString("StoreName", null)));
+
+                    requestObject1.put("Fk_PaymentMethod", Utils.encryptStart(strPaymentId));
+                    requestObject1.put("ID_SalesOrder", Utils.encryptStart(FK_SalesOrder));
+//
+//                    Log.e(TAG,"requestObject1   1681    "+strPaymentId);
+                    Log.e(TAG,"requestObject1   1680    "+requestObject1);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), requestObject1.toString());
+                Call<String> call = apiService.getVerifychecksum(body);
+                call.enqueue(new Callback<String>() {
+                    @Override public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                        try {
+                            progressDialog.dismiss();
+                            Log.e(TAG,"response   1680    "+response.body());
+                            JSONObject jObject = new JSONObject(response.body());
+
+                            if(jObject.getString("StatusCode").equals("0")){
+                                JSONObject jobj = jObject.getJSONObject("AccountTransferStatus");
+                                Log.e(TAG,"msg   1697   "+jobj.getString("msg"));
+
+//                                String strPGMsg = "BDSKUATY|BDSK1004|NA|2|NA|NA|NA|INR|NA|R|bdskuaty|NA|NA|F|NA|NA|NA|NA|NA|NA|NA|http://localhost:51953/Home/PaymentGateWayResult|984BABE1F1214D9DED3FA8151D7C002EC675E44A376D16580E4805D119776FDB";
+                                // String strPGMsg = "AIRMTST|ARP1553593909862|NA|2|NA|NA|NA|INR|NA|R|airmtst|NA|NA|F|NA|NA|NA|NA|NA|NA|NA|https://uat.billdesk.com/pgidsk/pgmerc/pg_dump.jsp|892409133";
+                                String strPGMsg = jobj.getString("msg");
+                                String strTokenMsg = null;
+                                SampleCallBack objSampleCallBack = new SampleCallBack();
+                                Intent sdkIntent = new Intent(CheckoutActivity.this, PaymentOptions.class);
+                                sdkIntent.putExtra("msg",strPGMsg);
+                                if(strTokenMsg != null && strTokenMsg.length() > strPGMsg.length()) {
+
+                                    sdkIntent.putExtra("token",strTokenMsg);
+                                }
+                                SharedPreferences pref3 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF3, 0);
+                                // String useremail=pref3.getString("useremail", null);
+                                SharedPreferences pref4 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF4, 0);
+
+                                sdkIntent.putExtra("user-email",pref3.getString("useremail", null));
+                                sdkIntent.putExtra("user-mobile",pref4.getString("userphoneno", null));
+                                sdkIntent.putExtra("callback",objSampleCallBack);
+
+                                startActivity(sdkIntent);
+                                //  startActivityForResult(sdkIntent,201);
+
+                            }else{
+                                JSONObject jobj = jObject.getJSONObject("AccountTransferStatus");
+                                Log.e(TAG,"msg   1697   "+jobj.getString("msg"));
+                                Toast.makeText(getApplicationContext(),jobj.getString("ResponseMessage")+ "!!",Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            progressDialog.dismiss();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        progressDialog.dismiss();
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else {
+            Intent in = new Intent(this,NoInternetActivity.class);
+            startActivity(in);
+        }
+    }
+
 
 }
 

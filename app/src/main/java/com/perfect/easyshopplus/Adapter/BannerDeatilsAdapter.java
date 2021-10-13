@@ -57,6 +57,7 @@ public class BannerDeatilsAdapter extends PagerAdapter {
         View myImageLayout = inflater.inflate(R.layout.slide, view, false);
         assert myImageLayout !=null;
         final ImageView myImage = (ImageView) myImageLayout.findViewById(R.id.image);
+        Log.e("images","images 60  "+images[position]);
         PicassoTrustAll.getInstance(context).load(images[position]).into(myImage);
       /*  Glide.with(context)
                 .load(images[position])

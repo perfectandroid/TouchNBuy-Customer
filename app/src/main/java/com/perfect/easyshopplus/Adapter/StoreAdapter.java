@@ -217,9 +217,12 @@ public class StoreAdapter extends RecyclerView.Adapter {
                                 SharedPreferences.Editor ID_Storeeditor = ID_Store.edit();
                                 ID_Storeeditor.putString("ID_Store", jsonObject.getString("ID_Store"));
                                 ID_Storeeditor.commit();
+
+
                                 SharedPreferences StoreName = context.getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
                                 SharedPreferences.Editor StoreNameeditor = StoreName.edit();
                                 StoreNameeditor.putString("StoreName", jsonObject.getString("StoreName"));
+                                Log.e(TAG,"StoreName   255  "+jsonObject.getString("StoreName"));
 
                                 StoreNameeditor.commit();
                                 SharedPreferences Requiredcounterpickuppref = context.getApplicationContext().getSharedPreferences(Config.SHARED_PREF44, 0);

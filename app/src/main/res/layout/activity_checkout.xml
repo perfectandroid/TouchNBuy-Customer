@@ -1125,6 +1125,331 @@
 
                 </androidx.cardview.widget.CardView>
 
+                <androidx.cardview.widget.CardView
+                    xmlns:card_view="https://schemas.android.com/apk/res-auto"
+                    card_view:cardBackgroundColor="@color/white"
+                    card_view:cardCornerRadius="6dp"
+                    android:elevation="25dp"
+                    card_view:cardUseCompatPadding="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/card_paymenttype"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:id="@+id/PayType_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_paymenttype"
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:textSize="15dp"
+                            android:textStyle="bold"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/black"
+                            android:drawableRight="@drawable/arrow_top"
+                            android:text="PAYMENT TYPE : " />
+
+                        <!--
+                                            <LinearLayout
+                                                android:background="@color/greydark"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="1dp"/>
+                        -->
+
+                        <LinearLayout
+                            android:id="@+id/ll_paymenttype"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="vertical"
+                            android:visibility="visible">
+
+
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyc_paymenttype"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white"/>
+
+
+
+
+
+
+                            <!--                        <LinearLayout-->
+                            <!--                            android:id="@+id/ll_check"-->
+                            <!--                            android:layout_width="match_parent"-->
+                            <!--                            android:layout_height="wrap_content"-->
+                            <!--                            android:layout_marginLeft="10dp"-->
+                            <!--                            android:layout_marginRight="10dp"-->
+                            <!--                            android:layout_marginBottom="2dp">-->
+                            <!--                            <CheckBox-->
+                            <!--                                android:id="@+id/cbConfirm"-->
+                            <!--                                android:layout_width="wrap_content"-->
+                            <!--                                android:layout_height="wrap_content"-->
+                            <!--                                android:textStyle="bold"-->
+                            <!--                                android:text=" "-->
+                            <!--                                android:layout_marginBottom="2dp"-->
+                            <!--                                android:checked="true"-->
+                            <!--                                android:textColor="@color/black"/>-->
+                            <!--                            <TextView-->
+                            <!--                                android:id="@+id/tvtermsncondition"-->
+                            <!--                                android:layout_width="wrap_content"-->
+                            <!--                                android:layout_height="wrap_content"-->
+                            <!--                                android:textStyle="bold"-->
+                            <!--                                android:layout_marginBottom="2dp"-->
+                            <!--                                android:text="Terms &amp; Conditions"-->
+                            <!--                                android:textColor="@color/black"/>-->
+                            <!--                        </LinearLayout>-->
+                            <!--  <LinearLayout
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_weight=".8"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:id="@+id/tvitemcount"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:text="Sub Total"
+                                    android:textColor="@color/black"
+                                    android:textSize="18sp" />
+                                <LinearLayout
+                                    android:id="@+id/llGST"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="(GST "/>
+                                    <TextView
+                                        android:id="@+id/tv_gst"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content" />
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Included)"/>
+                                </LinearLayout>
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="10dp" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:text="Discount"
+                                    android:textColor="@color/black"
+                                    android:textSize="15sp" />
+
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:text="Member Discount"
+                                    android:textColor="@color/black"
+                                    android:textSize="15sp" />
+
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:text="GST"
+                                    android:visibility="gone"
+                                    android:textColor="@color/black"
+                                    android:textSize="15sp" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:text="Other Charges"
+                                    android:textColor="@color/black"
+                                    android:textSize="15sp" />
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="10dp" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:text="Grand Total"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/black"
+                                    android:layout_marginBottom="5dp"
+                                    android:textSize="18sp" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:text="Amount Payable"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/colorPrimaryExtraDark"
+                                    android:textSize="20sp" />
+
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_weight="1.5"
+                                android:orientation="vertical"
+                                android:layout_marginRight="20dp">
+
+                                <TextView
+                                    android:id="@+id/tv_subtotal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="end"
+                                    android:text="00.00"
+                                    android:textColor="@color/black"
+                                    android:textSize="18sp" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"/>
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content" />
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"/>
+                                </LinearLayout>
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="10dp" />
+
+                                <TextView
+                                    android:id="@+id/tv_discount"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:gravity="end"
+                                    android:text="00.00"
+                                    android:textColor="@color/black"
+                                    android:textSize="15sp" />
+
+
+                                <TextView
+                                    android:id="@+id/tv_memberdiscount"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="end"
+                                    android:text="00.00"
+                                    android:textColor="@color/black"
+                                    android:textSize="15sp" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:gravity="end"
+                                    android:text="00.00"
+                                    android:visibility="gone"
+                                    android:textColor="@color/black"
+                                    android:textSize="15sp" />
+
+                                <TextView
+                                    android:id="@+id/tv_othercharges"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:gravity="end"
+                                    android:text="@string/rs"
+                                    android:textColor="@color/black"
+                                    android:textSize="15sp" />
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="10dp" />
+
+                                <TextView
+                                    android:id="@+id/tv_grandtotal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="end"
+                                    android:textStyle="bold"
+                                    android:text="00.00"
+                                    android:layout_marginBottom="5dp"
+                                    android:textColor="@color/black"
+                                    android:textSize="18dp" />
+
+                                <TextView
+                                    android:id="@+id/tv_amountpay"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="end"
+                                    android:textStyle="bold"
+                                    android:text="00.00"
+                                    android:textColor="@color/colorPrimaryExtraDark"
+                                    android:textSize="20dp" />
+                            </LinearLayout>
+                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/tv_savedamount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="left"
+                            android:visibility="gone"
+                            android:textColor="@color/red"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"/>-->
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="3dp" />
+                        </LinearLayout>
+
+
+
+
+                    </LinearLayout>
+
+
+
+                </androidx.cardview.widget.CardView>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

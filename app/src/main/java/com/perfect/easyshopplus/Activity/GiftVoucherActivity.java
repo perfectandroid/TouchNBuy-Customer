@@ -366,6 +366,7 @@ public class GiftVoucherActivity extends AppCompatActivity implements View.OnCli
     }
 
 
+
     private void UpdateScratchCard(String customerReward) {
         SharedPreferences baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
         SharedPreferences imgpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF57, 0);

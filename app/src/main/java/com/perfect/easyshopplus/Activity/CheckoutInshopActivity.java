@@ -17,6 +17,8 @@ import com.google.android.material.navigation.NavigationView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -36,6 +38,9 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.perfect.easyshopplus.Adapter.AdapterPaymentOptions;
 import com.perfect.easyshopplus.Adapter.NavMenuAdapter;
 import com.perfect.easyshopplus.DB.DBHandler;
 import com.perfect.easyshopplus.R;
@@ -121,6 +126,16 @@ public class CheckoutInshopActivity extends AppCompatActivity implements Navigat
     String StoreName_s,OrderNumber_s;
     String FK_SalesOrder;
 
+    String IsOnlinePay = "false";
+    String RedeemRequest = "false";
+    String Pc_PrivilageCardEnable = "false";
+    String Pc_AccNumber = "";
+    String Pc_ID_CustomerAcc = "0";
+    String privilegeamount ="0";
+
+    String strPaymenttype ="";
+    String strPaymentId = "1";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,6 +185,7 @@ public class CheckoutInshopActivity extends AppCompatActivity implements Navigat
         }
         setViews();
         getCurrentdatentime();
+        paymentcondition();
         tvtime.setText("Order confirmation at "+strTime);
         tvdate.setText("Order confirmation on "+strDate);
         SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF14, 0);
@@ -899,6 +915,14 @@ public class CheckoutInshopActivity extends AppCompatActivity implements Navigat
                 SharedPreferences prefFK_SalesOrder = getApplicationContext().getSharedPreferences(Config.SHARED_PREF404, 0);
                 Log.e(TAG,"prefFK_SalesOrder   1393    "+prefFK_SalesOrder.getString("FK_SalesOrder","0"));
 
+                requestObject1.put("IsOnlinePay",IsOnlinePay);
+                requestObject1.put("RedeemRequest",RedeemRequest);
+
+                requestObject1.put("PrivilageCardEnable",Pc_PrivilageCardEnable);
+                requestObject1.put("PrivCardAmount",privilegeamount);
+                requestObject1.put("AccNumber",Pc_AccNumber);
+                requestObject1.put("ID_CustomerAcc",Pc_ID_CustomerAcc);
+
                 Log.e(TAG,"requestObject1    895  "+requestObject1);
 
             } catch (JSONException e) {
@@ -931,15 +955,18 @@ public class CheckoutInshopActivity extends AppCompatActivity implements Navigat
                             prefFK_SalesOrdereditor.putString("FK_SalesOrder", FK_SalesOrder);
                             prefFK_SalesOrdereditor.commit();
 
-                            SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
-                            Intent intent = new Intent(CheckoutInshopActivity.this,ThanksActivity.class);
-                            intent.putExtra("StoreName", pref1.getString("StoreName", null));
-                            intent.putExtra("OrderNumber",jobj.getString("OrderNumber"));
-                            intent.putExtra("strPaymenttype","");
-                            intent.putExtra("finalamount",finalamount);
-                            startActivity(intent);
-                            //startActivity(new Intent(CheckoutInshopActivity.this, ThanksActivity.class));
-                            finish();
+//                            SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
+//                            Intent intent = new Intent(CheckoutInshopActivity.this,ThanksActivity.class);
+//                            intent.putExtra("StoreName", pref1.getString("StoreName", null));
+//                            intent.putExtra("OrderNumber",jobj.getString("OrderNumber"));
+//                            intent.putExtra("strPaymenttype","");
+//                            intent.putExtra("finalamount",finalamount);
+//                            startActivity(intent);
+//                            //startActivity(new Intent(CheckoutInshopActivity.this, ThanksActivity.class));
+//                            finish();
+
+                            updatePayments(OrderNumber_s,FK_SalesOrder,strPaymentId,"","0","","0",finalamount,"0");
+
                         }else if(jObject.getString("StatusCode").equals("10")){
                             AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutInshopActivity.this);
                             builder.setMessage(jobj.getString("ResponseMessage"))
@@ -1078,6 +1105,181 @@ public class CheckoutInshopActivity extends AppCompatActivity implements Navigat
 //            e.printStackTrace();
 //        }
 //    }
+
+    private void updatePayments(String id_salesOrder, String FK_SalesOrder,String fk_paymentMethod, String uniqueTxnID, String payDescription,
+                                String authStatuss, String payResponseId, String txnAmount, String txnType) {
+
+        Log.e(TAG,"455   id_salesOrder       "+id_salesOrder);
+        Log.e(TAG,"455   FK_SalesOrder       "+FK_SalesOrder);
+        Log.e(TAG,"455   fk_paymentMethod    "+fk_paymentMethod);
+        Log.e(TAG,"455   uniqueTxnID         "+uniqueTxnID);
+        Log.e(TAG,"455   payDescription      "+payDescription);
+        Log.e(TAG,"455   authStatus          "+authStatuss);
+        Log.e(TAG,"455   payResponseId       "+payResponseId);
+        Log.e(TAG,"455   txnAmount           "+txnAmount);
+        Log.e(TAG,"455   txnType             "+txnType);
+
+        SharedPreferences baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
+        SharedPreferences imgpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF57, 0);
+        String BASEURL = baseurlpref.getString("BaseURL", null);
+        String IMAGEURL = imgpref.getString("ImageURL", null);
+        if (new InternetUtil(this).isInternetOn()) {
+            progressDialog = new ProgressDialog(this, R.style.Progress);
+            progressDialog.setProgressStyle(android.R.style.Widget_ProgressBar);
+            progressDialog.setCancelable(false);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setIndeterminateDrawable(this.getResources()
+                    .getDrawable(R.drawable.progress));
+            progressDialog.show();
+            try{
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .sslSocketFactory(getSSLSocketFactory())
+                        .hostnameVerifier(getHostnameVerifier())
+                        .build();
+                Gson gson = new GsonBuilder()
+                        .setLenient()
+                        .create();
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(BASEURL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create(gson))
+                        .client(client)
+                        .build();
+                ApiInterface apiService = retrofit.create(ApiInterface.class);
+                final JSONObject requestObject1 = new JSONObject();
+                try {
+                    DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+                    Calendar cal = Calendar.getInstance();
+                    String currentdate = dateFormat.format(cal.getTime());
+                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
+
+
+                    SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF1, 0);
+                    SharedPreferences pref2 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF7, 0);
+                    SharedPreferences pref3= getApplicationContext().getSharedPreferences(Config.SHARED_PREF9, 0);
+                    SharedPreferences pref4= getApplicationContext().getSharedPreferences(Config.SHARED_PREF20, 0);
+
+
+//					uniqueTxnID = "";
+//					authStatus = "";
+//					txnAmount = "";
+//					txnType  ="";
+
+                    requestObject1.put("ID_SalesOrder", FK_SalesOrder);
+                    requestObject1.put("FK_PaymentMethod", fk_paymentMethod);
+                    requestObject1.put("PayTransactionID",uniqueTxnID);
+                    requestObject1.put("PayDescription", payDescription);
+                    requestObject1.put("PayStatus", authStatuss);
+                    requestObject1.put("PayResponseId",payResponseId );
+                    requestObject1.put("Amount",txnAmount );
+                    requestObject1.put("TransType", txnType);
+
+
+                    Log.e(TAG,"requestObject1   516    "+requestObject1);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), requestObject1.toString());
+                Call<String> call = apiService.PaymentDetailUpdate(body);
+                call.enqueue(new Callback<String>() {
+                    @Override public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                        try {
+                            progressDialog.dismiss();
+                            Log.e(TAG,"response   1675  "+response.body());
+
+
+//							{"GateWayResult":{"Status":true,"TransDateTime":"25-08-2021 11:14:31","TransType":"01","TransactionId":"BDSK11112","TranStatus":"0300",
+//									"TranAmnt":"00000002.00","ResponseCode":"0","ResponseMessage":"Transaction Verified"},"StatusCode":0,"EXMessage":null}
+
+
+                            JSONObject jObject = new JSONObject(response.body());
+                            JSONObject jobj = jObject.getJSONObject("SalesOrderDetails");
+                            if(jObject.getString("StatusCode").equals("0")){
+
+                                Log.e(TAG,"authStatus   567 1   "+authStatuss+"   ");
+                                startActivity(new Intent(CheckoutInshopActivity.this, ThanksActivity.class));
+                                SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
+                                Intent intent = new Intent(CheckoutInshopActivity.this,ThanksActivity.class);
+                                intent.putExtra("StoreName", pref1.getString("StoreName", null));
+                                intent.putExtra("OrderNumber",jobj.getString("OrderNumber"));
+                                intent.putExtra("strPaymenttype",strPaymenttype);
+                                intent.putExtra("finalamount",finalamount);
+//
+//
+                                startActivity(intent);
+
+                                finish();
+
+
+                            }else {
+                                AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutInshopActivity.this);
+                                builder.setMessage(jobj.getString("ResponseMessage"))
+                                        .setCancelable(false)
+                                        .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                startActivity(new Intent(CheckoutInshopActivity.this, HomeActivity.class));
+                                            }
+                                        });
+                                AlertDialog alert = builder.create();
+                                alert.show();
+                            }
+
+//
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            progressDialog.dismiss();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        progressDialog.dismiss();
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else {
+            Intent in = new Intent(this, NoInternetActivity.class);
+            startActivity(in);
+        }
+
+
+
+    }
+
+    public void paymentcondition(){
+
+
+        SharedPreferences OnlinePaymentmeth1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF62, 0);
+        String BASEURL = OnlinePaymentmeth1.getString("OnlinePaymentMethods", null);
+        Log.e(TAG,"BASEURLSSSSS   2283    "+BASEURL);
+
+
+
+        SharedPreferences OnlinePaymentpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF62, 0);
+        String value = OnlinePaymentpref.getString("OnlinePaymentMethods", null);
+        Log.e(TAG,"OnlinePaymentpref   2293    "+value);
+        try {
+            JSONArray jsonArrayPay = new JSONArray(value);
+            for (int i=0;i<jsonArrayPay.length();i++){
+                JSONObject jsonObject = jsonArrayPay.getJSONObject(i);
+                if (jsonObject.getString("ID_PaymentMethod").equals("1")){
+                    strPaymenttype = jsonObject.getString("PaymentName");
+                }
+
+            }
+
+
+
+        } catch (Exception e) {
+            Log.e(TAG,"Exception   2322    "+e.toString());
+        }
+    }
 
 }
 

@@ -22,6 +22,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
@@ -48,6 +49,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.perfect.easyshopplus.Activity.billdesks.SampleCallBack;
 import com.perfect.easyshopplus.Activity.billdesks.StatusActivity;
+import com.perfect.easyshopplus.Adapter.AdapterPaymentOptions;
 import com.perfect.easyshopplus.Adapter.NavMenuAdapter;
 import com.perfect.easyshopplus.Adapter.OrderDetailsListAdapter;
 import com.perfect.easyshopplus.Adapter.OrderListAdapter;
@@ -57,6 +59,7 @@ import com.perfect.easyshopplus.R;
 import com.perfect.easyshopplus.Retrofit.ApiInterface;
 import com.perfect.easyshopplus.Utility.Config;
 import com.perfect.easyshopplus.Utility.InternetUtil;
+import com.perfect.easyshopplus.Utility.ItemClickListener;
 import com.perfect.easyshopplus.Utility.PicassoTrustAll;
 import com.perfect.easyshopplus.Utility.Utils;
 
@@ -100,7 +103,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class OrderDetailsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+public class OrderDetailsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener , ItemClickListener {
 
     String TAG ="OrderDetailsActivity";
     ProgressDialog progressDialog;
@@ -175,6 +178,12 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
     TextView tv_pending,tv_confirmed,tv_packed,tv_delivered,tv_view_purchase,tv_payment_statusmsg;
     String voucherUrl = "";
     String IsOnlinePay = "false";
+    RecyclerView recyc_paymenttype;
+    JSONArray jsonArrayPay;
+    LinearLayout ll_privisummary;
+    TextView privi_tv,privi_tvamnt;
+    LinearLayout ll_privstatus;
+    TextView tv_priv_statusmsg;
 
 
 
@@ -609,6 +618,15 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
         tv_view_purchase =  (TextView) findViewById(R.id.tv_view_purchase);
         tv_payment_statusmsg = (TextView) findViewById(R.id.tv_payment_statusmsg);
 
+        recyc_paymenttype = (RecyclerView) findViewById(R.id.recyc_paymenttype);
+
+        ll_privisummary = (LinearLayout) findViewById(R.id.ll_privisummary);
+        privi_tv = (TextView) findViewById(R.id.privi_tv);
+        privi_tvamnt = (TextView) findViewById(R.id.privi_tvamnt);
+
+        ll_privstatus = (LinearLayout) findViewById(R.id.ll_privstatus);
+        tv_priv_statusmsg= (TextView) findViewById(R.id.tv_priv_statusmsg);
+
 
 
     }
@@ -725,21 +743,54 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
                                 txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+f.format(jobj.getDouble("AmountPayable")));
 
                                 Float RedeemAmnts = Float.parseFloat(jobj.getString("RedeemAmnt"));
+                                Float PrivCardAmount = Float.parseFloat(jobj.getString("PrivCardAmount"));
                                 Log.e(TAG,"RedeemAmnt  450  "+RedeemAmnts);
                                 String amntPayable ="";
-                                if (RedeemAmnts>0){
-                                    Log.e(TAG,"RedeemAmnt  453  "+RedeemAmnts);
-                                    amntPayable = String.valueOf(jobj.getDouble("AmountPayable") + RedeemAmnts);
-                                    Log.e(TAG,"RedeemAmnt  amntPayable  "+amntPayable);
+                                if (RedeemAmnts>0 && PrivCardAmount >0){
+                                    Log.e(TAG,"RedeemAmnt  PrivCardAmount 4531  "+RedeemAmnts+"  "+PrivCardAmount);
+                                    amntPayable = String.valueOf(jobj.getDouble("AmountPayable") + RedeemAmnts+PrivCardAmount);
+                                    Log.e(TAG,"RedeemAmnt  PrivCardAmount   amntPayable 4532  "+amntPayable);
                                     tv_grandtotal.setText(/*string + " " +*/ f.format(Double.parseDouble(amntPayable)));
                                     ll_redeemsummary.setVisibility(View.VISIBLE);
+                                    ll_privisummary.setVisibility(View.VISIBLE);
                                     redeem_tvamnt.setText(""+f.format(Double.parseDouble(String.valueOf(RedeemAmnts))));
-                                }else {
-                                    Log.e(TAG,"RedeemAmnt  457  "+RedeemAmnts);
-                                    tv_grandtotal.setText(/*string + " " +*/ f.format(jobj.getDouble("AmountPayable")));
-                                    ll_redeemsummary.setVisibility(View.GONE);
-                                    redeem_tvamnt.setText("0.00");
+                                    privi_tvamnt.setText(""+f.format(Double.parseDouble(String.valueOf(PrivCardAmount))));
+
                                 }
+                                else if (RedeemAmnts>0){
+                                    Log.e(TAG,"RedeemAmnt  4533  "+RedeemAmnts);
+                                    amntPayable = String.valueOf(jobj.getDouble("AmountPayable") + RedeemAmnts);
+                                    Log.e(TAG,"RedeemAmnt   amntPayable 4534  "+amntPayable);
+                                    tv_grandtotal.setText(/*string + " " +*/ f.format(Double.parseDouble(amntPayable)));
+//                                    tv_grandtotal.setText(/*string + " " +*/ f.format(jobj.getDouble("AmountPayable")));
+                                    ll_redeemsummary.setVisibility(View.VISIBLE);
+                                    ll_privisummary.setVisibility(View.GONE);
+                                    redeem_tvamnt.setText(""+f.format(Double.parseDouble(String.valueOf(RedeemAmnts))));
+                                    privi_tvamnt.setText("0.00");
+                                }
+
+                                else if (PrivCardAmount>0){
+                                    Log.e(TAG,"PrivCardAmount  4535  "+PrivCardAmount);
+                                    amntPayable = String.valueOf(jobj.getDouble("AmountPayable") + PrivCardAmount);
+                                    Log.e(TAG,"  PrivCardAmount   amntPayable 4534  "+amntPayable);
+                                    tv_grandtotal.setText(/*string + " " +*/ f.format(Double.parseDouble(amntPayable)));
+//                                    tv_grandtotal.setText(/*string + " " +*/ f.format(jobj.getDouble("AmountPayable")));
+                                    ll_redeemsummary.setVisibility(View.GONE);
+                                    ll_privisummary.setVisibility(View.VISIBLE);
+                                    redeem_tvamnt.setText("0.00");
+                                    privi_tvamnt.setText(""+f.format(Double.parseDouble(String.valueOf(PrivCardAmount))));
+                                }
+
+                                else{
+                                    Log.e(TAG,"PrivCardAmount  457  "+PrivCardAmount);
+                                    tv_grandtotal.setText(/*string + " " +*/ f.format(jobj.getDouble("AmountPayable")));
+//                                    tv_grandtotal.setText(/*string + " " +*/ f.format(jobj.getDouble("AmountPayable")));
+                                    ll_redeemsummary.setVisibility(View.GONE);
+                                    ll_privisummary.setVisibility(View.GONE);
+                                    redeem_tvamnt.setText("0.00");
+                                    privi_tvamnt.setText("0.00");
+                                }
+
 
                                 dbMinimumDeliveryAmount = jobj.getDouble("MinimumDeliveryAmount");
 
@@ -770,11 +821,20 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
                                 }
 
                                 strPaymentStatus= jobj.getString("PaymentStatus");
+                                Log.e(TAG,"strPaymentStatus   824 "+strPaymentStatus+"  "+status+"  "+jobj.getString("PrivCardStatus"));
 //                                if (strPaymentStatus.equals("Paid")){
                                 if (strPaymentStatus.equals("Paid") || status.equals("Delivered")){
-                                    SharedPreferences AmountPaid = getApplicationContext().getSharedPreferences(Config.SHARED_PREF167, 0);
-                                    tvamtpayable.setText(""+AmountPaid.getString("AmountPaid",null));
-                                    card_paymenttype.setVisibility(View.GONE);
+
+                                    if (jobj.getString("PrivCardStatus").equals("Sucess")){
+                                        SharedPreferences AmountPaid = getApplicationContext().getSharedPreferences(Config.SHARED_PREF167, 0);
+                                        tvamtpayable.setText(""+AmountPaid.getString("AmountPaid",null));
+                                        card_paymenttype.setVisibility(View.GONE);
+                                    }else {
+                                        SharedPreferences AmountPaid = getApplicationContext().getSharedPreferences(Config.SHARED_PREF167, 0);
+                                        tvamtpayable.setText(""+AmountPaid.getString("AmountPaid",null));
+                                        card_paymenttype.setVisibility(View.VISIBLE);
+                                    }
+
                                 }else {
                                     SharedPreferences amountpayable = getApplicationContext().getSharedPreferences(Config.SHARED_PREF142, 0);
                                     tvamtpayable.setText(""+amountpayable.getString("amountpayable",null));
@@ -783,6 +843,18 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
 
 
                                 tv_payment_statusmsg.setText("Payment Status : "+jobj.getString("Transactionmessage"));
+                                if (jobj.getString("PrivilageCardEnable").equals("true")){
+                                    ll_privstatus.setVisibility(View.VISIBLE);
+                                    tv_priv_statusmsg.setText("Card Status : "+jobj.getString("PrivCardStatus"));
+                                }else {
+                                    ll_privstatus.setVisibility(View.GONE);
+                                    tv_priv_statusmsg.setText("Card Status : "+jobj.getString("PrivCardStatus"));
+                                }
+
+
+//                                ll_privstatus = (LinearLayout) findViewById(R.id.ll_privstatus);
+//                                tv_priv_statusmsg
+
                                 FK_SalesOrder =  jobj.getString("FK_SalesOrder");
                                 UPIID =  jobj.getString("UPIID");
                                 onlinepayMethods =jobj.getString("OnlinePaymentMethodDetails");
@@ -791,11 +863,12 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
                                 paymentcondition(onlinepayMethods);
 
                                 strPaymentMode = jobj.getString("PaymentHint");
-                                if (strPaymentMode.equals("Online")){
-                                    tv_payment_mode.setText("Payment Mode : "+strPaymentMode+" , "+jobj.getString("PayTransactionDetail"));
-                                }else {
-                                    tv_payment_mode.setText("Payment Mode : "+"Cash On Delivery [COD]");
-                                }
+//                                if (strPaymentMode.equals("Online")){
+//                                    tv_payment_mode.setText("Payment Mode : "+strPaymentMode+" , "+jobj.getString("PayTransactionDetail"));
+//                                }else {
+//                                    tv_payment_mode.setText("Payment Mode : "+"Cash On Delivery [COD]");
+//                                }
+                                tv_payment_mode.setText("Payment Mode : "+strPaymentMode+" , "+jobj.getString("PayTransactionDetail"));
 
 //                                if (strPaymentMode.equals("Cash")){
 //                                    tv_payment_statusmsg.setVisibility(View.GONE);
@@ -893,35 +966,49 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
 //        SharedPreferences OnlinePaymentpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF62, 0);
 //        String value = OnlinePaymentpref.getString("OnlinePaymentMethods", null);
 
+
+
         String value = onlinepayMethods;
         Log.e(TAG,"OnlinePaymentpref   2293    "+value);
         try {
-            JSONArray jsonArray = new JSONArray(value);
-            for(int i=0; i<=jsonArray.length(); i++) {
-                JSONObject jobjt = jsonArray.getJSONObject(i);
-                String id  = jobjt.getString("ID_PaymentMethod");
-                String PaymentName = jobjt.getString("PaymentName");
 
-                Log.e("paymentdata ",""+PaymentName);
+            jsonArrayPay = new JSONArray(value);
 
 
-                if (PaymentName.equals("UPI")){
-                    radioButton3.setVisibility(View.VISIBLE);
-                    radioButton3.setText(PaymentName);
-                }
-                if (PaymentName.equals("PayU")){
-                    radioButton4.setVisibility(View.VISIBLE);
-                    radioButton4.setText(PaymentName);
-                }
-                if (PaymentName.equals("Razorpay")){
-                    radioButton2.setVisibility(View.VISIBLE);
-                    radioButton2.setText(PaymentName);
-                }
-                if (PaymentName.equals("Bill Desk")){
-                    radioButton5.setVisibility(View.VISIBLE);
-                    radioButton5.setText(PaymentName);
-                }
-            }
+            AdapterPaymentOptions adapter = new AdapterPaymentOptions(OrderDetailsActivity.this, jsonArrayPay);
+            LinearLayoutManager horizontalLayoutManagaer
+                    = new LinearLayoutManager(OrderDetailsActivity.this, LinearLayoutManager.VERTICAL, false);
+            recyc_paymenttype.setLayoutManager(horizontalLayoutManagaer);
+            recyc_paymenttype.setAdapter(adapter);
+            adapter.setClickListener(OrderDetailsActivity.this);
+
+
+//            JSONArray jsonArray = new JSONArray(value);
+//            for(int i=0; i<=jsonArray.length(); i++) {
+//                JSONObject jobjt = jsonArray.getJSONObject(i);
+//                String id  = jobjt.getString("ID_PaymentMethod");
+//                String PaymentName = jobjt.getString("PaymentName");
+//
+//                Log.e("paymentdata ",""+PaymentName);
+//
+//
+//                if (PaymentName.equals("UPI")){
+//                    radioButton3.setVisibility(View.VISIBLE);
+//                    radioButton3.setText(PaymentName);
+//                }
+//                if (PaymentName.equals("PayU")){
+//                    radioButton4.setVisibility(View.VISIBLE);
+//                    radioButton4.setText(PaymentName);
+//                }
+//                if (PaymentName.equals("Razorpay")){
+//                    radioButton2.setVisibility(View.VISIBLE);
+//                    radioButton2.setText(PaymentName);
+//                }
+//                if (PaymentName.equals("Bill Desk")){
+//                    radioButton5.setVisibility(View.VISIBLE);
+//                    radioButton5.setText(PaymentName);
+//                }
+//            }
 
         } catch (Exception e) {
             Log.e(TAG,"Exception   2322    "+e.toString());
@@ -1134,7 +1221,8 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
                 Log.e(TAG,"OrderNumber_s   1375     "+OrderNumber_s);
                 //
 
-                if (strPaymenttype.equals("COD") || strPaymenttype.equals("UPI") || strPaymenttype.equals("PAYU Biz") || strPaymenttype.equals("Bill Desk")){
+//                if (strPaymenttype.equals("COD") || strPaymenttype.equals("UPI") || strPaymenttype.equals("PAYU Biz") || strPaymenttype.equals("Bill Desk")){
+                if (!strPaymentId.equals("")){
                     passPaymentMethod();
                 }else {
                     AlertDialog.Builder builder= new AlertDialog.Builder(OrderDetailsActivity.this);
@@ -1268,28 +1356,35 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
                             if(jObject.getString("StatusCode").equals("3")){
                                 JSONObject jobj = jObject.getJSONObject("SalesOrderDetails");
                                 Log.e(TAG,"ResponseMessage   1270   "+jobj.getString("ResponseMessage"));
-                                if(strPaymenttype.equals("COD")){
+                                if(strPaymentId.equals("1")){
                                     try {
 
                                     }catch (Exception e){
                                         Log.e(TAG,"Exception   1019  "+e.toString());
                                     }
                                 }
-                                else if(strPaymenttype.equals("UPI")){
+                                else if(strPaymentId.equals("4")){
+                                      try {
+
+                                    }catch (Exception e){
+                                        Log.e(TAG,"Exception   1019  "+e.toString());
+                                    }
+                                }
+                                else if(strPaymentId.equals("5")){
                                     try {
                                         payUsingUpi(storeName, UPIID, "Order Payment", ""+finalamount);
                                     }catch (Exception e){
                                         Log.e(TAG,"Exception  1026   "+e.toString());
                                     }
                                 }
-                                else if (strPaymenttype.equals("PAYU Biz")) {
+                                else if (strPaymentId.equals("10")) {
                                     try {
 
                                     }catch (Exception e){
                                         Log.e(TAG,"Exception   1033  "+e.toString());
                                     }
                                 }
-                                else if (strPaymenttype.equals("Bill Desk")) {
+                                else if (strPaymentId.equals("2")) {
                                     try {
                                         startBillDesk(finalamount);
                                     }catch (Exception e){
@@ -2094,15 +2189,6 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
             Log.e("UPIPAY", "upiPaymentDataOperation2: " + str);
             String[] separated = str. split("&");
 
-            String[] septxnId = separated[0]. split("=");
-            String[] septxnRef = separated[1]. split("=");
-            String[] sepStatus = separated[2]. split("=");
-            String[] sepresponseCode = separated[3]. split("=");
-
-            Log.e("septxnId", "upiPaymentDataOperation31: " + septxnId[1]);
-            Log.e("septxnRef", "upiPaymentDataOperation32: " + septxnRef[1]);
-            Log.e("sepStatus", "upiPaymentDataOperation33: " + sepStatus[1]);
-            Log.e("sepresponseCode", "upiPaymentDataOperation33: " + sepresponseCode[1]);
 
 
             String paymentCancel = "";
@@ -2147,6 +2233,17 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
 //                startActivity(intent);
 //
 //                finish();
+
+                String[] septxnId = separated[0]. split("=");
+                String[] septxnRef = separated[1]. split("=");
+                String[] sepStatus = separated[2]. split("=");
+                String[] sepresponseCode = separated[3]. split("=");
+
+                Log.e("septxnId", "upiPaymentDataOperation31: " + septxnId[1]);
+                Log.e("septxnRef", "upiPaymentDataOperation32: " + septxnRef[1]);
+                Log.e("sepStatus", "upiPaymentDataOperation33: " + sepStatus[1]);
+                Log.e("sepresponseCode", "upiPaymentDataOperation33: " + sepresponseCode[1]);
+
 
                 updatePayments(OrderNumber_s,FK_SalesOrder,strPaymentId,septxnId[1],"0","","0",finalamount,"0");
 
@@ -2523,6 +2620,26 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
     }
 
 
+    @Override
+    public void onClick(int position, String paymentName) {
+
+        Log.e(TAG,"4616  "+position+ "  "+paymentName);
+
+        try {
+            JSONObject jsonObject = jsonArrayPay.getJSONObject(position);
+            strPaymenttype=jsonObject.getString("PaymentName");
+            // strPaymentId=jsonObject.getString("ID_PaymentMethod");
+            IsOnlinePay = jsonObject.getString("IsOnlinePay");
+            MerchantID =  jsonObject.getString("MerchantID");
+            TransactionID =  jsonObject.getString("TransactionID");
+            SecurityID =  jsonObject.getString("SecurityID");
+            strPaymentId = jsonObject.getString("ID_PaymentMethod");
+            //  getMerchantKeys();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 
 }

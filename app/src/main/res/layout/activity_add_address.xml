@@ -1759,7 +1759,8 @@
                                 android:layout_marginLeft="20dp"
                                 android:layout_marginRight="20dp"
                                 android:layout_marginBottom="5dp"
-                                android:weightSum="1">
+                                android:weightSum="1"
+                                android:visibility="visible">
 
                                 <RadioButton
                                     android:id="@+id/radioButton"
@@ -1833,6 +1834,12 @@
                                     android:textSize="12dp"
                                     android:visibility="gone" />
                             </RadioGroup>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyc_paymenttype"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white"/>
 
 
 

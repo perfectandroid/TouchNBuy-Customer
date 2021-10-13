@@ -63,4 +63,5 @@
     <string name="some_error_occurred">Some error occurred...</string>
     <string name="transaction_cancelled_by_user">Transaction cancelled by user</string>
     <string name="tetms_and_condition">Terms And Conditions</string>
+
 </resources>

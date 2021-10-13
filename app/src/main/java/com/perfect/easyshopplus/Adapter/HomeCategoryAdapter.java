@@ -69,6 +69,7 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter {
                     jsonObject=jsonArray.getJSONObject(position-1);
                     String imagepath=IMAGEURL + jsonObject.getString("ImgePath");
                     String PrdctName=jsonObject.getString("FirstCategoryName");
+                    Log.e(TAG,"imagepath  72  "+imagepath);
                     ((MainViewHolder)holder).tvPrdName.setText(PrdctName);
 //                Glide.with(context)
 //                        .load(imagepath)

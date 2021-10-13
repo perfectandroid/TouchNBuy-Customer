@@ -55,6 +55,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.billdesk.sdk.PaymentOptions;
 import com.goodiebag.pinview.Pinview;
@@ -68,6 +70,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.perfect.easyshopplus.Activity.billdesks.SampleCallBack;
+import com.perfect.easyshopplus.Adapter.AdapterPaymentOptions;
 import com.perfect.easyshopplus.Adapter.NavMenuAdapter;
 import com.perfect.easyshopplus.DB.DBHandler;
 import com.perfect.easyshopplus.R;
@@ -75,6 +78,7 @@ import com.perfect.easyshopplus.Retrofit.ApiInterface;
 import com.perfect.easyshopplus.Servicess.GpsTracker;
 import com.perfect.easyshopplus.Utility.Config;
 import com.perfect.easyshopplus.Utility.InternetUtil;
+import com.perfect.easyshopplus.Utility.ItemClickListener;
 import com.perfect.easyshopplus.Utility.PicassoTrustAll;
 import com.perfect.easyshopplus.Utility.Utils;
 import com.razorpay.Checkout;
@@ -126,7 +130,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class AddressAddActivty extends AppCompatActivity implements View.OnClickListener, PaymentResultListener,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class AddressAddActivty extends AppCompatActivity implements View.OnClickListener, PaymentResultListener,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ItemClickListener {
 
     ProgressDialog progressDialog;
     int inExpressdelivery=0;
@@ -247,6 +251,13 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
     LinearLayout ll_privilegesummary;
     TextView privilege_tv,privilege_tvamnt;
     TextView tv_label_custname,tv_custname,tv_label_privi_address,tv_privi_address,tv_privi_payamount;
+    RecyclerView recyc_paymenttype;
+    JSONArray jsonArrayPay;
+    String Pc_PrivilageCardEnable = "false";
+    String Pc_AccNumber = "";
+    String Pc_ID_CustomerAcc = "0";
+    String SelstrPaymentId = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -272,6 +283,8 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
 
         initiateViews();
         setRegister();
+
+        radioGroup.setVisibility(View.GONE);
 
         setHomeNavMenu1();
         setBottomBar();
@@ -421,7 +434,7 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
 //            radioButton2.setVisibility(View.GONE);
 //            radioButton3.setVisibility(View.GONE);
 
-            paymentcondition();
+           // paymentcondition();
         }
         getTimenDateLimit();
 
@@ -429,7 +442,7 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
         SharedPreferences pref9 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF60, 0);
         strTimeSlotCheck=pref9.getString("TimeSlotCheck", null);
 
-//        paymentcondition();
+        paymentcondition();
 
         mLocationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
         // checkLocation(); //check whether location service is
@@ -491,7 +504,7 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                 else {
                     RedeemRequest = "false";
                     ll_check_redeem.setVisibility(View.GONE);
-                    redeemamount = "0";
+                    redeemamount = "0.00";
 //                    tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
 //                    SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
 //                    txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
@@ -602,6 +615,8 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                                 Log.e(TAG,"4201   finalamountnew       "+finalamountnew);
                                 DecimalFormat f = new DecimalFormat("##.00");
                                 redeem_tvamnt.setText(""+f.format(Double.parseDouble(redeemamount)));
+                                Toast.makeText(getApplicationContext(),"Reward Amount Successfully Updated",Toast.LENGTH_SHORT).show();
+
                             }else {
                                 Log.e(TAG,"Exception  42028   Check Amount");
                                // Toast.makeText(getApplicationContext(),"Check Reward Amount",Toast.LENGTH_SHORT).show();
@@ -709,6 +724,7 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                                 DecimalFormat f = new DecimalFormat("##.00");
                               //  redeem_tvamnt.setText(""+f.format(Double.parseDouble(redeemamount)));
                                 privilege_tvamnt.setText(""+f.format(Double.parseDouble(privilegeamount)));
+                                Toast.makeText(getApplicationContext(),"Card Amount Successfully Updated",Toast.LENGTH_SHORT).show();
                             }else {
 //                                Log.e(TAG,"Exception  42028   Check Amount");
                               //  Toast.makeText(getApplicationContext(),"Check Card Amount",Toast.LENGTH_SHORT).show();
@@ -792,7 +808,8 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
     }
 
     private void getMerchantKeys() {
-        strPaymentId = "0";
+
+        strPaymentId = "";
         SharedPreferences OnlinePaymentpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF62, 0);
         String value = OnlinePaymentpref.getString("OnlinePaymentMethods", null);
         Log.e(TAG,"OnlinePaymentpref   2293    "+value);
@@ -800,34 +817,39 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
             JSONArray jsonArray = new JSONArray(value);
             for(int i=0; i<=jsonArray.length(); i++) {
                 JSONObject jobjt = jsonArray.getJSONObject(i);
-                String id  = jobjt.getString("ID_PaymentMethod");
+                String id_pay  = jobjt.getString("ID_PaymentMethod");
                 String PaymentName = jobjt.getString("PaymentName");
 
                 Log.e("paymentdata ","   485    "+PaymentName);
+                Log.e("paymentdata ","   485    "+strPaymenttype);
                 Log.e("TransactionID ","   485    "+jobjt.getInt("TransactionID"));
                 Log.e("MerchantID ","   485    "+jobjt.getString("MerchantID"));
                 Log.e("SecurityID ","   485    "+jobjt.getString("SecurityID"));
-                MerchantID = null;
-                TransactionID = null;
-                SecurityID = null;
+//                MerchantID = null;
+//                TransactionID = null;
+//                SecurityID = null;
 
 
                 Log.e(TAG,"PaymentName   50111 "+i+"      "+PaymentName+"    "+strPaymenttype);
 //                if (PaymentName.equals("UPI")){
-                if (PaymentName.equals(strPaymenttype)){
+//                if (PaymentName.equals(strPaymenttype)){
+                if (SelstrPaymentId.equals(id_pay)){
                     MerchantID =  jobjt.getString("MerchantID");
                     TransactionID =  jobjt.getString("TransactionID");
                     SecurityID =  jobjt.getString("SecurityID");
                     strPaymentId = jobjt.getString("ID_PaymentMethod");
-                    Log.e(TAG,"strPaymentId   5291       "+strPaymentId+"    "+jobjt.getString("ID_PaymentMethod")+"        "+strPaymenttype);
+                    Log.e(TAG,"UPI   5291       "+strPaymentId+"    "+jobjt.getString("ID_PaymentMethod")+"        "+strPaymenttype);
+                    Log.e(TAG,"UPI   852       "+MerchantID+"    "+TransactionID+"        "+SecurityID+"    "+strPaymentId);
                 }
 //                if (PaymentName.equals("PayU")){
+//                if (PaymentName.equals(strPaymenttype)){
                 if (PaymentName.equals(strPaymenttype)){
                     MerchantID =  jobjt.getString("MerchantID");
                     TransactionID =  jobjt.getString("TransactionID");
                     SecurityID =  jobjt.getString("SecurityID");
                     strPaymentId = jobjt.getString("ID_PaymentMethod");
-                    Log.e(TAG,"strPaymentId   5292       "+strPaymentId+"    "+jobjt.getString("ID_PaymentMethod")+"        "+strPaymenttype);
+                    Log.e(TAG,"PayU   5292       "+strPaymentId+"    "+jobjt.getString("ID_PaymentMethod")+"        "+strPaymenttype);
+                    Log.e(TAG,"PayU   852       "+MerchantID+"    "+TransactionID+"        "+SecurityID+"    "+strPaymentId);
                 }
 //                if (PaymentName.equals("Razorpay")){
                 if (PaymentName.equals(strPaymenttype)){
@@ -835,7 +857,8 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                     TransactionID =  jobjt.getString("TransactionID");
                     SecurityID =  jobjt.getString("SecurityID");
                     strPaymentId = jobjt.getString("ID_PaymentMethod");
-                    Log.e(TAG,"strPaymentId   5294       "+strPaymentId+"    "+jobjt.getString("ID_PaymentMethod")+"        "+strPaymenttype);
+                    Log.e(TAG,"Razorpay   5294       "+strPaymentId+"    "+jobjt.getString("ID_PaymentMethod")+"        "+strPaymenttype);
+                    Log.e(TAG,"Razorpay   852       "+MerchantID+"    "+TransactionID+"        "+SecurityID+"    "+strPaymentId);
                 }
 //                if (PaymentName.equals("Bill Desk")){
                 if (PaymentName.equals(strPaymenttype)){
@@ -843,19 +866,22 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                     TransactionID =  jobjt.getString("TransactionID");
                     SecurityID =  jobjt.getString("SecurityID");
                     strPaymentId = jobjt.getString("ID_PaymentMethod");
-                    Log.e(TAG,"strPaymentId   5295       "+strPaymentId+"    "+jobjt.getString("ID_PaymentMethod")+"        "+strPaymenttype);
+                    Log.e(TAG,"Bill Desk   5295       "+strPaymentId+"    "+jobjt.getString("ID_PaymentMethod")+"        "+strPaymenttype);
+                    Log.e(TAG,"Bill Desk   852       "+MerchantID+"    "+TransactionID+"        "+SecurityID+"    "+strPaymentId);
                 }
-                if (strPaymenttype.equals("COD")){
+//                if (strPaymenttype.equals("COD")){
+                if (PaymentName.equals(strPaymenttype)){
                     MerchantID =  "";
                     TransactionID =  "";
                     SecurityID =  "";
                     strPaymentId = "0";
-                    Log.e(TAG,"strPaymentId   5295       "+strPaymentId+"    "+jobjt.getString("ID_PaymentMethod")+"        "+strPaymenttype);
+                    Log.e(TAG,"COD   5295       "+strPaymentId+"    "+jobjt.getString("ID_PaymentMethod")+"        "+strPaymenttype);
+                    Log.e(TAG,"COD   852       "+MerchantID+"    "+TransactionID+"        "+SecurityID+"    "+strPaymentId);
                 }
 
 
-            }
 
+            }
 
 
         } catch (Exception e) {
@@ -1283,6 +1309,8 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
         tv_privi_payamount = findViewById(R.id.tv_privi_payamount);
         ll_privilegesummary = findViewById(R.id.ll_privilegesummary);
         privilege_tvamnt = findViewById(R.id.privilege_tvamnt);
+
+        recyc_paymenttype = findViewById(R.id.recyc_paymenttype);
 
     }
 
@@ -1758,7 +1786,8 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.im:
                 //  drawer.openDrawer(Gravity.START);
-                onBackPressed();                break;
+                onBackPressed();
+                break;
             case R.id.etdate:
                 dateSelector();
                 break;
@@ -1843,6 +1872,7 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
 
                         Toast.makeText(getApplicationContext(),PleaseAddvalidAddress.getString("PleaseAddvalidAddress", "")+".",Toast.LENGTH_LONG).show();
                     }else{
+                        Log.e(TAG,"strTimeSlotCheck  1872  "+strTimeSlotCheck);
                         if (strTimeSlotCheck.equals("true")) {
                             AsOnDateApplicableChecking();
                         }
@@ -1852,90 +1882,104 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
 
 
                             Log.e(TAG,"strPaymenttype  1435      "+strPaymenttype);
-                            if(strPaymenttype.equals("COD")){
-                                orderConfirmation();
-                            }
-                            else if(strPaymenttype.equals("ONLINE")){
-                                try {
-                                    orderConfirmation();
-                                  //  startrazerPayment("perfect solution", "demo testing", 1, "perfectsolution@gmail.com", "9497093212");
-                                }catch (Exception e){
+//                            if(strPaymenttype.equals("COD")){
+//                                orderConfirmation();
+//                            }
+//                            else if(strPaymenttype.equals("ONLINE")){
+//                                try {
+//                                    orderConfirmation();
+//                                  //  startrazerPayment("perfect solution", "demo testing", 1, "perfectsolution@gmail.com", "9497093212");
+//                                }catch (Exception e){
+//
+//                                    AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
+//                                    builder.setMessage(ThereissometechnicalissuesPleaseuseanotherpaymentoptions+". ")
+//                                            .setCancelable(false)
+//                                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+//                                                public void onClick(DialogInterface dialog, int id) {
+//                                                }
+//                                            });
+//                                    AlertDialog alert = builder.create();
+//                                    alert.show();
+//                                }
+//                            }
+//                            else if(strPaymenttype.equals("UPI")){
+//                                try {
+//                                    orderConfirmation();
+////                                    SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
+////                                    SharedPreferences pref6 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF59, 0);
+////                                    payUsingUpi(pref1.getString("StoreName", null), pref6.getString("UPIID", null), "Order Payment", ""+finalamount);
+//                                }catch (Exception e){
+//                                    AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
+//                                    // builder.setTitle("Terms & Conditions");
+//                                    builder.setMessage(PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdevice+". ")
+//                                            .setCancelable(false)
+//                                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+//                                                public void onClick(DialogInterface dialog, int id) {
+//                                                }
+//                                            });
+//                                    AlertDialog alert = builder.create();
+//                                    alert.show();
+//                                }
+//                            }else if (strPaymenttype.equals("PAYU Biz")) {
+//                                try {
+//                                    orderConfirmation();
+////                                    startPayubiz(finalamount);
+//                                }catch (Exception e){
+//                                    AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
+//                                    // builder.setTitle("Terms & Conditions");
+//                                    builder.setMessage(PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdevice+". ")
+//                                            .setCancelable(false)
+//                                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+//                                                public void onClick(DialogInterface dialog, int id) {
+//                                                }
+//                                            });
+//                                    AlertDialog alert = builder.create();
+//                                    alert.show();
+//                                }
+//                            }
+//                            else if (strPaymenttype.equals("Bill Desk")) {
+//                                try {
+//                                    orderConfirmation();
+////                                    startBillDesk(finalamount);
+//                                }catch (Exception e){
+//                                    AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
+//                                    // builder.setTitle("Terms & Conditions");
+//                                    builder.setMessage(PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdevice+". ")
+//                                            .setCancelable(false)
+//                                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+//                                                public void onClick(DialogInterface dialog, int id) {
+//                                                }
+//                                            });
+//                                    AlertDialog alert = builder.create();
+//                                    alert.show();
+//                                }
+//                            }
+//                            else {
+//                                AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
+//                                // builder.setTitle("Terms & Conditions");
+//                                builder.setMessage(Pleaseselectanypaymentoption+". ")
+//                                        .setCancelable(false)
+//                                        .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+//                                            public void onClick(DialogInterface dialog, int id) {
+//                                            }
+//                                        });
+//                                AlertDialog alert = builder.create();
+//                                alert.show();
+//                            }
 
-                                    AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
-                                    builder.setMessage(ThereissometechnicalissuesPleaseuseanotherpaymentoptions+". ")
-                                            .setCancelable(false)
-                                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int id) {
-                                                }
-                                            });
-                                    AlertDialog alert = builder.create();
-                                    alert.show();
-                                }
-                            }
-                            else if(strPaymenttype.equals("UPI")){
-                                try {
-                                    orderConfirmation();
-//                                    SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
-//                                    SharedPreferences pref6 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF59, 0);
-//                                    payUsingUpi(pref1.getString("StoreName", null), pref6.getString("UPIID", null), "Order Payment", ""+finalamount);
-                                }catch (Exception e){
-                                    AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
-                                    // builder.setTitle("Terms & Conditions");
-                                    builder.setMessage(PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdevice+". ")
-                                            .setCancelable(false)
-                                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int id) {
-                                                }
-                                            });
-                                    AlertDialog alert = builder.create();
-                                    alert.show();
-                                }
-                            }else if (strPaymenttype.equals("PAYU Biz")) {
-                                try {
-                                    orderConfirmation();
-//                                    startPayubiz(finalamount);
-                                }catch (Exception e){
-                                    AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
-                                    // builder.setTitle("Terms & Conditions");
-                                    builder.setMessage(PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdevice+". ")
-                                            .setCancelable(false)
-                                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int id) {
-                                                }
-                                            });
-                                    AlertDialog alert = builder.create();
-                                    alert.show();
-                                }
-                            }
-                            else if (strPaymenttype.equals("Bill Desk")) {
-                                try {
-                                    orderConfirmation();
-//                                    startBillDesk(finalamount);
-                                }catch (Exception e){
-                                    AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
-                                    // builder.setTitle("Terms & Conditions");
-                                    builder.setMessage(PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdevice+". ")
-                                            .setCancelable(false)
-                                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int id) {
-                                                }
-                                            });
-                                    AlertDialog alert = builder.create();
-                                    alert.show();
-                                }
-                            }
-                            else {
-                                AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
-                                // builder.setTitle("Terms & Conditions");
-                                builder.setMessage(Pleaseselectanypaymentoption+". ")
-                                        .setCancelable(false)
-                                        .setPositiveButton(OK, new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                            }
-                                        });
-                                AlertDialog alert = builder.create();
-                                alert.show();
-                            }
+                           // if(!strPaymentId.equals("")){
+                                orderConfirmation();
+//                            }else {
+//                                AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
+//                                builder.setMessage(Pleaseselectanypaymentoption+". ")
+//                                        .setCancelable(false)
+//                                        .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+//                                            public void onClick(DialogInterface dialog, int id) {
+//                                            }
+//                                        });
+//                                AlertDialog alert = builder.create();
+//                                alert.show();
+//                            }
                 }
 
                 }}
@@ -2034,6 +2078,9 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                 tv_your_privilage.setText("");
                 tv_privi_payamount.setText("");
                 ll_privilegesummary.setVisibility(View.GONE);
+                Pc_PrivilageCardEnable = "false";
+                Pc_AccNumber = "";
+                Pc_ID_CustomerAcc = "0";
 
                 if (Double.parseDouble(redeemamount)<Double.parseDouble(finalamountSave)){
                     String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(redeemamount));
@@ -2071,6 +2118,9 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                 tv_your_privilage.setText("");
                 tv_privi_payamount.setText("");
                 privilege_tvamnt.setText("0.00");
+                Pc_PrivilageCardEnable = "false";
+                Pc_AccNumber = "";
+                Pc_ID_CustomerAcc = "0";
 
                 if (Double.parseDouble(redeemamount)<Double.parseDouble(finalamountSave)){
                     String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(redeemamount));
@@ -2148,8 +2198,9 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                                 JSONObject jObject = new JSONObject(response.body());
 
                                 if(jObject.getString("StatusCode").equals("0")){
+
                                     JSONObject jobj = jObject.getJSONObject("CustomerbalanceInfo");
-                                    Log.e(TAG,"20492  "+jobj.getString("ResponseMessage"));
+                                 //   Log.e(TAG,"20492  "+jobj.getString("ResponseMessage"));
 
                                //     if (jobj.getString("ResponseCode").equals("0")){
 
@@ -2350,9 +2401,11 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                             ll_privilegesummary.setVisibility(View.GONE);
                             if(jObject.getString("StatusCode").equals("0")){
                                 JSONObject jobj = jObject.getJSONObject("CustomerbalanceInfo");
-                                Log.e(TAG,"2252 2  "+jobj.getString("ResponseMessage"));
+                              //  Log.e(TAG,"2252 2  "+jobj.getString("ResponseMessage"));
 
-                                if (jobj.getString("ResponseCode").equals("0")){
+                              //  if (jobj.getString("ResponseCode").equals("0")){
+                                    Pc_PrivilageCardEnable = "true";
+
                                     ll_privilegesummary.setVisibility(View.VISIBLE);
                                     JSONArray jarray = jobj.getJSONArray("BalanceList");
                                     JSONObject jsonObject=jarray.getJSONObject(0);
@@ -2363,33 +2416,36 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
 
                                     alertDialog.dismiss();
                                     Log.e(TAG,"20671  9");
+
                                     tv_custname.setText(""+jsonObject.getString("CusName"));
                                     tv_privi_address.setText(""+jsonObject.getString("Address1"));
                                     tv_your_privilage.setText("Available Balance : "+Utils.getDecimelFormate(Double.parseDouble(jsonObject.getString("Balance"))));
                                     et_your_privilage.setHint("Enter Amount");
                                     privilegePoints =  Double.parseDouble(""+jsonObject.getString("Balance"));
+                                    Pc_AccNumber =  jsonObject.getString("AccNumber");
+                                    Pc_ID_CustomerAcc =  jsonObject.getString("ID_CustomerAcc");
 
-                                }else {
-                                    ll_privilegesummary.setVisibility(View.GONE);
-                                    Log.e(TAG,"20672  ");
-                                    ll_check_privilage.setVisibility(View.GONE);
-                                    ll_privilege_apply.setVisibility(View.GONE);
-                                    pinview.clearValue();
-
-//                                    String respMsg = jobj.getString("ResponseMessage");
-                                    String statusMsg = jObject.getString("EXMessage");
-                                    AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
-                                    builder.setMessage(statusMsg)
-                                            .setCancelable(false)
-                                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int id) {
-                                                }
-                                            });
-                                    AlertDialog alert = builder.create();
-                                    alert.show();
-
-
-                                }
+//                                }else {
+//                                    ll_privilegesummary.setVisibility(View.GONE);
+//                                    Log.e(TAG,"20672  ");
+//                                    ll_check_privilage.setVisibility(View.GONE);
+//                                    ll_privilege_apply.setVisibility(View.GONE);
+//                                    pinview.clearValue();
+//
+////                                    String respMsg = jobj.getString("ResponseMessage");
+//                                    String statusMsg = jObject.getString("EXMessage");
+//                                    AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
+//                                    builder.setMessage(statusMsg)
+//                                            .setCancelable(false)
+//                                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+//                                                public void onClick(DialogInterface dialog, int id) {
+//                                                }
+//                                            });
+//                                    AlertDialog alert = builder.create();
+//                                    alert.show();
+//
+//
+//                                }
                             }else {
 
                                 Log.e(TAG,"20672  ");
@@ -2811,17 +2867,14 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                                         AlertDialog alert = builder.create();
                                         alert.show();
                                     } else {
+
                                         Log.e(TAG,"strPaymenttype  1435 2      "+strPaymenttype);
-                                        if (strPaymenttype.equals("COD")) {
+                                        if(!strPaymentId.equals("")){
                                             orderConfirmation();
-                                        } else if (strPaymenttype.equals("ONLINE")) {
-                                            try {
-                                                orderConfirmation();
-                                              //  startrazerPayment("perfect solution", "demo testing", 1, "perfectsolution@gmail.com", "9497093212");
-                                            } catch (Exception e) {
+                                        }else {
                                                 AlertDialog.Builder builder = new AlertDialog.Builder(AddressAddActivty.this);
                                                 // builder.setTitle("Terms & Conditions");
-                                                builder.setMessage(ThereissometechnicalissuesPleaseuseanotherpaymentoptions+". ")
+                                                builder.setMessage(Pleaseselectanypaymentoption+". ")
                                                         .setCancelable(false)
                                                         .setPositiveButton(OK, new DialogInterface.OnClickListener() {
                                                             public void onClick(DialogInterface dialog, int id) {
@@ -2829,71 +2882,89 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                                                         });
                                                 AlertDialog alert = builder.create();
                                                 alert.show();
-                                            }
-                                        } else if (strPaymenttype.equals("UPI")) {
-                                            try {
-                                                orderConfirmation();
-//                                                SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
-//                                                SharedPreferences pref6 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF59, 0);
-//                                                payUsingUpi(pref1.getString("StoreName", null), pref6.getString("UPIID", null), "Order Payment", "" + finalamount);
-                                            } catch (Exception e) {
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(AddressAddActivty.this);
-                                                // builder.setTitle("Terms & Conditions");
-                                                builder.setMessage(PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdevice+". ")
-                                                        .setCancelable(false)
-                                                        .setPositiveButton(OK, new DialogInterface.OnClickListener() {
-                                                            public void onClick(DialogInterface dialog, int id) {
-                                                            }
-                                                        });
-                                                AlertDialog alert = builder.create();
-                                                alert.show();
-                                            }
-                                        } else if (strPaymenttype.equals("PAYU Biz")) {
-                                            try {
-                                                orderConfirmation();
-                                              //  startPayubiz(finalamount);
-                                            }catch (Exception e){
-                                                AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
-                                                // builder.setTitle("Terms & Conditions");
-                                                builder.setMessage(PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdevice+". ")
-                                                        .setCancelable(false)
-                                                        .setPositiveButton(OK, new DialogInterface.OnClickListener() {
-                                                            public void onClick(DialogInterface dialog, int id) {
-                                                            }
-                                                        });
-                                                AlertDialog alert = builder.create();
-                                                alert.show();
-                                            }
                                         }
-                                        else if (strPaymenttype.equals("Bill Desk")) {
-                                            try {
-                                    orderConfirmation();
-//                                                startBillDesk(finalamount);
-                                            }catch (Exception e){
-                                                AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
-                                                // builder.setTitle("Terms & Conditions");
-                                                builder.setMessage(PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdevice+". ")
-                                                        .setCancelable(false)
-                                                        .setPositiveButton(OK, new DialogInterface.OnClickListener() {
-                                                            public void onClick(DialogInterface dialog, int id) {
-                                                            }
-                                                        });
-                                                AlertDialog alert = builder.create();
-                                                alert.show();
-                                            }
-                                        }
-                                        else {
-                                            AlertDialog.Builder builder = new AlertDialog.Builder(AddressAddActivty.this);
-                                            // builder.setTitle("Terms & Conditions");
-                                            builder.setMessage(Pleaseselectanypaymentoption+". ")
-                                                    .setCancelable(false)
-                                                    .setPositiveButton(OK, new DialogInterface.OnClickListener() {
-                                                        public void onClick(DialogInterface dialog, int id) {
-                                                        }
-                                                    });
-                                            AlertDialog alert = builder.create();
-                                            alert.show();
-                                        }
+//                                        if (strPaymenttype.equals("COD")) {
+//                                            orderConfirmation();
+//                                        } else if (strPaymenttype.equals("ONLINE")) {
+//                                            try {
+//                                                orderConfirmation();
+//                                              //  startrazerPayment("perfect solution", "demo testing", 1, "perfectsolution@gmail.com", "9497093212");
+//                                            } catch (Exception e) {
+//                                                AlertDialog.Builder builder = new AlertDialog.Builder(AddressAddActivty.this);
+//                                                // builder.setTitle("Terms & Conditions");
+//                                                builder.setMessage(ThereissometechnicalissuesPleaseuseanotherpaymentoptions+". ")
+//                                                        .setCancelable(false)
+//                                                        .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+//                                                            public void onClick(DialogInterface dialog, int id) {
+//                                                            }
+//                                                        });
+//                                                AlertDialog alert = builder.create();
+//                                                alert.show();
+//                                            }
+//                                        } else if (strPaymenttype.equals("UPI")) {
+//                                            try {
+//                                                orderConfirmation();
+////                                                SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
+////                                                SharedPreferences pref6 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF59, 0);
+////                                                payUsingUpi(pref1.getString("StoreName", null), pref6.getString("UPIID", null), "Order Payment", "" + finalamount);
+//                                            } catch (Exception e) {
+//                                                AlertDialog.Builder builder = new AlertDialog.Builder(AddressAddActivty.this);
+//                                                // builder.setTitle("Terms & Conditions");
+//                                                builder.setMessage(PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdevice+". ")
+//                                                        .setCancelable(false)
+//                                                        .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+//                                                            public void onClick(DialogInterface dialog, int id) {
+//                                                            }
+//                                                        });
+//                                                AlertDialog alert = builder.create();
+//                                                alert.show();
+//                                            }
+//                                        } else if (strPaymenttype.equals("PAYU Biz")) {
+//                                            try {
+//                                                orderConfirmation();
+//                                              //  startPayubiz(finalamount);
+//                                            }catch (Exception e){
+//                                                AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
+//                                                // builder.setTitle("Terms & Conditions");
+//                                                builder.setMessage(PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdevice+". ")
+//                                                        .setCancelable(false)
+//                                                        .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+//                                                            public void onClick(DialogInterface dialog, int id) {
+//                                                            }
+//                                                        });
+//                                                AlertDialog alert = builder.create();
+//                                                alert.show();
+//                                            }
+//                                        }
+//                                        else if (strPaymenttype.equals("Bill Desk")) {
+//                                            try {
+//                                    orderConfirmation();
+////                                                startBillDesk(finalamount);
+//                                            }catch (Exception e){
+//                                                AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
+//                                                // builder.setTitle("Terms & Conditions");
+//                                                builder.setMessage(PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdevice+". ")
+//                                                        .setCancelable(false)
+//                                                        .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+//                                                            public void onClick(DialogInterface dialog, int id) {
+//                                                            }
+//                                                        });
+//                                                AlertDialog alert = builder.create();
+//                                                alert.show();
+//                                            }
+//                                        }
+//                                        else {
+//                                            AlertDialog.Builder builder = new AlertDialog.Builder(AddressAddActivty.this);
+//                                            // builder.setTitle("Terms & Conditions");
+//                                            builder.setMessage(Pleaseselectanypaymentoption+". ")
+//                                                    .setCancelable(false)
+//                                                    .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+//                                                        public void onClick(DialogInterface dialog, int id) {
+//                                                        }
+//                                                    });
+//                                            AlertDialog alert = builder.create();
+//                                            alert.show();
+//                                        }
                                     }
 
                                  /*  if if(ettime.getText().toString().isEmpty()){AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutActivity.this);
@@ -3175,12 +3246,15 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                     requestObject1.put("ID_SalesOrder",prefFK_SalesOrderNew.getString("FK_SalesOrder_new","0"));
                     requestObject1.put("RedeemRequest",RedeemRequest);
 
-
-
+                    requestObject1.put("PrivilageCardEnable",Pc_PrivilageCardEnable);
+                    requestObject1.put("PrivCardAmount",privilegeamount);
+                    requestObject1.put("AccNumber",Pc_AccNumber);
+                    requestObject1.put("ID_CustomerAcc",Pc_ID_CustomerAcc);
 
                     Log.e(TAG,"prefFK_SalesOrderNew   1393    "+prefFK_SalesOrderNew.getString("FK_SalesOrder_new","0"));
 
                     Log.e(TAG,"requestObject1   1393    "+requestObject1);
+                    Log.e(TAG,"requestObject1   3224    "+Pc_PrivilageCardEnable+"  "+Pc_AccNumber+"  "+Pc_ID_CustomerAcc);
 
 
                 } catch (JSONException e) {
@@ -3225,14 +3299,16 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
 
 
                             JSONObject jObject = new JSONObject(response.body());
-                            JSONObject jobj = jObject.getJSONObject("SalesOrderDetails");
+
                             if(jObject.getString("StatusCode").equals("3")){
+                                JSONObject jobj = jObject.getJSONObject("SalesOrderDetails");
                                // Toast.makeText(getApplicationContext(), jobj.getString("ResponseMessage"),Toast.LENGTH_LONG).show();
                                 DBHandler db=new DBHandler(AddressAddActivty.this);
                                 db.deleteallCart();
 
                                 OrderNumber_s = jobj.getString("OrderNumber");
                                 FK_SalesOrder = jobj.getString("FK_SalesOrder");
+                                Log.e(TAG,"strPaymentId     3305   "+strPaymentId);
 
 
                                 SharedPreferences prefFK_SalesOrderNew = getApplicationContext().getSharedPreferences(Config.SHARED_PREF405, 0);
@@ -3240,7 +3316,14 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                                 prefFK_SalesOrdereditorNew.putString("FK_SalesOrder_new", jobj.getString("FK_SalesOrder"));
                                 prefFK_SalesOrdereditorNew.commit();
 
-                                if(strPaymenttype.equals("COD")){
+//                            Cash On Delivery-1
+//                            Bill Desk-2
+//                            Bill Plz-3
+//                            Razorpay-4
+//                            Google Pay-5
+
+//                                if(strPaymenttype.equals("COD")){
+                                if(strPaymentId.equals("1")){
 //                                    startActivity(new Intent(AddressAddActivty.this, ThanksActivity.class));
 //                                    SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
 //                                    Intent intent = new Intent(AddressAddActivty.this,ThanksActivity.class);
@@ -3255,7 +3338,9 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
 //                                    finish();
 
                                     updatePayments(OrderNumber_s,FK_SalesOrder,strPaymentId,"","0","","0",finalamount,"0");
-                                }else if(strPaymenttype.equals("ONLINE")){
+                                }
+                               // else if(strPaymenttype.equals("ONLINE")){
+                                else if(strPaymentId.equals("4")){
 
 
 
@@ -3275,7 +3360,9 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                                         AlertDialog alert = builder.create();
                                         alert.show();
                                     }
-                                }else if(strPaymenttype.equals("UPI")){
+                                }
+//                                else if(strPaymenttype.equals("UPI")){
+                                else if(strPaymentId.equals("5")){
                                     try {
                                       //  doOrderConfirm();
                                         SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
@@ -3293,7 +3380,9 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                                         AlertDialog alert = builder.create();
                                         alert.show();
                                     }
-                                }else if (strPaymenttype.equals("PAYU Biz")) {
+                                }
+//                                else if (strPaymenttype.equals("PAYU Biz")) {
+                                else if(strPaymentId.equals("10")){
                                     try {
 //                                    startPayubiz(finalamount);
                                     }catch (Exception e){
@@ -3309,7 +3398,8 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                                         alert.show();
                                     }
                                 }
-                                else if (strPaymenttype.equals("Bill Desk")) {
+//                                else if (strPaymenttype.equals("Bill Desk")) {
+                                else if (strPaymentId.equals("2")) {
                                     try {
                                    // orderConfirmation();
                                         startBillDesk(finalamount);
@@ -3341,6 +3431,7 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
 //                                finish();
                             }
                             else if(jObject.getString("StatusCode").equals("10")){
+                                JSONObject jobj = jObject.getJSONObject("SalesOrderDetails");
                                 AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
                                 builder.setMessage(jobj.getString("ResponseMessage"))
                                         .setCancelable(false)
@@ -3355,6 +3446,7 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                                 alert.show();
                             }
                             else if(jObject.getString("StatusCode").equals("-12")){
+                                JSONObject jobj = jObject.getJSONObject("SalesOrderDetails");
                                 AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
                                 builder.setMessage(jobj.getString("ResponseMessage"))
                                         .setCancelable(false)
@@ -3367,6 +3459,7 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                                 alert.show();
                             }
                             else if(jObject.getString("StatusCode").equals("-13")){
+                                JSONObject jobj = jObject.getJSONObject("SalesOrderDetails");
                                 AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
                                 builder.setMessage(jobj.getString("ResponseMessage"))
                                         .setCancelable(false)
@@ -3379,12 +3472,23 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                                 alert.show();
                             }
                             else{
-                                SharedPreferences OrderSubmittedFailed = getApplicationContext().getSharedPreferences(Config.SHARED_PREF311, 0);
-                                Toast.makeText(getApplicationContext(),OrderSubmittedFailed.getString("OrderSubmittedFailed", "")+ " !",Toast.LENGTH_LONG).show();
+//                                SharedPreferences OrderSubmittedFailed = getApplicationContext().getSharedPreferences(Config.SHARED_PREF311, 0);
+//                                Toast.makeText(getApplicationContext(),OrderSubmittedFailed.getString("OrderSubmittedFailed", "")+ " !",Toast.LENGTH_LONG).show();
+                                AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
+                                builder.setMessage(jObject.getString("EXMessage"))
+                                        .setCancelable(false)
+                                        .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                            }
+                                        });
+                                AlertDialog alert = builder.create();
+                                alert.show();
                             }
-                        } catch (JSONException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                             progressDialog.dismiss();
+                            Log.e(TAG,"Exception   3457   "+e.toString());
+
                         }
                     }
                     @Override
@@ -3395,6 +3499,7 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
 
             } catch (Exception e) {
                 e.printStackTrace();
+                Log.e(TAG,"Exception   345711   "+e.toString());
             }
         }else {
             Intent in = new Intent(this,NoInternetActivity.class);
@@ -3583,7 +3688,22 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
         else {
             inExpressdelivery=0;
         }
-        holidayCheck();
+
+
+        if(!strPaymentId.equals("")){
+            holidayCheck();
+        }else {
+            AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
+            builder.setMessage(Pleaseselectanypaymentoption+". ")
+                    .setCancelable(false)
+                    .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+
     }
 
     public void payUsingUpi(  String name,String upiId, String note, String amount) {
@@ -3704,15 +3824,7 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
             Log.e("UPIPAY", "upiPaymentDataOperation2: " + str);
             String[] separated = str. split("&");
 
-            String[] septxnId = separated[0]. split("=");
-            String[] septxnRef = separated[1]. split("=");
-            String[] sepStatus = separated[2]. split("=");
-            String[] sepresponseCode = separated[3]. split("=");
 
-            Log.e("septxnId", "upiPaymentDataOperation31: " + septxnId[1]);
-            Log.e("septxnRef", "upiPaymentDataOperation32: " + septxnRef[1]);
-            Log.e("sepStatus", "upiPaymentDataOperation33: " + sepStatus[1]);
-            Log.e("sepresponseCode", "upiPaymentDataOperation33: " + sepresponseCode[1]);
 
 
             String paymentCancel = "";
@@ -3757,6 +3869,16 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
 //                startActivity(intent);
 //
 //                finish();
+
+                String[] septxnId = separated[0]. split("=");
+                String[] septxnRef = separated[1]. split("=");
+                String[] sepStatus = separated[2]. split("=");
+                String[] sepresponseCode = separated[3]. split("=");
+
+                Log.e("septxnId", "upiPaymentDataOperation31: " + septxnId[1]);
+                Log.e("septxnRef", "upiPaymentDataOperation32: " + septxnRef[1]);
+                Log.e("sepStatus", "upiPaymentDataOperation33: " + sepStatus[1]);
+                Log.e("sepresponseCode", "upiPaymentDataOperation33: " + sepresponseCode[1]);
 
                 updatePayments(OrderNumber_s,FK_SalesOrder,strPaymentId,septxnId[1],"0","","0",finalamount,"0");
             } else if ("Payment cancelled by user.".equals(paymentCancel)) {
@@ -4028,12 +4150,12 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                         SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
                         String output = sdf1.format(c.getTime());
                         //Toast.makeText(getApplicationContext(),output,Toast.LENGTH_LONG).show();
-                        if (strPaymenttype.equals("PAYU Biz")){
-//                            startPayubiz(finalamount);
-                        }else {
-                            doOrderConfirm(/*output*/);
-                        }
-                       // doOrderConfirm(/*output*/);
+//                        if (strPaymenttype.equals("PAYU Biz")){
+////                            startPayubiz(finalamount);
+//                        }else {
+//                            doOrderConfirm(/*output*/);
+//                        }
+                        doOrderConfirm(/*output*/);
 
 
 
@@ -4100,9 +4222,18 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
         String value = OnlinePaymentpref.getString("OnlinePaymentMethods", null);
         Log.e(TAG,"OnlinePaymentpref   2293    "+value);
         try {
-            JSONArray jsonArray = new JSONArray(value);
-            for(int i=0; i<=jsonArray.length(); i++) {
-                JSONObject jobjt = jsonArray.getJSONObject(i);
+            jsonArrayPay = new JSONArray(value);
+
+
+            AdapterPaymentOptions adapter = new AdapterPaymentOptions(AddressAddActivty.this, jsonArrayPay);
+            LinearLayoutManager horizontalLayoutManagaer
+                    = new LinearLayoutManager(AddressAddActivty.this, LinearLayoutManager.VERTICAL, false);
+            recyc_paymenttype.setLayoutManager(horizontalLayoutManagaer);
+            recyc_paymenttype.setAdapter(adapter);
+            adapter.setClickListener(AddressAddActivty.this);
+
+            for(int i=0; i<=jsonArrayPay.length(); i++) {
+                JSONObject jobjt = jsonArrayPay.getJSONObject(i);
                 String id  = jobjt.getString("ID_PaymentMethod");
                 String PaymentName = jobjt.getString("PaymentName");
 
@@ -4593,5 +4724,25 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
     }
 
 
+    @Override
+    public void onClick(int position, String paymentName) {
 
+        Log.e(TAG,"4616  "+position+ "  "+paymentName);
+
+        try {
+            JSONObject jsonObject = jsonArrayPay.getJSONObject(position);
+            strPaymenttype=jsonObject.getString("PaymentName");
+           // strPaymentId=jsonObject.getString("ID_PaymentMethod");
+            SelstrPaymentId=jsonObject.getString("ID_PaymentMethod");
+            IsOnlinePay = jsonObject.getString("IsOnlinePay");
+            MerchantID =  jsonObject.getString("MerchantID");
+            TransactionID =  jsonObject.getString("TransactionID");
+            SecurityID =  jsonObject.getString("SecurityID");
+            strPaymentId = jsonObject.getString("ID_PaymentMethod");
+          //  getMerchantKeys();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

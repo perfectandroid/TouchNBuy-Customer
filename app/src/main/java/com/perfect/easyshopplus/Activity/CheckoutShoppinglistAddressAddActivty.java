@@ -32,6 +32,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -132,6 +133,13 @@ public class CheckoutShoppinglistAddressAddActivty extends AppCompatActivity imp
     String RedeemRequest = "false";
     CheckBox cbRedeem;
     TextView tv_header,tvaddcart;
+    String Pc_PrivilageCardEnable = "false";
+    String Pc_AccNumber = "";
+    String Pc_ID_CustomerAcc = "0";
+    String privilegeamount ="0";
+    String strPaymentId = "1";
+    RadioButton radioButton;
+
 
 
     @Override
@@ -205,10 +213,13 @@ public class CheckoutShoppinglistAddressAddActivty extends AppCompatActivity imp
             tvitemcount.setText(Subtotal + " (" + String.valueOf(db.selectCartCount()) + " " + Items + ")");
         }
         setViews();
+        paymentcondition();
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Calendar cal = Calendar.getInstance();
         String currentdate = dateFormat.format(cal.getTime());
         etdate.setText(currentdate);
+
+
 
         SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF39, 0);
         SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF40, 0);
@@ -735,6 +746,8 @@ public class CheckoutShoppinglistAddressAddActivty extends AppCompatActivity imp
         cbRedeem = findViewById(R.id.cbRedeem);
         tv_Want_to_redeem = findViewById(R.id.tv_Want_to_redeem);
 
+        radioButton = findViewById(R.id.radioButton);
+
 
 
     }
@@ -1244,6 +1257,11 @@ public class CheckoutShoppinglistAddressAddActivty extends AppCompatActivity imp
                     requestObject1.put("ID_SalesOrder",prefFK_SalesOrderNew.getString("FK_SalesOrder_new","0"));
                     requestObject1.put("RedeemRequest",RedeemRequest);
 
+                    requestObject1.put("PrivilageCardEnable",Pc_PrivilageCardEnable);
+                    requestObject1.put("PrivCardAmount",privilegeamount);
+                    requestObject1.put("AccNumber",Pc_AccNumber);
+                    requestObject1.put("ID_CustomerAcc",Pc_ID_CustomerAcc);
+
                     Log.e(TAG,"requestObject1       "+requestObject1);
 
                 } catch (JSONException e) {
@@ -1318,17 +1336,20 @@ public class CheckoutShoppinglistAddressAddActivty extends AppCompatActivity imp
                                 SharedPreferences.Editor prefFK_SalesOrdereditorNew = prefFK_SalesOrderNew.edit();
                                 prefFK_SalesOrdereditorNew.putString("FK_SalesOrder_new", jobj.getString("FK_SalesOrder"));
                                 prefFK_SalesOrdereditorNew.commit();
+//
+//                                SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
+//                                Intent intent = new Intent(CheckoutShoppinglistAddressAddActivty.this,ThanksActivity.class);
+//                                intent.putExtra("StoreName", pref1.getString("StoreName", null));
+//                                intent.putExtra("OrderNumber",jobj.getString("OrderNumber"));
+//                                intent.putExtra("strPaymenttype","COD");
+//                                intent.putExtra("finalamount",finalamount);
+//                                startActivity(intent);
+//
+//                                //  startActivity(new Intent(CheckoutShoppinglistAddressAddActivty.this, ThanksActivity.class));
+//                                finish();
 
-                                SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
-                                Intent intent = new Intent(CheckoutShoppinglistAddressAddActivty.this,ThanksActivity.class);
-                                intent.putExtra("StoreName", pref1.getString("StoreName", null));
-                                intent.putExtra("OrderNumber",jobj.getString("OrderNumber"));
-                                intent.putExtra("strPaymenttype","COD");
-                                intent.putExtra("finalamount",finalamount);
-                                startActivity(intent);
+                                updatePayments(OrderNumber_s,FK_SalesOrder,strPaymentId,"","0","","0",finalamount,"0");
 
-                                //  startActivity(new Intent(CheckoutShoppinglistAddressAddActivty.this, ThanksActivity.class));
-                                finish();
                             }else if(jObject.getString("StatusCode").equals("10")){
                                 JSONObject jobj = jObject.getJSONObject("SalesOrderDetails");
                                 AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutShoppinglistAddressAddActivty.this);
@@ -1537,4 +1558,183 @@ public class CheckoutShoppinglistAddressAddActivty extends AppCompatActivity imp
             e.printStackTrace();
         }
     }
+
+    public void paymentcondition(){
+
+
+        SharedPreferences OnlinePaymentmeth1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF62, 0);
+        String BASEURL = OnlinePaymentmeth1.getString("OnlinePaymentMethods", null);
+        Log.e(TAG,"BASEURLSSSSS   2283    "+BASEURL);
+
+
+
+        SharedPreferences OnlinePaymentpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF62, 0);
+        String value = OnlinePaymentpref.getString("OnlinePaymentMethods", null);
+        Log.e(TAG,"OnlinePaymentpref   2293    "+value);
+        try {
+            JSONArray jsonArrayPay = new JSONArray(value);
+            for (int i=0;i<jsonArrayPay.length();i++){
+                JSONObject jsonObject = jsonArrayPay.getJSONObject(i);
+                if (jsonObject.getString("ID_PaymentMethod").equals("1")){
+                    strPaymenttype = jsonObject.getString("PaymentName");
+                    radioButton.setText(""+jsonObject.getString("PaymentName"));
+                }
+
+            }
+
+
+
+        } catch (Exception e) {
+            Log.e(TAG,"Exception   2322    "+e.toString());
+        }
+    }
+
+    private void updatePayments(String id_salesOrder, String FK_SalesOrder,String fk_paymentMethod, String uniqueTxnID, String payDescription,
+                                String authStatuss, String payResponseId, String txnAmount, String txnType) {
+
+        Log.e(TAG,"455   id_salesOrder       "+id_salesOrder);
+        Log.e(TAG,"455   FK_SalesOrder       "+FK_SalesOrder);
+        Log.e(TAG,"455   fk_paymentMethod    "+fk_paymentMethod);
+        Log.e(TAG,"455   uniqueTxnID         "+uniqueTxnID);
+        Log.e(TAG,"455   payDescription      "+payDescription);
+        Log.e(TAG,"455   authStatus          "+authStatuss);
+        Log.e(TAG,"455   payResponseId       "+payResponseId);
+        Log.e(TAG,"455   txnAmount           "+txnAmount);
+        Log.e(TAG,"455   txnType             "+txnType);
+        Log.e(TAG,"455   txnType             "+txnType);
+        Log.e(TAG,"455   strPaymenttype             "+strPaymenttype);
+
+        SharedPreferences baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
+        SharedPreferences imgpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF57, 0);
+        String BASEURL = baseurlpref.getString("BaseURL", null);
+        String IMAGEURL = imgpref.getString("ImageURL", null);
+        if (new InternetUtil(this).isInternetOn()) {
+            progressDialog = new ProgressDialog(this, R.style.Progress);
+            progressDialog.setProgressStyle(android.R.style.Widget_ProgressBar);
+            progressDialog.setCancelable(false);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setIndeterminateDrawable(this.getResources()
+                    .getDrawable(R.drawable.progress));
+            progressDialog.show();
+            try{
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .sslSocketFactory(getSSLSocketFactory())
+                        .hostnameVerifier(getHostnameVerifier())
+                        .build();
+                Gson gson = new GsonBuilder()
+                        .setLenient()
+                        .create();
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(BASEURL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create(gson))
+                        .client(client)
+                        .build();
+                ApiInterface apiService = retrofit.create(ApiInterface.class);
+                final JSONObject requestObject1 = new JSONObject();
+                try {
+                    DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+                    Calendar cal = Calendar.getInstance();
+                    String currentdate = dateFormat.format(cal.getTime());
+                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
+
+
+                    SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF1, 0);
+                    SharedPreferences pref2 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF7, 0);
+                    SharedPreferences pref3= getApplicationContext().getSharedPreferences(Config.SHARED_PREF9, 0);
+                    SharedPreferences pref4= getApplicationContext().getSharedPreferences(Config.SHARED_PREF20, 0);
+
+
+//					uniqueTxnID = "";
+//					authStatus = "";
+//					txnAmount = "";
+//					txnType  ="";
+
+                    requestObject1.put("ID_SalesOrder", FK_SalesOrder);
+                    requestObject1.put("FK_PaymentMethod", fk_paymentMethod);
+                    requestObject1.put("PayTransactionID",uniqueTxnID);
+                    requestObject1.put("PayDescription", payDescription);
+                    requestObject1.put("PayStatus", authStatuss);
+                    requestObject1.put("PayResponseId",payResponseId );
+                    requestObject1.put("Amount",txnAmount );
+                    requestObject1.put("TransType", txnType);
+
+
+                    Log.e(TAG,"requestObject1   516    "+requestObject1);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), requestObject1.toString());
+                Call<String> call = apiService.PaymentDetailUpdate(body);
+                call.enqueue(new Callback<String>() {
+                    @Override public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                        try {
+                            progressDialog.dismiss();
+                            Log.e(TAG,"response   1675  "+response.body());
+
+
+//							{"GateWayResult":{"Status":true,"TransDateTime":"25-08-2021 11:14:31","TransType":"01","TransactionId":"BDSK11112","TranStatus":"0300",
+//									"TranAmnt":"00000002.00","ResponseCode":"0","ResponseMessage":"Transaction Verified"},"StatusCode":0,"EXMessage":null}
+
+
+                            JSONObject jObject = new JSONObject(response.body());
+                            JSONObject jobj = jObject.getJSONObject("SalesOrderDetails");
+                            if(jObject.getString("StatusCode").equals("0")){
+
+                                Log.e(TAG,"authStatus   567 1   "+authStatuss+"   ");
+                                startActivity(new Intent(CheckoutShoppinglistAddressAddActivty.this, ThanksActivity.class));
+                                SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
+                                Intent intent = new Intent(CheckoutShoppinglistAddressAddActivty.this,ThanksActivity.class);
+                                intent.putExtra("StoreName", pref1.getString("StoreName", null));
+                                intent.putExtra("OrderNumber",jobj.getString("OrderNumber"));
+                                intent.putExtra("strPaymenttype",strPaymenttype);
+                                intent.putExtra("finalamount",finalamount);
+//
+//
+                                startActivity(intent);
+
+                                finish();
+
+
+                            }else {
+                                AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutShoppinglistAddressAddActivty.this);
+                                builder.setMessage(jobj.getString("ResponseMessage"))
+                                        .setCancelable(false)
+                                        .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                startActivity(new Intent(CheckoutShoppinglistAddressAddActivty.this, HomeActivity.class));
+                                            }
+                                        });
+                                AlertDialog alert = builder.create();
+                                alert.show();
+                            }
+
+//
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            progressDialog.dismiss();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        progressDialog.dismiss();
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else {
+            Intent in = new Intent(this, NoInternetActivity.class);
+            startActivity(in);
+        }
+
+
+
+    }
+
 }
