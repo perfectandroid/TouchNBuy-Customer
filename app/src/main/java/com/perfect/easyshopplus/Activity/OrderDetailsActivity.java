@@ -746,49 +746,90 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
                                 Float PrivCardAmount = Float.parseFloat(jobj.getString("PrivCardAmount"));
                                 Log.e(TAG,"RedeemAmnt  450  "+RedeemAmnts);
                                 String amntPayable ="";
-                                if (RedeemAmnts>0 && PrivCardAmount >0){
-                                    Log.e(TAG,"RedeemAmnt  PrivCardAmount 4531  "+RedeemAmnts+"  "+PrivCardAmount);
-                                    amntPayable = String.valueOf(jobj.getDouble("AmountPayable") + RedeemAmnts+PrivCardAmount);
-                                    Log.e(TAG,"RedeemAmnt  PrivCardAmount   amntPayable 4532  "+amntPayable);
-                                    tv_grandtotal.setText(/*string + " " +*/ f.format(Double.parseDouble(amntPayable)));
-                                    ll_redeemsummary.setVisibility(View.VISIBLE);
-                                    ll_privisummary.setVisibility(View.VISIBLE);
-                                    redeem_tvamnt.setText(""+f.format(Double.parseDouble(String.valueOf(RedeemAmnts))));
-                                    privi_tvamnt.setText(""+f.format(Double.parseDouble(String.valueOf(PrivCardAmount))));
-
-                                }
-                                else if (RedeemAmnts>0){
-                                    Log.e(TAG,"RedeemAmnt  4533  "+RedeemAmnts);
-                                    amntPayable = String.valueOf(jobj.getDouble("AmountPayable") + RedeemAmnts);
-                                    Log.e(TAG,"RedeemAmnt   amntPayable 4534  "+amntPayable);
-                                    tv_grandtotal.setText(/*string + " " +*/ f.format(Double.parseDouble(amntPayable)));
+//                                if (RedeemAmnts>0 && PrivCardAmount >0){
+//                                    Log.e(TAG,"RedeemAmnt  PrivCardAmount 4531  "+RedeemAmnts+"  "+PrivCardAmount);
+//                                    amntPayable = String.valueOf(jobj.getDouble("AmountPayable") + RedeemAmnts+PrivCardAmount);
+//                                    Log.e(TAG,"RedeemAmnt  PrivCardAmount   amntPayable 4532  "+amntPayable);
+//                                    tv_grandtotal.setText(/*string + " " +*/ f.format(Double.parseDouble(amntPayable)));
+//                                    ll_redeemsummary.setVisibility(View.VISIBLE);
+//                                    ll_privisummary.setVisibility(View.VISIBLE);
+//                                    redeem_tvamnt.setText(""+f.format(Double.parseDouble(String.valueOf(RedeemAmnts))));
+//                                    privi_tvamnt.setText(""+f.format(Double.parseDouble(String.valueOf(PrivCardAmount))));
+//
+//                                }
+//                                else if (RedeemAmnts>0){
+//                                    Log.e(TAG,"RedeemAmnt  4533  "+RedeemAmnts);
+//                                    amntPayable = String.valueOf(jobj.getDouble("AmountPayable") + RedeemAmnts);
+//                                    Log.e(TAG,"RedeemAmnt   amntPayable 4534  "+amntPayable);
+//                                    tv_grandtotal.setText(/*string + " " +*/ f.format(Double.parseDouble(amntPayable)));
+////                                    tv_grandtotal.setText(/*string + " " +*/ f.format(jobj.getDouble("AmountPayable")));
+//                                    ll_redeemsummary.setVisibility(View.VISIBLE);
+//                                    ll_privisummary.setVisibility(View.GONE);
+//                                    redeem_tvamnt.setText(""+f.format(Double.parseDouble(String.valueOf(RedeemAmnts))));
+//                                    privi_tvamnt.setText("0.00");
+//                                }
+//
+//                                else if (PrivCardAmount>0){
+//                                    Log.e(TAG,"PrivCardAmount  4535  "+PrivCardAmount);
+//                                    amntPayable = String.valueOf(jobj.getDouble("AmountPayable") + PrivCardAmount);
+//                                    Log.e(TAG,"  PrivCardAmount   amntPayable 4534  "+amntPayable);
+//                                    tv_grandtotal.setText(/*string + " " +*/ f.format(Double.parseDouble(amntPayable)));
+////                                    tv_grandtotal.setText(/*string + " " +*/ f.format(jobj.getDouble("AmountPayable")));
+//                                    ll_redeemsummary.setVisibility(View.GONE);
+//                                    ll_privisummary.setVisibility(View.VISIBLE);
+//                                    redeem_tvamnt.setText("0.00");
+//                                    privi_tvamnt.setText(""+f.format(Double.parseDouble(String.valueOf(PrivCardAmount))));
+//                                }
+//
+//                                else{
+//                                    Log.e(TAG,"PrivCardAmount  457  "+PrivCardAmount);
 //                                    tv_grandtotal.setText(/*string + " " +*/ f.format(jobj.getDouble("AmountPayable")));
-                                    ll_redeemsummary.setVisibility(View.VISIBLE);
+////                                    tv_grandtotal.setText(/*string + " " +*/ f.format(jobj.getDouble("AmountPayable")));
+//                                    ll_redeemsummary.setVisibility(View.GONE);
+//                                    ll_privisummary.setVisibility(View.GONE);
+//                                    redeem_tvamnt.setText("0.00");
+//                                    privi_tvamnt.setText("0.00");
+//                                }
+
+
+                                if (jobj.getString("PrivilageCardEnable").equals("true")){
+                                    //ll_privstatus.setVisibility(View.VISIBLE);
+                                    ll_privisummary.setVisibility(View.VISIBLE);
+                                  //  tv_priv_statusmsg.setText("Card Status : "+jobj.getString("PrivCardStatus"));
+                                    if (PrivCardAmount>0){
+                                        privi_tvamnt.setText(""+f.format(Double.parseDouble(String.valueOf(PrivCardAmount))));
+                                    }else {
+                                        ll_privisummary.setVisibility(View.GONE);
+                                        privi_tvamnt.setText("0.00");
+                                    }
+                                }else {
+                                   // ll_privstatus.setVisibility(View.GONE);
                                     ll_privisummary.setVisibility(View.GONE);
-                                    redeem_tvamnt.setText(""+f.format(Double.parseDouble(String.valueOf(RedeemAmnts))));
+                                 //   tv_priv_statusmsg.setText("Card Status : "+jobj.getString("PrivCardStatus"));
                                     privi_tvamnt.setText("0.00");
                                 }
 
-                                else if (PrivCardAmount>0){
-                                    Log.e(TAG,"PrivCardAmount  4535  "+PrivCardAmount);
-                                    amntPayable = String.valueOf(jobj.getDouble("AmountPayable") + PrivCardAmount);
-                                    Log.e(TAG,"  PrivCardAmount   amntPayable 4534  "+amntPayable);
-                                    tv_grandtotal.setText(/*string + " " +*/ f.format(Double.parseDouble(amntPayable)));
-//                                    tv_grandtotal.setText(/*string + " " +*/ f.format(jobj.getDouble("AmountPayable")));
+
+                                if (jobj.getString("GiftVoucher").equals("true")){
+                                    ll_redeemsummary.setVisibility(View.VISIBLE);
+                                    if (RedeemAmnts>0){
+                                        redeem_tvamnt.setText(""+f.format(Double.parseDouble(String.valueOf(RedeemAmnts))));
+                                    }else {
+                                        ll_redeemsummary.setVisibility(View.GONE);
+                                        redeem_tvamnt.setText("0.00");
+                                    }
+
+                                }else {
                                     ll_redeemsummary.setVisibility(View.GONE);
-                                    ll_privisummary.setVisibility(View.VISIBLE);
                                     redeem_tvamnt.setText("0.00");
-                                    privi_tvamnt.setText(""+f.format(Double.parseDouble(String.valueOf(PrivCardAmount))));
                                 }
 
-                                else{
-                                    Log.e(TAG,"PrivCardAmount  457  "+PrivCardAmount);
-                                    tv_grandtotal.setText(/*string + " " +*/ f.format(jobj.getDouble("AmountPayable")));
-//                                    tv_grandtotal.setText(/*string + " " +*/ f.format(jobj.getDouble("AmountPayable")));
-                                    ll_redeemsummary.setVisibility(View.GONE);
-                                    ll_privisummary.setVisibility(View.GONE);
-                                    redeem_tvamnt.setText("0.00");
-                                    privi_tvamnt.setText("0.00");
+                                if (jobj.getString("PrivilageCard").equals("true")){
+                                    ll_privstatus.setVisibility(View.VISIBLE);
+                                    tv_priv_statusmsg.setText("Card Status : "+jobj.getString("PrivCardStatus"));
+                                }else {
+                                    ll_privstatus.setVisibility(View.GONE);
+                                    tv_priv_statusmsg.setText("Card Status : "+jobj.getString("PrivCardStatus"));
                                 }
 
 
@@ -809,6 +850,13 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
                                 } else {
                                     finalamount = twoStringArray[0];
                                 }
+
+                                if (jobj.getDouble("SalesPrice")>0){
+                                    tv_grandtotal.setText(f.format(Double.parseDouble(jobj.getString("SalesPrice"))));
+                                }else {
+                                    tv_grandtotal.setText("0.00");
+                                }
+
 
                                 strShippingAddress = jobj.getString("DeliverAddress");
                                 if(strShippingAddress.equals("null") ||strShippingAddress.isEmpty()){
@@ -843,13 +891,9 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
 
 
                                 tv_payment_statusmsg.setText("Payment Status : "+jobj.getString("Transactionmessage"));
-                                if (jobj.getString("PrivilageCardEnable").equals("true")){
-                                    ll_privstatus.setVisibility(View.VISIBLE);
-                                    tv_priv_statusmsg.setText("Card Status : "+jobj.getString("PrivCardStatus"));
-                                }else {
-                                    ll_privstatus.setVisibility(View.GONE);
-                                    tv_priv_statusmsg.setText("Card Status : "+jobj.getString("PrivCardStatus"));
-                                }
+
+
+
 
 
 //                                ll_privstatus = (LinearLayout) findViewById(R.id.ll_privstatus);
@@ -1208,7 +1252,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
 //            case R.id.ll_payNow:
             case R.id.tv_paynow:
 
-                Log.e(TAG,"MerchantID   1375     "+IsOnlinePay);
+                Log.e(TAG,"IsOnlinePay   1375     "+IsOnlinePay);
                 Log.e(TAG,"MerchantID   1375     "+MerchantID);
                 Log.e(TAG,"TransactionID  1375   "+TransactionID);
                 Log.e(TAG,"SecurityID   1375     "+SecurityID);
@@ -2540,7 +2584,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
                     requestObject1.put("TransType", txnType);
 
 
-                    Log.e(TAG,"requestObject1   516    "+requestObject1);
+                    Log.e(TAG,"requestObject1   2587    "+requestObject1);
 
 
                 } catch (JSONException e) {
