@@ -497,12 +497,14 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
 
                     if (Double.parseDouble(privilegeamount)<Double.parseDouble(finalamountSave)){
                         String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(privilegeamount));
-                        tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                        DecimalFormat f1 = new DecimalFormat("#0.00");
+                        tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
                         tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                         SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                         txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                     }else {
-                        tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
+                        DecimalFormat f1 = new DecimalFormat("#0.00");
+                        tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountSave))))+" /-");
                         tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                         SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                         txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
@@ -522,12 +524,14 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
 
                     if (Double.parseDouble(privilegeamount)<Double.parseDouble(finalamountSave)){
                         String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(privilegeamount));
-                        tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                        DecimalFormat f1 = new DecimalFormat("#0.00");
+                        tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
                         tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                         SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                         txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                     }else {
-                        tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
+                        DecimalFormat f1 = new DecimalFormat("#0.00");
+                        tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountSave))))+" /-");
                         tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                         SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                         txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
@@ -614,7 +618,8 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                                 redeemamount = String.valueOf(Double.parseDouble(et_your_redeem.getText().toString()));
 //                                String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(et_your_redeem.getText().toString()));
                                 String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - TotalredemnPrivilege);
-                                tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                                DecimalFormat f1 = new DecimalFormat("#0.00");
+                                tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
                                 tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                                 SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                                 txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
@@ -637,7 +642,8 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
 
                                 redeemamount  = "0";
                                 String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(privilegeamount));
-                                tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                                DecimalFormat f1 = new DecimalFormat("#0.00");
+                                tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
                                 tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                                 SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                                 txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
@@ -659,7 +665,8 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                             redeemamount  = "0";
                             String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(privilegeamount));
 //                            tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
-                            tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                            DecimalFormat f1 = new DecimalFormat("#0.00");
+                            tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
                             tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                             SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
 //                            txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
@@ -689,7 +696,8 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                     redeemamount  = "0";
                     String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(privilegeamount));
 //                    tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
-                    tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                    DecimalFormat f1 = new DecimalFormat("#0.00");
+                    tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
                     tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                     SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
 //                    txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
@@ -714,14 +722,15 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
 //                        Log.e(TAG,"finalamtchkRedeem   474   "+finalamtchkRedeem+"   "+finalamountSave+"  "+privilegeamount);
 //                        Log.e(TAG,"finalamtchkRedeem   4742   "+TotalredemnPrivilege);
 //                        if (Double.parseDouble(et_your_redeem.getText().toString())<Double.parseDouble(finalamountSave)){
-                        if (TotalredemnPrivilege<Double.parseDouble(finalamountSave)){
+                        if (TotalredemnPrivilege<=Double.parseDouble(finalamountSave)){
 //                            Log.e(TAG,"finalamtchkRedeem   4741   "+finalamtchkRedeem+"   "+finalamountSave);
                             if (privilegePoints >= Double.parseDouble(et_your_privilage.getText().toString())){
 
                                 privilegeamount = String.valueOf(Double.parseDouble(et_your_privilage.getText().toString()));
 //                                String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(et_your_redeem.getText().toString()));
                                 String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - TotalredemnPrivilege);
-                                tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                                DecimalFormat f1 = new DecimalFormat("#0.00");
+                                tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
                                 tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                                 SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                                 txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
@@ -744,7 +753,8 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                                 alert.show();
                                 privilegeamount  = "0";
                                 String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(redeemamount));
-                                tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                                DecimalFormat f1 = new DecimalFormat("#0.00");
+                                tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
                                 tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                                 SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                                 txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
@@ -766,7 +776,8 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                             privilegeamount  = "0";
                             String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(redeemamount));
 //                            tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
-                            tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                            DecimalFormat f1 = new DecimalFormat("#0.00");
+                            tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
                             tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                             SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
 //                            txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
@@ -795,7 +806,8 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                     privilegeamount  = "0";
                     String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(redeemamount));
 //                    tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
-                    tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                    DecimalFormat f1 = new DecimalFormat("#0.00");
+                    tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
                     tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                     SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
 //                    txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
@@ -1066,7 +1078,8 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
 
         }
        // tv_amountpay.setText(string+" "+finalamount+" /-");
-        tv_amountpay.setText(/*string+" "+*/f.format(Double.parseDouble(String.valueOf(subtotal))));
+        DecimalFormat f1 = new DecimalFormat("#0.00");
+        tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(subtotal)))));
         SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
         txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(String.valueOf(subtotal))));
 
@@ -1279,12 +1292,14 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
 
                 if (Double.parseDouble(redeemamount)<Double.parseDouble(finalamountSave)){
                     String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(redeemamount));
-                    tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                    DecimalFormat f1 = new DecimalFormat("#0.00");
+                    tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
                     tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                     SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                     txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                 }else {
-                    tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
+                    DecimalFormat f1 = new DecimalFormat("#0.00");
+                    tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountSave))))+" /-");
                     tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                     SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                     txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
@@ -1319,12 +1334,14 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
 
                 if (Double.parseDouble(redeemamount)<Double.parseDouble(finalamountSave)){
                     String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(redeemamount));
-                    tv_amountpay.setText(/*string+" "+*/finalamountnew+" /-");
+                    DecimalFormat f1 = new DecimalFormat("#0.00");
+                    tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
                     tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                     SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                     txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                 }else {
-                    tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
+                    DecimalFormat f1 = new DecimalFormat("#0.00");
+                    tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountSave))))+" /-");
                     tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                     SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                     txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));

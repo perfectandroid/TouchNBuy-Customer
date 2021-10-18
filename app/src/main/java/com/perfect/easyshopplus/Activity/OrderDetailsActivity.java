@@ -738,7 +738,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
                                     tv_gst.setVisibility(View.GONE);
                                 }
                                 // tv_grandtotal.setText(/*string + " " +*/ f.format(jobj.getDouble("AmountPayable")));
-                                tv_amountpay.setText(/*string + " " +*/ f.format(jobj.getDouble("AmountPayable")));
+                                tv_amountpay.setText(/*string + " " +*/ jobj.getString("AmountPayable"));
                                 SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
                                 txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+f.format(jobj.getDouble("AmountPayable")));
 
@@ -904,7 +904,13 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
                                 onlinepayMethods =jobj.getString("OnlinePaymentMethodDetails");
                                 OrderNumber_s =jobj.getString("OrderNo");
                                 voucherUrl = jObject.getString("VoucherUrl");
-                                paymentcondition(onlinepayMethods);
+
+                               if (jobj.getDouble("AmountPayable")>0){
+                                   paymentcondition(onlinepayMethods);
+                               }else {
+                                   card_paymenttype.setVisibility(View.GONE);
+                               }
+
 
                                 strPaymentMode = jobj.getString("PaymentHint");
 //                                if (strPaymentMode.equals("Online")){
