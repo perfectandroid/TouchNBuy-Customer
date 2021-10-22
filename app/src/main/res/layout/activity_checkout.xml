@@ -645,7 +645,7 @@
                                             android:layout_height="match_parent"
                                             android:textStyle="normal"
                                             android:padding="5dp"
-                                            android:inputType="number"
+                                            android:inputType="numberDecimal"
                                             android:singleLine="true"
                                             android:hint=""
                                             android:textSize="12dp"

@@ -239,6 +239,7 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
 
     String ThereissometechnicalissuesPleaseuseanotherpaymentoptions,PleaseuseanotherpaymentoptionsGooglePayisnotinstalledinyourdevice;
     String Paymentfailed,PaymentSuccessfully;
+    AdapterPaymentOptions adapterPayOption = null;
 
 
     @Override
@@ -484,16 +485,36 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
             }
         });
 
+        et_your_privilage.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (et_your_privilage.getText().toString().equals(".")){
+                    et_your_privilage.setText("");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         cbRedeem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (cbRedeem.isChecked()){
-                    RedeemRequest = "true";
+                    RedeemRequest = "false";
                     ll_check_redeem.setVisibility(View.VISIBLE);
                     et_your_redeem.setText("");
                     redeemamount = "0.00";
                     redeem_tvamnt.setText("0.00");
-                    ll_redeemsummary.setVisibility(View.VISIBLE);
+                    ll_redeemsummary.setVisibility(View.GONE);
 
                     if (Double.parseDouble(privilegeamount)<Double.parseDouble(finalamountSave)){
                         String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(privilegeamount));
@@ -603,7 +624,12 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
         bt_apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                strPaymentId = "";
+                adapterPayOption.setChecked();
+                ll_redeemsummary.setVisibility(View.GONE);
+                if (Double.parseDouble(redeemamount)<=0){
+                    Pc_PrivilageCardEnable = "false";
+                }
                 if (et_your_redeem.getText().length() != 0 ){
                     try {
 
@@ -611,27 +637,69 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                       //  Log.e(TAG,"finalamtchkRedeem   474   "+finalamtchkRedeem+"   "+finalamountSave+"  "+privilegeamount);
                         Log.e(TAG,"finalamtchkRedeem   4742   "+TotalredemnPrivilege);
 //                        if (Double.parseDouble(et_your_redeem.getText().toString())<Double.parseDouble(finalamountSave)){
-                        if (TotalredemnPrivilege<Double.parseDouble(finalamountSave)){
-                      //      Log.e(TAG,"finalamtchkRedeem   4741   "+finalamtchkRedeem+"   "+finalamountSave);
-                            if (rewardString >= Double.parseDouble(et_your_redeem.getText().toString())){
 
-                                redeemamount = String.valueOf(Double.parseDouble(et_your_redeem.getText().toString()));
+                        if(TotalredemnPrivilege > 0){
+                            RedeemRequest = "true";
+                            if (TotalredemnPrivilege<=Double.parseDouble(finalamountSave)){
+                                //      Log.e(TAG,"finalamtchkRedeem   4741   "+finalamtchkRedeem+"   "+finalamountSave);
+                                if (rewardString >= Double.parseDouble(et_your_redeem.getText().toString())){
+
+                                    ll_redeemsummary.setVisibility(View.VISIBLE);
+
+                                    redeemamount = String.valueOf(Double.parseDouble(et_your_redeem.getText().toString()));
 //                                String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(et_your_redeem.getText().toString()));
-                                String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - TotalredemnPrivilege);
-                                DecimalFormat f1 = new DecimalFormat("#0.00");
-                                tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
-                                tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
-                                SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
-                                txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
-                                Log.e(TAG,"4201   finalamountnew       "+finalamountnew);
-                                DecimalFormat f = new DecimalFormat("##.00");
-                                redeem_tvamnt.setText(""+f.format(Double.parseDouble(redeemamount)));
-                                Toast.makeText(getApplicationContext(),"Reward Amount Successfully Updated",Toast.LENGTH_SHORT).show();
-                            }else {
-                                Log.e(TAG,"Exception  42028   Check Amount");
-                                // Toast.makeText(getApplicationContext(),"Check Reward Amount",Toast.LENGTH_SHORT).show();
+                                    String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - TotalredemnPrivilege);
+                                    DecimalFormat f1 = new DecimalFormat("#0.00");
+                                    tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
+                                    tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
+                                    SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
+                                    txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
+                                    Log.e(TAG,"4201   finalamountnew       "+finalamountnew);
+                                    DecimalFormat f = new DecimalFormat("##.00");
+                                    redeem_tvamnt.setText(""+f.format(Double.parseDouble(redeemamount)));
+                                    Toast.makeText(getApplicationContext(),"Reward Amount Successfully Updated",Toast.LENGTH_SHORT).show();
+
+                                    if ((Double.parseDouble(String.valueOf(finalamountnew))==0)){
+                                        card_paymenttype.setVisibility(View.GONE);
+                                    }else {
+                                        card_paymenttype.setVisibility(View.VISIBLE);
+                                    }
+
+                                }else {
+                                    Log.e(TAG,"Exception  42028   Check Amount");
+                                    // Toast.makeText(getApplicationContext(),"Check Reward Amount",Toast.LENGTH_SHORT).show();
+                                    AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutActivity.this);
+                                    builder.setMessage("Check Reward Amount")
+                                            .setCancelable(false)
+                                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                }
+                                            });
+                                    AlertDialog alert = builder.create();
+                                    alert.show();
+
+                                    RedeemRequest = "false";
+                                    redeemamount  = "0";
+                                    String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(privilegeamount));
+                                    DecimalFormat f1 = new DecimalFormat("#0.00");
+                                    tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
+                                    tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
+                                    SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
+                                    txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
+                                    redeem_tvamnt.setText("0.00");
+                                    if ((Double.parseDouble(String.valueOf(finalamountnew))==0)){
+                                        card_paymenttype.setVisibility(View.GONE);
+                                    }else {
+                                        card_paymenttype.setVisibility(View.VISIBLE);
+                                    }
+                                }
+                            }
+                            else {
+                                // Log.e(TAG,"finalamtchkRedeem   4742   "+finalamtchkRedeem+"   "+finalamountSave);
+                                // Toast.makeText(getApplicationContext(),"Redeem Amount should be less than Payment amount",Toast.LENGTH_SHORT).show();
+
                                 AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutActivity.this);
-                                builder.setMessage("Check Reward Amount")
+                                builder.setMessage("Redeem Amount should be less than Payment amount")
                                         .setCancelable(false)
                                         .setPositiveButton(OK, new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
@@ -639,22 +707,31 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                                         });
                                 AlertDialog alert = builder.create();
                                 alert.show();
-
+                                RedeemRequest = "false";
                                 redeemamount  = "0";
                                 String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(privilegeamount));
+//                            tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
                                 DecimalFormat f1 = new DecimalFormat("#0.00");
                                 tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
                                 tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                                 SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
+//                            txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                                 txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                                 redeem_tvamnt.setText("0.00");
-                            }
-                        }else {
-                           // Log.e(TAG,"finalamtchkRedeem   4742   "+finalamtchkRedeem+"   "+finalamountSave);
-                            // Toast.makeText(getApplicationContext(),"Redeem Amount should be less than Payment amount",Toast.LENGTH_SHORT).show();
 
+                                if ((Double.parseDouble(String.valueOf(finalamountnew))==0)){
+                                    card_paymenttype.setVisibility(View.GONE);
+                                }else {
+                                    card_paymenttype.setVisibility(View.VISIBLE);
+                                }
+
+                            }
+                        }
+                        else{
+                            RedeemRequest = "false";
+                            redeemamount  = "0";
                             AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutActivity.this);
-                            builder.setMessage("Redeem Amount should be less than Payment amount")
+                            builder.setMessage("Check Amount")
                                     .setCancelable(false)
                                     .setPositiveButton(OK, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
@@ -662,23 +739,31 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                                     });
                             AlertDialog alert = builder.create();
                             alert.show();
-                            redeemamount  = "0";
+
                             String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(privilegeamount));
-//                            tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
+//                    tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
                             DecimalFormat f1 = new DecimalFormat("#0.00");
                             tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
                             tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                             SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
-//                            txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
+//                    txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                             txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                             redeem_tvamnt.setText("0.00");
 
+                            if ((Double.parseDouble(String.valueOf(finalamountnew))==0)){
+                                card_paymenttype.setVisibility(View.GONE);
+                            }else {
+                                card_paymenttype.setVisibility(View.VISIBLE);
+                            }
                         }
+
 
 
 
                     }catch (Exception e){
                         Log.e(TAG,"Exception  42032   "+e.toString());
+                        RedeemRequest = "false";
+                        redeemamount  = "0";
                     }
                     //
                 }else {
@@ -693,6 +778,7 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                             });
                     AlertDialog alert = builder.create();
                     alert.show();
+                    RedeemRequest = "false";
                     redeemamount  = "0";
                     String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(privilegeamount));
 //                    tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
@@ -703,6 +789,12 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
 //                    txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                     txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                     redeem_tvamnt.setText("0.00");
+
+                    if ((Double.parseDouble(String.valueOf(finalamountnew))==0)){
+                        card_paymenttype.setVisibility(View.GONE);
+                    }else {
+                        card_paymenttype.setVisibility(View.VISIBLE);
+                    }
                 }
 
                 Utils.hideKeyboard(CheckoutActivity.this);
@@ -712,6 +804,15 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
         bt_apply_privilage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                strPaymentId = "";
+                adapterPayOption.setChecked();
+                ll_privilegesummary.setVisibility(View.GONE);
+                if (Double.parseDouble(redeemamount)<=0){
+                    RedeemRequest = "false";
+                    ll_redeemsummary.setVisibility(View.GONE);
+                }
+
                 if (et_your_privilage.getText().length() != 0 ){
                     //  privilegeamount = et_your_privilage.getText().toString();
 
@@ -722,28 +823,67 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
 //                        Log.e(TAG,"finalamtchkRedeem   474   "+finalamtchkRedeem+"   "+finalamountSave+"  "+privilegeamount);
 //                        Log.e(TAG,"finalamtchkRedeem   4742   "+TotalredemnPrivilege);
 //                        if (Double.parseDouble(et_your_redeem.getText().toString())<Double.parseDouble(finalamountSave)){
-                        if (TotalredemnPrivilege<=Double.parseDouble(finalamountSave)){
-//                            Log.e(TAG,"finalamtchkRedeem   4741   "+finalamtchkRedeem+"   "+finalamountSave);
-                            if (privilegePoints >= Double.parseDouble(et_your_privilage.getText().toString())){
 
-                                privilegeamount = String.valueOf(Double.parseDouble(et_your_privilage.getText().toString()));
+                        if(TotalredemnPrivilege > 0){
+                            Pc_PrivilageCardEnable = "true";
+                            if (TotalredemnPrivilege<=Double.parseDouble(finalamountSave)){
+//                            Log.e(TAG,"finalamtchkRedeem   4741   "+finalamtchkRedeem+"   "+finalamountSave);
+                                if (privilegePoints >= Double.parseDouble(et_your_privilage.getText().toString())){
+                                    ll_privilegesummary.setVisibility(View.VISIBLE);
+                                    privilegeamount = String.valueOf(Double.parseDouble(et_your_privilage.getText().toString()));
 //                                String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(et_your_redeem.getText().toString()));
-                                String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - TotalredemnPrivilege);
-                                DecimalFormat f1 = new DecimalFormat("#0.00");
-                                tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
-                                tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
-                                SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
-                                txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
+                                    String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - TotalredemnPrivilege);
+                                    DecimalFormat f1 = new DecimalFormat("#0.00");
+                                    tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
+                                    tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
+                                    SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
+                                    txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
 //                                Log.e(TAG,"4201   finalamountnew       "+finalamountnew);
-                                DecimalFormat f = new DecimalFormat("##.00");
-                                //  redeem_tvamnt.setText(""+f.format(Double.parseDouble(redeemamount)));
-                                privilege_tvamnt.setText(""+f.format(Double.parseDouble(privilegeamount)));
-                                Toast.makeText(getApplicationContext(),"Card Amount Successfully Updated",Toast.LENGTH_SHORT).show();
-                            }else {
+                                    DecimalFormat f = new DecimalFormat("##.00");
+                                    //  redeem_tvamnt.setText(""+f.format(Double.parseDouble(redeemamount)));
+                                    privilege_tvamnt.setText(""+f.format(Double.parseDouble(privilegeamount)));
+                                    Toast.makeText(getApplicationContext(),"Card Amount Successfully Updated",Toast.LENGTH_SHORT).show();
+
+                                    if ((Double.parseDouble(String.valueOf(finalamountnew))==0)){
+                                        card_paymenttype.setVisibility(View.GONE);
+                                    }else {
+                                        card_paymenttype.setVisibility(View.VISIBLE);
+                                    }
+                                }else {
 //                                Log.e(TAG,"Exception  42028   Check Amount");
-                                //  Toast.makeText(getApplicationContext(),"Check Card Amount",Toast.LENGTH_SHORT).show();
+                                    //  Toast.makeText(getApplicationContext(),"Check Card Amount",Toast.LENGTH_SHORT).show();
+                                    AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutActivity.this);
+                                    builder.setMessage("Check Card Amount")
+                                            .setCancelable(false)
+                                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                }
+                                            });
+                                    AlertDialog alert = builder.create();
+                                    alert.show();
+                                    Pc_PrivilageCardEnable = "false";
+                                    privilegeamount  = "0";
+                                    String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(redeemamount));
+                                    DecimalFormat f1 = new DecimalFormat("#0.00");
+                                    tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
+                                    tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
+                                    SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
+                                    txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
+                                    //redeem_tvamnt.setText("0.00");
+                                    privilege_tvamnt.setText("0.00");
+
+                                    if ((Double.parseDouble(String.valueOf(finalamountnew))==0)){
+                                        card_paymenttype.setVisibility(View.GONE);
+                                    }else {
+                                        card_paymenttype.setVisibility(View.VISIBLE);
+                                    }
+                                }
+                            }
+                            else {
+//                            Log.e(TAG,"finalamtchkRedeem   4742   "+finalamtchkRedeem+"   "+finalamountSave);
+                                //   Toast.makeText(getApplicationContext(),"Redeem Amount should be less than Payment amount",Toast.LENGTH_SHORT).show();
                                 AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutActivity.this);
-                                builder.setMessage("Check Card Amount")
+                                builder.setMessage("Check Card Amount should be less than Payment amount")
                                         .setCancelable(false)
                                         .setPositiveButton(OK, new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
@@ -751,21 +891,31 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                                         });
                                 AlertDialog alert = builder.create();
                                 alert.show();
+                                Pc_PrivilageCardEnable = "false";
                                 privilegeamount  = "0";
                                 String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(redeemamount));
+//                            tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
                                 DecimalFormat f1 = new DecimalFormat("#0.00");
                                 tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
                                 tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                                 SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
+//                            txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                                 txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
-                                //redeem_tvamnt.setText("0.00");
                                 privilege_tvamnt.setText("0.00");
+
+                                if ((Double.parseDouble(String.valueOf(finalamountnew))==0)){
+                                    card_paymenttype.setVisibility(View.GONE);
+                                }else {
+                                    card_paymenttype.setVisibility(View.VISIBLE);
+                                }
+
                             }
-                        }else {
-//                            Log.e(TAG,"finalamtchkRedeem   4742   "+finalamtchkRedeem+"   "+finalamountSave);
-                            //   Toast.makeText(getApplicationContext(),"Redeem Amount should be less than Payment amount",Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Pc_PrivilageCardEnable = "false";
+                            privilegeamount  = "0";
                             AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutActivity.this);
-                            builder.setMessage("Check Card Amount should be less than Payment amount")
+                            builder.setMessage("Check Card Amount")
                                     .setCancelable(false)
                                     .setPositiveButton(OK, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
@@ -773,21 +923,31 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                                     });
                             AlertDialog alert = builder.create();
                             alert.show();
-                            privilegeamount  = "0";
+
                             String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(redeemamount));
-//                            tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
+//                    tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
                             DecimalFormat f1 = new DecimalFormat("#0.00");
                             tv_amountpay.setText(/*string+" "+*/f1.format((Double.parseDouble(String.valueOf(finalamountnew))))+" /-");
                             tv_privi_payamount.setText("Payable Amount : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                             SharedPreferences totalamount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF131, 0);
-//                            txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
+//                    txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                             txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                             privilege_tvamnt.setText("0.00");
 
+                            if ((Double.parseDouble(String.valueOf(finalamountnew))==0)){
+                                card_paymenttype.setVisibility(View.GONE);
+                            }else {
+                                card_paymenttype.setVisibility(View.VISIBLE);
+                            }
+
+
                         }
+
 
                     }catch (Exception e){
                         Log.e(TAG,"Exception  420321   "+e.toString());
+                        Pc_PrivilageCardEnable = "false";
+                        privilegeamount  = "0";
                     }
                 }else {
                     //  privilegeamount = "0";
@@ -803,6 +963,7 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                             });
                     AlertDialog alert = builder.create();
                     alert.show();
+                    Pc_PrivilageCardEnable = "false";
                     privilegeamount  = "0";
                     String finalamountnew = String.valueOf(Double.parseDouble(finalamountSave) - Double.parseDouble(redeemamount));
 //                    tv_amountpay.setText(/*string+" "+*/finalamountSave+" /-");
@@ -813,6 +974,12 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
 //                    txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountSave)));
                     txt_payamount.setText(totalamount.getString("totalamount", "")+" : "+Utils.getDecimelFormate(Double.parseDouble(finalamountnew)));
                     privilege_tvamnt.setText("0.00");
+
+                    if ((Double.parseDouble(String.valueOf(finalamountnew))==0)){
+                        card_paymenttype.setVisibility(View.GONE);
+                    }else {
+                        card_paymenttype.setVisibility(View.VISIBLE);
+                    }
 
                 }
                 Utils.hideKeyboard(CheckoutActivity.this);
@@ -861,7 +1028,6 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
 
                     SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF1, 0);
                     SharedPreferences pref2 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF7, 0);
-
 
                     requestObject1.put("ReqMode","1");
                     requestObject1.put("Bank_Key", getResources().getString(R.string.BankKey));
@@ -1163,7 +1329,20 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                         else{
                             holidayCheck();
                         }
-                    }else {
+                    }
+                    else if (Double.parseDouble(finalamount)==0 && Pc_PrivilageCardEnable.equals("true")){
+                        strPaymentId = "0";
+                        IsOnlinePay = "false";
+                        Log.e(TAG,"finalamount   37182  "+finalamount);
+                        holidayCheck();
+                    }
+                    else if (Double.parseDouble(finalamount)==0 && RedeemRequest.equals("true")){
+                        strPaymentId = "0";
+                        IsOnlinePay = "false";
+                        Log.e(TAG,"finalamount   37182  "+finalamount);
+                        holidayCheck();
+                    }
+                    else {
                         AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutActivity.this);
                         builder.setMessage(Pleaseselectanypaymentoption+". ")
                                 .setCancelable(false)
@@ -1614,7 +1793,7 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                               //  Log.e(TAG,"2252 2  "+jobj.getString("ResponseMessage"));
 
                                 //if (jobj.getString("ResponseCode").equals("0")){
-                                    ll_privilegesummary.setVisibility(View.VISIBLE);
+                                    ll_privilegesummary.setVisibility(View.GONE);
                                     JSONArray jarray = jobj.getJSONArray("BalanceList");
                                     JSONObject jsonObject=jarray.getJSONObject(0);
 
@@ -2782,6 +2961,24 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                                     alert.show();
                                 }
                             }
+                            else if(strPaymentId.equals("0")){
+
+                                try {
+                                    //   doOrderConfirm();
+                                    updatePayments(OrderNumber_s,FK_SalesOrder,strPaymentId,"","0","","0",finalamount,"0");
+                                }catch (Exception e){
+
+                                    AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutActivity.this);
+                                    builder.setMessage(ThereissometechnicalissuesPleaseuseanotherpaymentoptions+". ")
+                                            .setCancelable(false)
+                                            .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                }
+                                            });
+                                    AlertDialog alert = builder.create();
+                                    alert.show();
+                                }
+                            }
                         }
                         else if(jObject.getString("StatusCode").equals("10")){
                             JSONObject jobj = jObject.getJSONObject("SalesOrderDetails");
@@ -3363,12 +3560,13 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
             jsonArrayPay = new JSONArray(value);
 
 
-            AdapterPaymentOptions adapter = new AdapterPaymentOptions(CheckoutActivity.this, jsonArrayPay);
+//            adapterPayOption = new AdapterPaymentOptions(AddressAddActivty.this, jsonArrayPay);
+            adapterPayOption = new AdapterPaymentOptions(CheckoutActivity.this, jsonArrayPay);
             LinearLayoutManager horizontalLayoutManagaer
                     = new LinearLayoutManager(CheckoutActivity.this, LinearLayoutManager.VERTICAL, false);
             recyc_paymenttype.setLayoutManager(horizontalLayoutManagaer);
-            recyc_paymenttype.setAdapter(adapter);
-            adapter.setClickListener(CheckoutActivity.this);
+            recyc_paymenttype.setAdapter(adapterPayOption);
+            adapterPayOption.setClickListener(CheckoutActivity.this);
 
 
         } catch (Exception e) {
@@ -3492,12 +3690,13 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                             if(jObject.getString("StatusCode").equals("0")){
 
                                 Log.e(TAG,"authStatus   567 1   "+authStatuss+"   ");
-                                startActivity(new Intent(CheckoutActivity.this, ThanksActivity.class));
+                             //   startActivity(new Intent(CheckoutActivity.this, ThanksActivity.class));
                                 SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
                                 Intent intent = new Intent(CheckoutActivity.this,ThanksActivity.class);
                                 intent.putExtra("StoreName", pref1.getString("StoreName", null));
                                 intent.putExtra("OrderNumber",jobj.getString("OrderNumber"));
-                                intent.putExtra("strPaymenttype",strPaymenttype);
+//                                intent.putExtra("strPaymenttype",strPaymenttype);
+                                intent.putExtra("strPaymenttype",jobj.getString("PaymentMethod"));
                                 intent.putExtra("finalamount",finalamount);
 //
 //
@@ -3587,7 +3786,7 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
         try {
             //holidayCheck();
             Toast.makeText(this, PaymentSuccessfully+": " + razorpayPaymentID, Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(CheckoutActivity.this, ThanksActivity.class));
+           // startActivity(new Intent(CheckoutActivity.this, ThanksActivity.class));
             SharedPreferences pref1 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF8, 0);
             Intent intent = new Intent(CheckoutActivity.this,ThanksActivity.class);
             intent.putExtra("StoreName", pref1.getString("StoreName", null));

@@ -1400,10 +1400,10 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
                             Log.e(TAG,"response   1675  "+response.body());
 
                             JSONObject jObject = new JSONObject(response.body());
-
+                            Log.e(TAG,"response   16753  "+jObject.getString("StatusCode"));
                             if(jObject.getString("StatusCode").equals("3")){
-                                JSONObject jobj = jObject.getJSONObject("SalesOrderDetails");
-                                Log.e(TAG,"ResponseMessage   1270   "+jobj.getString("ResponseMessage"));
+//                                JSONObject jobj = jObject.getJSONObject("SalesOrderDetails");
+//                                Log.e(TAG,"ResponseMessage   1270   "+jobj.getString("ResponseMessage"));
                                 if(strPaymentId.equals("1")){
                                     try {
 
@@ -1441,12 +1441,13 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
                                 }
 
                             }else {
-                                JSONObject jobj = jObject.getJSONObject("SalesOrderDetails");
+                              //  JSONObject jobj = jObject.getJSONObject("SalesOrderDetails");
                                 AlertDialog.Builder builder= new AlertDialog.Builder(OrderDetailsActivity.this);
                                 // builder.setTitle("Terms & Conditions");
-                                SharedPreferences Pleaseselectanypaymentoptionsp = getApplicationContext().getSharedPreferences(Config.SHARED_PREF264, 0);
-                                String Pleaseselectanypaymentoption = (jobj.getString("ResponseMessage"));
-                                builder.setMessage(Pleaseselectanypaymentoption+". ")
+                               // SharedPreferences Pleaseselectanypaymentoptionsp = getApplicationContext().getSharedPreferences(Config.SHARED_PREF264, 0);
+//                                String Pleaseselectanypaymentoption = (jobj.getString("ResponseMessage"));
+                                String EXMessage = (jObject.getString("EXMessage"));
+                                builder.setMessage(EXMessage)
                                         .setCancelable(false)
                                         .setPositiveButton(OK, new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
@@ -2603,7 +2604,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
                     @Override public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                         try {
                             progressDialog.dismiss();
-                            Log.e(TAG,"response   1675  "+response.body());
+                            Log.e(TAG,"response   16752  "+response.body());
 
 
 //							{"GateWayResult":{"Status":true,"TransDateTime":"25-08-2021 11:14:31","TransType":"01","TransactionId":"BDSK11112","TranStatus":"0300",

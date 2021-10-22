@@ -966,7 +966,7 @@
                                             android:layout_height="match_parent"
                                             android:textStyle="normal"
                                             android:padding="5dp"
-                                            android:inputType="number"
+                                            android:inputType="numberDecimal"
                                             android:singleLine="true"
                                             android:hint=""
                                             android:textSize="12dp"
@@ -1709,7 +1709,8 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:id="@+id/card_payoption">
 
                     <LinearLayout
                         android:id="@+id/Price_detail"

@@ -101,17 +101,17 @@ public class SplashActivity extends AppCompatActivity {
         else if(getResources().getString(R.string.app_name).equals("Pulikkottil Hypermarket")){
             SharedPreferences Baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
             SharedPreferences.Editor BaseurlprefEditor = Baseurlpref.edit();
-//            BaseurlprefEditor.putString("BaseURL", "https://202.164.150.65:14001/TouchNBuyAPI/api/");
+            BaseurlprefEditor.putString("BaseURL", "https://202.164.150.65:14001/TouchNBuyAPI/api/");
 //            BaseurlprefEditor.putString("BaseURL", "https://103.66.76.111:14002/touchnbuyapi/api/");//Live
-            BaseurlprefEditor.putString("BaseURL", "https://103.203.75.124:14002/api/");//Live New 23.08.2021
+//            BaseurlprefEditor.putString("BaseURL", "https://103.203.75.124:14002/api/");//Live New 23.08.2021
 //            BaseurlprefEditor.putString("BaseURL", "https://shop.pulikkottilhypermarket.in/api/");//Live New 24.08.2021 domain
 
             BaseurlprefEditor.commit();
             SharedPreferences Imageurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF57, 0);
             SharedPreferences.Editor ImageurlprefEditor = Imageurlpref.edit();
-//            ImageurlprefEditor.putString("ImageURL", "https://202.164.150.65:14001/TouchNBuyAPI");
+            ImageurlprefEditor.putString("ImageURL", "https://202.164.150.65:14001/TouchNBuyAPI");
            // ImageurlprefEditor.putString("ImageURL", "https://103.66.76.111:14002/touchnbuyapi"); //LiveH
-            ImageurlprefEditor.putString("ImageURL", "https://103.203.75.124:14002"); //Live New 23.08.2021
+//            ImageurlprefEditor.putString("ImageURL", "https://103.203.75.124:14002"); //Live New 23.08.2021
 //            ImageurlprefEditor.putString("ImageURL", "https://shop.pulikkottilhypermarket.in"); //Live New 24.08.2021 domain
 
             ImageurlprefEditor.commit();

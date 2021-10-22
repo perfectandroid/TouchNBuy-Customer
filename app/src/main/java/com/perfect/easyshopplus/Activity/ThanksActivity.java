@@ -52,6 +52,7 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -110,7 +111,9 @@ public class ThanksActivity extends AppCompatActivity implements NavigationView.
 
             tv_storename.setText(""+in.getStringExtra("StoreName"));
             tv_orderno.setText(""+in.getStringExtra("OrderNumber"));
-            tv_amount.setText(""+Float.parseFloat(in.getStringExtra("finalamount"))+" /-");
+            DecimalFormat f1 = new DecimalFormat("#0.00");
+//            tv_amount.setText(""+Float.parseFloat(in.getStringExtra("finalamount"))+" /-");
+            tv_amount.setText(""+f1.format((Double.parseDouble(String.valueOf(in.getStringExtra("finalamount")))))+" /-");
             if (in.getStringExtra("strPaymenttype").equals("COD")){
                 tv_paymethod.setText("CASH ON DELIVERY[COD]");
             }else {
@@ -151,9 +154,6 @@ public class ThanksActivity extends AppCompatActivity implements NavigationView.
 
         SharedPreferences ordernumber = getApplicationContext().getSharedPreferences(Config.SHARED_PREF156, 0);
         tv_head_order.setText(""+ordernumber.getString("ordernumber",""));
-
-
-
 
 
 

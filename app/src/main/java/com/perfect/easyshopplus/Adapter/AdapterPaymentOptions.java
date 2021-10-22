@@ -67,6 +67,7 @@ public class AdapterPaymentOptions extends RecyclerView.Adapter{
                 @Override
                 public void onClick(View view) {
                     try {
+
                         clickListener.onClick(position,jsonObject.getString("PaymentName"));
                         pos = position;
                         notifyDataSetChanged();
@@ -96,6 +97,12 @@ public class AdapterPaymentOptions extends RecyclerView.Adapter{
     @Override
     public int getItemViewType(int position) {
         return position % 2;
+    }
+
+    public void setChecked() {
+
+        pos = -1;
+        notifyDataSetChanged();
     }
 
     private class MainViewHolder extends RecyclerView.ViewHolder {
