@@ -102,7 +102,7 @@ public class SplashActivity extends AppCompatActivity {
             SharedPreferences Baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
             SharedPreferences.Editor BaseurlprefEditor = Baseurlpref.edit();
             BaseurlprefEditor.putString("BaseURL", "https://202.164.150.65:14001/TouchNBuyAPI/api/");
-//            BaseurlprefEditor.putString("BaseURL", "https://103.66.76.111:14002/touchnbuyapi/api/");//Live
+//
 //            BaseurlprefEditor.putString("BaseURL", "https://103.203.75.124:14002/api/");//Live New 23.08.2021
 //            BaseurlprefEditor.putString("BaseURL", "https://shop.pulikkottilhypermarket.in/api/");//Live New 24.08.2021 domain
 
@@ -110,7 +110,7 @@ public class SplashActivity extends AppCompatActivity {
             SharedPreferences Imageurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF57, 0);
             SharedPreferences.Editor ImageurlprefEditor = Imageurlpref.edit();
             ImageurlprefEditor.putString("ImageURL", "https://202.164.150.65:14001/TouchNBuyAPI");
-           // ImageurlprefEditor.putString("ImageURL", "https://103.66.76.111:14002/touchnbuyapi"); //LiveH
+
 //            ImageurlprefEditor.putString("ImageURL", "https://103.203.75.124:14002"); //Live New 23.08.2021
 //            ImageurlprefEditor.putString("ImageURL", "https://shop.pulikkottilhypermarket.in"); //Live New 24.08.2021 domain
 
@@ -129,6 +129,21 @@ public class SplashActivity extends AppCompatActivity {
             SharedPreferences.Editor ImageurlprefEditor = Imageurlpref.edit();
             ImageurlprefEditor.putString("ImageURL", "https://202.164.150.65:14001/TouchNBuyAPI");
 //            ImageurlprefEditor.putString("ImageURL", "https://202.164.150.136:14007/TouchnBuyAPI"); // Live
+            ImageurlprefEditor.commit();
+
+//            getResellerDetails();
+            versionCkecking();
+        }
+        else if(getResources().getString(R.string.app_name).equals("TNB Demo")){
+            SharedPreferences Baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
+            SharedPreferences.Editor BaseurlprefEditor = Baseurlpref.edit();
+            BaseurlprefEditor.putString("BaseURL", "https://202.164.150.65:14001/TouchNBuyAPI/api/");
+            BaseurlprefEditor.commit();
+
+            SharedPreferences Imageurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF57, 0);
+            SharedPreferences.Editor ImageurlprefEditor = Imageurlpref.edit();
+            ImageurlprefEditor.putString("ImageURL", "https://202.164.150.65:14001/TouchNBuyAPI");
+
             ImageurlprefEditor.commit();
 
 //            getResellerDetails();
@@ -2187,7 +2202,7 @@ public class SplashActivity extends AppCompatActivity {
 
 
 
-                                if(getResources().getString(R.string.app_name).equals("JZT CART") || getResources().getString(R.string.app_name).equals("Pulikkottil Hypermarket") || getResources().getString(R.string.app_name).equals("NeethiMed") ) {
+                                if(getResources().getString(R.string.app_name).equals("JZT CART") || getResources().getString(R.string.app_name).equals("Pulikkottil Hypermarket") || getResources().getString(R.string.app_name).equals("NeethiMed")|| getResources().getString(R.string.app_name).equals("TNB Demo") ) {
                                     Intent i = new Intent(SplashActivity.this, WelcomeActivity.class);
                                     startActivity(i);
                                     finish();
@@ -2720,10 +2735,16 @@ public class SplashActivity extends AppCompatActivity {
             ok.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF48, 0);
-                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(pref.getString("PlayStoreLink", null)));
-                    startActivity(intent);
+
+                    try {
+                        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF48, 0);
+                        Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(pref.getString("PlayStoreLink", null)));
+                        startActivity(intent);
+                    }catch (Exception e){
+                        Log.e(TAG,"Exception    2730   "+e.toString());
+                    }
+
                 }
             });
             alertDialog.setCancelable(false);

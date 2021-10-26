@@ -852,8 +852,11 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                                     }else {
                                         card_payoption.setVisibility(View.VISIBLE);
                                     }
+                                    tv_your_privilage.setText("Available Balance : "+Utils.getDecimelFormate(privilegePoints-TotalredemnPrivilege));
+                                    et_your_privilage.setText("0");
 
                                 }else {
+                                    tv_your_privilage.setText("Available Balance : "+Utils.getDecimelFormate(privilegePoints));
 //                                Log.e(TAG,"Exception  42028   Check Amount");
                                     //  Toast.makeText(getApplicationContext(),"Check Card Amount",Toast.LENGTH_SHORT).show();
                                     AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
@@ -886,6 +889,7 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                                 }
                             }
                             else {
+                                tv_your_privilage.setText("Available Balance : "+Utils.getDecimelFormate(privilegePoints));
 //                            Log.e(TAG,"finalamtchkRedeem   4742   "+finalamtchkRedeem+"   "+finalamountSave);
                                 //   Toast.makeText(getApplicationContext(),"Redeem Amount should be less than Payment amount",Toast.LENGTH_SHORT).show();
                                 AlertDialog.Builder builder= new AlertDialog.Builder(AddressAddActivty.this);
@@ -919,6 +923,7 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                             }
                         }
                        else {
+                            tv_your_privilage.setText("Available Balance : "+Utils.getDecimelFormate(privilegePoints));
 
                             Pc_PrivilageCardEnable = "false";
                             privilegeamount  = "0";
@@ -959,10 +964,12 @@ public class AddressAddActivty extends AppCompatActivity implements View.OnClick
                         Pc_PrivilageCardEnable = "false";
                         privilegeamount  = "0";
                         ll_privilegesummary.setVisibility(View.GONE);
+                        tv_your_privilage.setText("Available Balance : "+Utils.getDecimelFormate(privilegePoints));
 
                     }
                 }else {
                   //  privilegeamount = "0";
+                      tv_your_privilage.setText("Available Balance : "+Utils.getDecimelFormate(privilegePoints));
                     Pc_PrivilageCardEnable = "false";
                     ll_privilegesummary.setVisibility(View.GONE);
                     Log.e(TAG,"Exception  42036   Check Amount");

@@ -185,6 +185,7 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
     EditText et_your_redeem;
     Double rewardString = 0.0;
     Double privilegePoints = 0.0;
+    Double mainprivilegePoints = 0.0;
     String redeemamount ="0",finalamountSave;
     LinearLayout ll_redeemsummary;
     TextView redeem_tv,redeem_tvamnt;
@@ -849,7 +850,11 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                                     }else {
                                         card_paymenttype.setVisibility(View.VISIBLE);
                                     }
+
+                                    tv_your_privilage.setText("Available Balance : "+Utils.getDecimelFormate(privilegePoints-TotalredemnPrivilege));
+                                    et_your_privilage.setText("0");
                                 }else {
+                                    tv_your_privilage.setText("Available Balance : "+Utils.getDecimelFormate(privilegePoints));
 //                                Log.e(TAG,"Exception  42028   Check Amount");
                                     //  Toast.makeText(getApplicationContext(),"Check Card Amount",Toast.LENGTH_SHORT).show();
                                     AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutActivity.this);
@@ -880,6 +885,7 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                                 }
                             }
                             else {
+                                tv_your_privilage.setText("Available Balance : "+Utils.getDecimelFormate(privilegePoints));
 //                            Log.e(TAG,"finalamtchkRedeem   4742   "+finalamtchkRedeem+"   "+finalamountSave);
                                 //   Toast.makeText(getApplicationContext(),"Redeem Amount should be less than Payment amount",Toast.LENGTH_SHORT).show();
                                 AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutActivity.this);
@@ -912,6 +918,7 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                             }
                         }
                         else{
+                            tv_your_privilage.setText("Available Balance : "+Utils.getDecimelFormate(privilegePoints));
                             Pc_PrivilageCardEnable = "false";
                             privilegeamount  = "0";
                             AlertDialog.Builder builder= new AlertDialog.Builder(CheckoutActivity.this);
@@ -945,12 +952,15 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
 
 
                     }catch (Exception e){
+                        tv_your_privilage.setText("Available Balance : "+Utils.getDecimelFormate(privilegePoints));
                         Log.e(TAG,"Exception  420321   "+e.toString());
                         Pc_PrivilageCardEnable = "false";
                         privilegeamount  = "0";
                     }
                 }else {
                     //  privilegeamount = "0";
+
+                    tv_your_privilage.setText("Available Balance : "+Utils.getDecimelFormate(privilegePoints));
 
                     Log.e(TAG,"Exception  42036   Check Amount");
                     // Toast.makeText(getApplicationContext(),"Check Amount",Toast.LENGTH_SHORT).show();
@@ -1810,6 +1820,8 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                                     privilegePoints =  Double.parseDouble(""+jsonObject.getString("Balance"));
                                     Pc_AccNumber =  jsonObject.getString("AccNumber");
                                     Pc_ID_CustomerAcc =  jsonObject.getString("ID_CustomerAcc");
+
+                                  //  mainprivilegePoints =  Double.parseDouble(""+jsonObject.getString("Balance"));
 
 //                                }else {
 //                                    ll_privilegesummary.setVisibility(View.GONE);
