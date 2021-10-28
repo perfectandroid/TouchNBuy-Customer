@@ -1495,7 +1495,18 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                 }
 
                 if (et_accno.getText().toString().length() == 12){
-                    getPrivilegeOtp(et_accno.getText().toString());
+                  //  getPrivilegeOtp(et_accno.getText().toString());
+                    if (cbRedeem.isChecked() || !privilegeamount.equals("")){
+                        finalamount = String.valueOf(Double.parseDouble(finalamountSave)-(Double.parseDouble(redeemamount)+Double.parseDouble(privilegeamount)));
+                    }else {
+                        finalamount = finalamountSave;
+                    }
+
+                    if (Double.parseDouble(finalamount)>0){
+                        getPrivilegeOtp(et_accno.getText().toString());
+                    }else {
+                        Toast.makeText(getApplicationContext(),"Check Payble Amount",Toast.LENGTH_SHORT).show();
+                    }
                 }else {
                     Toast.makeText(getApplicationContext(),"Enter Valid Account Number",Toast.LENGTH_SHORT).show();
                 }
@@ -1581,6 +1592,7 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
                         requestObject1.put("FK_LoginCus",pref.getString("userid", null));
                         requestObject1.put("AccNumber", accNo);
                         requestObject1.put("ReqMode", "1");
+                        requestObject1.put("SaleAmount", subtotal);
 
                         Log.e(TAG,"requestObject1   2043  "+requestObject1);
 
