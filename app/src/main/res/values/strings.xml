@@ -1,6 +1,8 @@
 <resources>
 
    <string name="app_name">TNB Demo</string>
+
+    <string name="app_name">TNB Demo</string>
     <!--
     <string name="app_name">Shop Away</string>
 -->
@@ -8,6 +10,7 @@
     <string name="app_name">Familymart</string>
 -->
   <!--  <string name="app_name">Pulikkottil Hypermarket</string>-->
+<!--    <string name="app_name">Pulikkottil Hypermarket</string>-->
     <!--
      -->
     <!--     <string name="app_name">Touch n Buy</string>-->
