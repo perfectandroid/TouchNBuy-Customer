@@ -3833,7 +3833,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 //                    if(getResources().getString(R.string.app_name).equals("JZT CART")){
-                    if(getResources().getString(R.string.app_name).equals("JZT CART") || getResources().getString(R.string.app_name).equals("Pulikkottil Hypermarket") || getResources().getString(R.string.app_name).equals("NeethiMed")|| getResources().getString(R.string.app_name).equals("Touch n Buy")|| getResources().getString(R.string.app_name).equals("TNB Demo")) {
+                    if(getResources().getString(R.string.app_name).equals("JZT CART") || getResources().getString(R.string.app_name).equals("Pulikkottil Hypermarket") || getResources().getString(R.string.app_name).equals("NeethiMed")|| getResources().getString(R.string.app_name).equals("Touch n Buy") || getResources().getString(R.string.app_name).equals("TNB Demo") || getResources().getString(R.string.app_name).equals("NeethiCoOp")) {
 
                         startActivity(new Intent(HomeActivity.this,SplashActivity.class));
                         finish();
