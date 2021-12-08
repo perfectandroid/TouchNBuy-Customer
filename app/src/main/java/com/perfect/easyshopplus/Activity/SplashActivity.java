@@ -2238,7 +2238,8 @@ public class SplashActivity extends AppCompatActivity {
 
 
 
-                                if(getResources().getString(R.string.app_name).equals("JZT CART") || getResources().getString(R.string.app_name).equals("Pulikkottil Hypermarket") || getResources().getString(R.string.app_name).equals("NeethiMed")|| getResources().getString(R.string.app_name).equals("TNB Demo") ) {
+                                if(getResources().getString(R.string.app_name).equals("JZT CART") || getResources().getString(R.string.app_name).equals("Pulikkottil Hypermarket") || getResources().getString(R.string.app_name).equals("NeethiMed") || getResources().getString(R.string.app_name).equals("TNB Demo") || getResources().getString(R.string.app_name).equals("NeethiCoOp") ) {
+
                                     Intent i = new Intent(SplashActivity.this, WelcomeActivity.class);
                                     startActivity(i);
                                     finish();
