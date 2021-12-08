@@ -429,6 +429,8 @@ public class OutShopFragment extends Fragment implements CartChangedListener {
                             if(jObject.getString("StatusCode").equals("0")) {
                                 JSONObject jobj = jObject.getJSONObject("PrescriptionList");
                                 final String checkcase = jobj.getString("CheckCase");
+                                SharedPreferences pref2 = getContext().getApplicationContext().getSharedPreferences(Config.SHARED_PREF27, 0);
+                                String strhomedelivery = pref2.getString("homedelivery", null);
                                 if (checkcase.equals("true")) {
                                     //  startActivity(new Intent(getContext(), PrescriptionUploadActivity.class));
                                     Intent i = new Intent(getActivity(),PrescriptionUploadActivity.class);
@@ -436,9 +438,8 @@ public class OutShopFragment extends Fragment implements CartChangedListener {
                                     startActivity(i);
                                 } else {
                                     SharedPreferences Counterpickuppref = getContext().getApplicationContext().getSharedPreferences(Config.SHARED_PREF44, 0);
-                                    if(Counterpickuppref.getString("Requiredcounterpickup", null).equals("false")){
-                                        SharedPreferences pref2 = getContext().getApplicationContext().getSharedPreferences(Config.SHARED_PREF27, 0);
-                                        String strhomedelivery = pref2.getString("homedelivery", null);
+                                    if(Counterpickuppref.getString("Requiredcounterpickup", null).equals("false") && strhomedelivery.equals("true")){
+
                                         if (strhomedelivery.equals("false")) {
 
                                             SharedPreferences Homedeliveryoptionwillstartshortly = getContext().getSharedPreferences(Config.SHARED_PREF253, 0);
@@ -481,6 +482,13 @@ public class OutShopFragment extends Fragment implements CartChangedListener {
                                             }
                                         }
 
+                                    }
+
+                                    else if(Counterpickuppref.getString("Requiredcounterpickup", null).equals("true") && strhomedelivery.equals("false")){
+
+                                        Intent intent = new Intent(getContext(), CheckoutActivity.class);
+                                        intent.putExtra("destination", fileimage);
+                                        startActivity(intent);
                                     }
                                     else{
                                         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());

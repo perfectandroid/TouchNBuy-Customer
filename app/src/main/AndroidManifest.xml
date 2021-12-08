@@ -73,7 +73,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDmvFcMjN7oJrQctZta5YApYkrJ3Nsg9G4" /> <!-- android:value="AIzaSyB-oznT79sLUdwSqDwu1Nb_zJ5WMLuALwo" /> -->
+            android:value="AIzaSyAtTH_EwqAURJcQqMlU18cjHE4_3u9kh7c" /> <!-- android:value="AIzaSyB-oznT79sLUdwSqDwu1Nb_zJ5WMLuALwo" /> -->
         <!-- AIzaSyBN3o5Q_2BxKkl388BXshF8-UGSWe6xM5s -->
         <!-- AIzaSyBpsOkpEJ4_DftF3RHJNlav_iLtS8U9upY -->
 <!--        Demo-->

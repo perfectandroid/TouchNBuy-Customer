@@ -45,6 +45,7 @@ import android.widget.Toast;
 
 import com.perfect.easyshopplus.Adapter.NavMenuAdapter;
 import com.perfect.easyshopplus.DB.DBHandler;
+import com.perfect.easyshopplus.Fragment.OutShopFragment;
 import com.perfect.easyshopplus.R;
         import com.perfect.easyshopplus.Utility.Config;
         import com.perfect.easyshopplus.Utility.FileUtils;
@@ -203,11 +204,67 @@ public class ShoppingListActivity extends AppCompatActivity implements Navigatio
             case R.id.btnUpload:
 //                if(imgbinary.equals("0"))
                 Log.e(TAG,"destination   182   "+destination);
+                SharedPreferences Counterpickuppref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF44, 0);
+                SharedPreferences pref2 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF27, 0);
+                String strhomedelivery = pref2.getString("homedelivery", null);
                 if(destination==null)
                 {
 
                     SharedPreferences Pleaseuploadimagesp = getApplicationContext().getSharedPreferences(Config.SHARED_PREF315, 0);
                     Toast.makeText(getApplicationContext(),Pleaseuploadimagesp.getString("Pleaseuploadimage", ""),Toast.LENGTH_LONG).show();
+                }
+
+                else if(Counterpickuppref.getString("Requiredcounterpickup", null).equals("false") && strhomedelivery.equals("true")){
+
+                    if (strhomedelivery.equals("false")) {
+
+                        SharedPreferences Homedeliveryoptionwillstartshortly = getSharedPreferences(Config.SHARED_PREF253, 0);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                        builder.setMessage(Homedeliveryoptionwillstartshortly.getString("Homedeliveryoptionwillstartshortly","")+".")
+//                                                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                                                    builder.setMessage("Home delivery option will start shortly.")
+                                .setCancelable(false)
+                                .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        //  startActivity(new Intent(getContext(), CheckoutActivity.class));
+                                    }
+                                });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                    else {
+                        SharedPreferences pref3 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF29, 0);
+                        String strMinimumDeliveryAmount = pref3.getString("MinimumDeliveryAmount", null);
+//                        if (Double.parseDouble(strMinimumDeliveryAmount) > ShoppingListActivity.this.doubleTotalAmt) {
+//
+//
+//                            SharedPreferences MinimumamountHomedelivery = getSharedPreferences(Config.SHARED_PREF254, 0);
+//                            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+//                            builder.setMessage(MinimumamountHomedelivery.getString("MinimumamountHomedelivery","")+" "+strMinimumDeliveryAmount)
+////                                                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+////                                                        builder.setMessage("Minimum amount required for Home delivery is " + strMinimumDeliveryAmount)
+//                                    .setCancelable(false)
+//                                    .setPositiveButton(OK, new DialogInterface.OnClickListener() {
+//                                        public void onClick(DialogInterface dialog, int id) {
+//
+//                                        }
+//                                    });
+//                            AlertDialog alert = builder.create();
+//                            alert.show();
+//                        } else {
+                            Intent intent = new Intent(getApplicationContext(), AddressAddActivty.class);
+                            intent.putExtra("destination", destination);
+                            startActivity(intent);
+                      //  }
+                    }
+
+                }
+
+                else if(Counterpickuppref.getString("Requiredcounterpickup", null).equals("true") && strhomedelivery.equals("false")){
+
+                    Intent intent = new Intent(getApplicationContext(), CheckoutActivity.class);
+                    intent.putExtra("destination", destination);
+                    startActivity(intent);
                 }
                 else
                 {
@@ -293,6 +350,8 @@ public class ShoppingListActivity extends AppCompatActivity implements Navigatio
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                     dialog.setView(customLayout, 0, 0, 0, 0);
                     dialog.show();
+
+
                 }
 
 
@@ -723,15 +782,49 @@ public class ShoppingListActivity extends AppCompatActivity implements Navigatio
                                         try {
 
 
-                                            destination = new File(Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name), "IMG_" + System.currentTimeMillis() + ".jpg");
-                                            if (!destination.getParentFile().exists()){
-                                                destination.getParentFile().mkdirs();
-                                            }
-                                            if (!destination.exists())
-                                            {
-                                                destination.createNewFile();
+                                            Log.e(TAG,"785  "+getString(R.string.app_name));
+                                           // destination = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"test.jpg");
+//                                            File direct = new File(Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name)+"/");
+//                                            destination = new File(Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name)+"/"+"IMG_" + System.currentTimeMillis() + ".jpg");
+                                            //destination = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + getResources().getString(R.string.app_name), "IMG_" + System.currentTimeMillis() + ".jpg");
+//                                            destination = new File(Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name), "IMG_" + System.currentTimeMillis() + ".jpg");
+//                                            if (!destination.getParentFile().exists()){
+//                                                destination.getParentFile().mkdirs();
+//                                            }
+//                                            if (!destination.exists())
+//                                            {
+//                                                destination.createNewFile();
+//
+//                                            }
 
+//                                            if (!destination.exists()){
+//                                                destination.mkdirs();
+//                                            }
+//                                            if (!destination.exists())
+//                                            {
+//                                                destination.createNewFile();
+//
+//                                            }
+
+//                                            "/" + getResources().getString(R.string.app_name)
+                                            File docsFolder = new File(Environment.getExternalStorageDirectory() + "/"+ getResources().getString(R.string.app_name));
+//                                            File docsFolder = new File(Environment.getExternalStorageDirectory() + "/Download"+ "/" + getResources().getString(R.string.app_name));
+                                            boolean isPresent = true;
+                                            if (!docsFolder.exists()) {
+                                                isPresent = docsFolder.mkdir();
                                             }
+                                            else {
+                                                // Failure
+                                                docsFolder.createNewFile();
+                                            }
+                                            if (isPresent) {
+                                                destination = new File(docsFolder.getAbsolutePath(),"IMG_" + System.currentTimeMillis() +".jpg");
+                                            } else {
+                                                // Failure
+                                                destination.createNewFile();
+                                            }
+
+
                                             Log.e(TAG,"destination   694  "+destination);
                                             if (destination != null) {
                                                 Uri photoURI = Uri.fromFile(new File(destination.toString()));
@@ -747,6 +840,7 @@ public class ShoppingListActivity extends AppCompatActivity implements Navigatio
 
                                     }else
                                     {
+
 
                                     }
                                     // }
@@ -897,13 +991,19 @@ public class ShoppingListActivity extends AppCompatActivity implements Navigatio
             }
             else {
 
-                imgPath = destination.getAbsolutePath();
-                destination = new File(imgPath);
-                if(destination.exists())
-                {
-                    Bitmap myBitmap = BitmapFactory.decodeFile(destination.getAbsolutePath());
-                    imgv1.setImageBitmap(myBitmap);
+                try {
+                    imgPath = destination.getAbsolutePath();
+                    destination = new File(imgPath);
+                    if(destination.exists())
+                    {
+                        Bitmap myBitmap = BitmapFactory.decodeFile(destination.getAbsolutePath());
+                        imgv1.setImageBitmap(myBitmap);
+                    }
+
+                }catch (Exception e){
+                    Log.e(TAG,"Exception   487   "+e.toString());
                 }
+
 
 
 

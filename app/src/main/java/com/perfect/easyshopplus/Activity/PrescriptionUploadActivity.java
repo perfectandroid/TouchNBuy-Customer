@@ -230,9 +230,11 @@ public class PrescriptionUploadActivity extends AppCompatActivity implements Nav
                 else
                 {
                     SharedPreferences Counterpickuppref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF44, 0);
-                    if(Counterpickuppref.getString("Requiredcounterpickup", null).equals("false")){
-                        SharedPreferences pref2 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF27, 0);
-                        String strhomedelivery = pref2.getString("homedelivery", null);
+                    SharedPreferences pref2 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF27, 0);
+                    String strhomedelivery = pref2.getString("homedelivery", null);
+                    if(Counterpickuppref.getString("Requiredcounterpickup", null).equals("false") && strhomedelivery.equals("true") ){
+//                        SharedPreferences pref2 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF27, 0);
+//                        String strhomedelivery = pref2.getString("homedelivery", null);
                         if (strhomedelivery.equals("false")) {
                             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(PrescriptionUploadActivity.this);
                             builder.setMessage(Homeshortlypleasedocounterpickupdeliveryoption+".")
@@ -242,7 +244,7 @@ public class PrescriptionUploadActivity extends AppCompatActivity implements Nav
                                             // startActivity(new Intent(PrescriptionUploadActivity.this, CheckoutActivity.class));
                                             Intent i = new Intent(PrescriptionUploadActivity.this,CheckoutActivity.class);
 //                                            i.putExtra("Image", imgbinary);
-                                            i.putExtra("destination", destination.toString());
+                                            i.putExtra("destination", destination);
                                             Log.e(TAG,"destination   232   "+destination);
                                             startActivity(i);
                                         }
@@ -272,11 +274,18 @@ public class PrescriptionUploadActivity extends AppCompatActivity implements Nav
 
                                 Intent intnt = new Intent(PrescriptionUploadActivity.this,AddressAddActivty.class);
 //                                intnt.putExtra("Image", imgbinary);
-                                intnt.putExtra("destination", destination.toString());
+                                intnt.putExtra("destination", destination);
                                 Log.e(TAG,"destination   232   "+destination);
                                 startActivity(intnt);
                             }
                         }
+                    }
+
+                    else if(Counterpickuppref.getString("Requiredcounterpickup", null).equals("true") && strhomedelivery.equals("false")){
+
+                        Intent intent = new Intent(getApplicationContext(), CheckoutActivity.class);
+                        intent.putExtra("destination", destination);
+                        startActivity(intent);
                     }
                     else{
                         final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
@@ -643,15 +652,27 @@ public class PrescriptionUploadActivity extends AppCompatActivity implements Nav
                                         try {
 
 
-                                            destination = new File(Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name), "IMG_" + System.currentTimeMillis() + ".jpg");
-                                            if (!destination.getParentFile().exists()){
-                                                destination.getParentFile().mkdirs();
+//                                            destination = new File(Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name), "IMG_" + System.currentTimeMillis() + ".jpg");
+//                                            if (!destination.getParentFile().exists()){
+//                                                destination.getParentFile().mkdirs();
+//                                            }
+//                                            if (!destination.exists())
+//                                            {
+//                                                destination.createNewFile();
+//
+//                                            }
+                                            File docsFolder = new File(Environment.getExternalStorageDirectory() + "/Download"+ "/" + getResources().getString(R.string.app_name));
+                                            boolean isPresent = true;
+                                            if (!docsFolder.exists()) {
+                                                isPresent = docsFolder.mkdir();
                                             }
-                                            if (!destination.exists())
-                                            {
+                                            if (isPresent) {
+                                                destination = new File(docsFolder.getAbsolutePath(),"IMG_" + System.currentTimeMillis() +".jpg");
+                                            } else {
+                                                // Failure
                                                 destination.createNewFile();
-
                                             }
+
                                             Log.e(TAG,"destination   694  "+destination);
                                             if (destination != null) {
                                                 Uri photoURI = Uri.fromFile(new File(destination.toString()));
@@ -824,7 +845,6 @@ public class PrescriptionUploadActivity extends AppCompatActivity implements Nav
                     Bitmap myBitmap = BitmapFactory.decodeFile(destination.getAbsolutePath());
                     imgv1.setImageBitmap(myBitmap);
                 }
-
 
 
                 Log.e(TAG,"destination   487   "+destination);

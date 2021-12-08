@@ -117,7 +117,7 @@ public class CustRegistrationActivity extends AppCompatActivity implements View.
 
         Log.e(TAG,"Start   106 ");
 
-        if(getResources().getString(R.string.app_name).equals("JZT CART") || getResources().getString(R.string.app_name).equals("Pulikkottil Hypermarket") || getResources().getString(R.string.app_name).equals("NeethiMed")|| getResources().getString(R.string.app_name).equals("Touch n Buy")) {
+        if(getResources().getString(R.string.app_name).equals("JZT CART") || getResources().getString(R.string.app_name).equals("Pulikkottil Hypermarket") || getResources().getString(R.string.app_name).equals("NeethiMed")|| getResources().getString(R.string.app_name).equals("Touch n Buy")|| getResources().getString(R.string.app_name).equals("TNB Demo")) {
 
             SharedPreferences Countrypref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF58, 0);
             SharedPreferences.Editor CountryprefEditor = Countrypref.edit();

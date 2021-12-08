@@ -1,11 +1,13 @@
 <resources>
+
+   <string name="app_name">TNB Demo</string>
     <!--
     <string name="app_name">Shop Away</string>
 -->
     <!--
     <string name="app_name">Familymart</string>
 -->
-    <string name="app_name">Pulikkottil Hypermarket</string>
+  <!--  <string name="app_name">Pulikkottil Hypermarket</string>-->
     <!--
      -->
     <!--     <string name="app_name">Touch n Buy</string>-->
@@ -14,6 +16,8 @@
     <!--    <string name="app_name">JZT CART</string>-->
 
     <!--    <string name="app_name">NeethiMed</string>-->
+
+<!--   <string name="app_name">NeethiCoOp</string>-->
 
 
     <string name="Termscondi">\t\tPLEASE READ THE TERMS AND CONDITIONS BEFORE ACCESSING THIS APP. WE OPERATE THIS APP FOR PROMOTING AND SELLING THE PRODUCTS AND SERVICES. BY USING THIS APP, YOU SIGNIFY YOUR ACCEPTANCE OF THESE CONDITIONS IN RETURN FOR WHICH WE WILL PROVIDE YOU WITH ACCESS. FROM TIME TO TIME WE MAY MODIFY THE CONDITIONS SO PLEASE CONTINUE TO REVIEW THE CONDITIONS OF USE WHENEVER ACCESSING OR USING THIS APP. IF AT ANY TIME YOU DO NOT WISH TO ACCEPT THESE CONDITIONS THEN YOU MAY NOT USE THIS APP.
