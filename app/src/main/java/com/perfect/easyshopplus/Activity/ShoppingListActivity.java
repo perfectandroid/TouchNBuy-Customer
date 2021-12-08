@@ -807,8 +807,8 @@ public class ShoppingListActivity extends AppCompatActivity implements Navigatio
 //                                            }
 
 //                                            "/" + getResources().getString(R.string.app_name)
-                                            File docsFolder = new File(Environment.getExternalStorageDirectory() + "/"+ getResources().getString(R.string.app_name));
-//                                            File docsFolder = new File(Environment.getExternalStorageDirectory() + "/Download"+ "/" + getResources().getString(R.string.app_name));
+//                                            File docsFolder = new File(Environment.getExternalStorageDirectory() + "/"+ getResources().getString(R.string.app_name));
+                                            File docsFolder = new File(Environment.getExternalStorageDirectory() + "/Download"+ "/" + getResources().getString(R.string.app_name));
                                             boolean isPresent = true;
                                             if (!docsFolder.exists()) {
                                                 isPresent = docsFolder.mkdir();
