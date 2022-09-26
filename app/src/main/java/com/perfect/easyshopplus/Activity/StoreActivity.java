@@ -451,7 +451,8 @@ public class StoreActivity extends AppCompatActivity implements NavigationView.O
                     SharedPreferences IDLanguages = getApplicationContext().getSharedPreferences(Config.SHARED_PREF80, 0);
                     requestObject1.put("ID_Languages",IDLanguages.getString("ID_Languages", null));
 
-                    Log.e(TAG,"requestObject1   449    "+requestObject1);
+                    Log.e(TAG,"BASEURL   4490    "+BASEURL);
+                    Log.e(TAG,"requestObject1   4491    "+requestObject1);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -462,7 +463,7 @@ public class StoreActivity extends AppCompatActivity implements NavigationView.O
                     @Override public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                         try {
                             progressDialog.dismiss();
-                            Log.e(TAG,"onResponse   403  "+response.body());
+                            Log.e(TAG,"onResponse   4492  "+response.body());
                             JSONObject jObject = new JSONObject(response.body());
                             JSONObject jobj = jObject.getJSONObject("StoreListDetailsInfo");
 
@@ -966,7 +967,7 @@ public class StoreActivity extends AppCompatActivity implements NavigationView.O
                         SharedPreferences IDLanguages = getApplicationContext().getSharedPreferences(Config.SHARED_PREF80, 0);
                         requestObject1.put("ID_Languages",IDLanguages.getString("ID_Languages", null));
 
-
+                        Log.e(TAG,"requestObject1  9981   "+requestObject1);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -975,7 +976,7 @@ public class StoreActivity extends AppCompatActivity implements NavigationView.O
                     call.enqueue(new Callback<String>() {
                         @Override public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                             try {
-                                Log.e(TAG,"onResponse  998   "+response.body());
+                                Log.e(TAG,"onResponse  9982   "+response.body());
                                 JSONObject jObject = new JSONObject(response.body());
                                 if(jObject.getString("StatusCode").equals("0")) {
                                     store_list_title_container.setVisibility(View.VISIBLE);

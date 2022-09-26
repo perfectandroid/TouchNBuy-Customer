@@ -217,7 +217,7 @@ public class LocationActivity extends AppCompatActivity implements View.OnClickL
                     }
 
                 }
-                if(getResources().getString(R.string.app_name).equals("JZT CART") || getResources().getString(R.string.app_name).equals("Pulikkottil Hypermarket") ) {
+                if(getResources().getString(R.string.app_name).equals("JZT CART") ) {
 
                 if(strCountry.equals("India")) {
                     SharedPreferences Baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
@@ -247,6 +247,49 @@ public class LocationActivity extends AppCompatActivity implements View.OnClickL
                 }
 
             }
+                if(getResources().getString(R.string.app_name).equals("TNB QA")){
+
+                    if(strCountry.equals("India")) {
+                        SharedPreferences Baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
+                        SharedPreferences.Editor BaseurlprefEditor = Baseurlpref.edit();
+                       // BaseurlprefEditor.putString("BaseURL", "https://112.133.227.123:14017/TNBAPI/api/");
+                        BaseurlprefEditor.putString("BaseURL", "https://112.133.227.123:14019/TouchNBuyQAAPI/api/");
+                        BaseurlprefEditor.commit();
+                        SharedPreferences Imageurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF57, 0);
+                        SharedPreferences.Editor ImageurlprefEditor = Imageurlpref.edit();
+                     //   ImageurlprefEditor.putString("ImageURL", "https://112.133.227.123:14017/TNBAPI");
+                        ImageurlprefEditor.putString("ImageURL", "https://112.133.227.123:14019/TouchNBuyQAAPI");
+                        ImageurlprefEditor.commit();
+
+                        getResellerDetails();
+                    }
+                    if(strCountry.equals("Malaysia")) {
+                        noService();
+
+                    }
+
+                }
+                if(getResources().getString(R.string.app_name).equals("TNB Demo")){
+
+                    if(strCountry.equals("India")) {
+                        SharedPreferences Baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
+                        SharedPreferences.Editor BaseurlprefEditor = Baseurlpref.edit();
+                        BaseurlprefEditor.putString("BaseURL", "https://202.164.150.65:14001/TouchNBuyAPI/api/");//local
+                        BaseurlprefEditor.commit();
+
+                        SharedPreferences Imageurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF57, 0);
+                        SharedPreferences.Editor ImageurlprefEditor = Imageurlpref.edit();
+                        ImageurlprefEditor.putString("ImageURL", "https://202.164.150.65:14001/TouchNBuyAPI");
+                        ImageurlprefEditor.commit();
+
+                        getResellerDetails();
+                    }
+                    if(strCountry.equals("Malaysia")) {
+                        noService();
+
+                    }
+
+                }
                /* else {
                     SharedPreferences Baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
                     SharedPreferences.Editor BaseurlprefEditor = Baseurlpref.edit();

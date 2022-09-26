@@ -4025,6 +4025,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         requestObject1.put("Bank_Key", getResources().getString(R.string.BankKey));
                         SharedPreferences IDLanguages = getApplicationContext().getSharedPreferences(Config.SHARED_PREF80, 0);
                         requestObject1.put("ID_Languages",IDLanguages.getString("ID_Languages", null));
+                        Log.e(TAG,"requestObject1    40281    "+requestObject1);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -4034,7 +4035,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         @Override public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                             try {
                                 progressDialog.dismiss();
-                                Log.e(TAG,"onResponse  218   "+response.body());
+                                Log.e(TAG,"onResponse  40282   "+response.body());
                                 JSONObject jObject = new JSONObject(response.body());
                                 JSONObject jobj = jObject.getJSONObject("CategoryListSearchInfo");
                                 JSONArray jarray = jobj.getJSONArray("CategoryListInfo");
@@ -4066,18 +4067,21 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                 jsonArrayCat = new JSONArray();
                              //   setcategoryDetals(jarrayCatDetailsCat,pos);
 
-                            } catch (JSONException e) {
+                            } catch (Exception e) {
                                 e.printStackTrace();
+                                Log.e(TAG,"onResponse  40283   "+e.toString());
                                 progressDialog.dismiss();
                             }
                         }
                         @Override
                         public void onFailure(Call<String> call, Throwable t) {
                             progressDialog.dismiss();
+                            Log.e(TAG,"onResponse  40284   "+t.getMessage());
                         }
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Log.e(TAG,"onResponse  40285   "+e.toString());
                 }
             }catch (Exception e) {
                 e.printStackTrace();

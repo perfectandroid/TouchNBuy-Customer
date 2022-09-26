@@ -117,7 +117,7 @@ public class CustRegistrationActivity extends AppCompatActivity implements View.
 
         Log.e(TAG,"Start   106 ");
 
-        if(getResources().getString(R.string.app_name).equals("JZT CART") || getResources().getString(R.string.app_name).equals("Pulikkottil Hypermarket") || getResources().getString(R.string.app_name).equals("NeethiMed")|| getResources().getString(R.string.app_name).equals("Touch n Buy")|| getResources().getString(R.string.app_name).equals("TNB Demo")) {
+        if(getResources().getString(R.string.app_name).equals("JZT CART") || getResources().getString(R.string.app_name).equals("Pulikkottil Hypermarket") || getResources().getString(R.string.app_name).equals("NeethiMed")|| getResources().getString(R.string.app_name).equals("Touch n Buy")|| getResources().getString(R.string.app_name).equals("TNB Demo")|| getResources().getString(R.string.app_name).equals("TNB QA")) {
 
             SharedPreferences Countrypref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF58, 0);
             SharedPreferences.Editor CountryprefEditor = Countrypref.edit();
@@ -594,6 +594,7 @@ public class CustRegistrationActivity extends AppCompatActivity implements View.
         SharedPreferences imgpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF57, 0);
         String BASEURL = baseurlpref.getString("BaseURL", null);
         String IMAGEURL = imgpref.getString("ImageURL", null);
+        Log.e(TAG,"BASEURL   597    "+BASEURL);
         if (new InternetUtil(this).isInternetOn()) {
             progressDialog = new ProgressDialog(this, R.style.Progress);
             progressDialog.setProgressStyle(android.R.style.Widget_ProgressBar);
@@ -642,6 +643,7 @@ public class CustRegistrationActivity extends AppCompatActivity implements View.
                     requestObject1.put("ID_Languages",IDLanguages.getString("ID_Languages", null));
 
                     Log.e(TAG,"requestObject1   644  "+requestObject1);
+                    Log.e(TAG,"BASEURL   644  "+BASEURL);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -657,10 +659,12 @@ public class CustRegistrationActivity extends AppCompatActivity implements View.
                             JSONObject jmember = jObject.getJSONObject("CustomerRegistrationDetailsInfo");
 //                    String ResponseCode = jmember.getString("ResponseCode");
                             String StatusCode = jObject.getString("StatusCode");
-                            ID_Customer = jmember.getString("FK_Customer");
-                            OTPRefNo = jmember.getString("OTP");
+
+
                             if(StatusCode.equals("0"))
                             {
+                                ID_Customer = jmember.getString("FK_Customer");
+                                OTPRefNo = jmember.getString("OTP");
                                 AlertDialog.Builder builder = new AlertDialog.Builder(CustRegistrationActivity.this);
                                 LayoutInflater inflater1 = (LayoutInflater) CustRegistrationActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                                 View layout = inflater1.inflate(R.layout.otp_popup, null);
@@ -1019,6 +1023,7 @@ public class CustRegistrationActivity extends AppCompatActivity implements View.
                     requestObject1.put("ID_Languages",IDLanguages.getString("ID_Languages", null));
 
                     Log.e(TAG,"requestObject1   1019   "+requestObject1);
+                    Log.e(TAG,"BASEURL   1019   "+BASEURL);
 
 
                 } catch (JSONException e) {

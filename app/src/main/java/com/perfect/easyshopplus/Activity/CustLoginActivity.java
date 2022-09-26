@@ -91,7 +91,7 @@ public class CustLoginActivity extends AppCompatActivity implements View.OnClick
         showPasswrd();
 
 
-        if(getResources().getString(R.string.app_name).equals("JZT CART") || getResources().getString(R.string.app_name).equals("Pulikkottil Hypermarket") || getResources().getString(R.string.app_name).equals("NeethiMed")|| getResources().getString(R.string.app_name).equals("Touch n Buy")|| getResources().getString(R.string.app_name).equals("TNB Demo")) {
+        if(getResources().getString(R.string.app_name).equals("JZT CART") || getResources().getString(R.string.app_name).equals("Pulikkottil Hypermarket") || getResources().getString(R.string.app_name).equals("NeethiMed")|| getResources().getString(R.string.app_name).equals("Touch n Buy")|| getResources().getString(R.string.app_name).equals("TNB Demo") || getResources().getString(R.string.app_name).equals("TNB QA")) {
 
             SharedPreferences Countrypref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF58, 0);
             SharedPreferences.Editor CountryprefEditor = Countrypref.edit();

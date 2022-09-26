@@ -3,22 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Project/TouchNBuy/app/src/main/res/layout/activity_cart_list.xml" value="0.27291666666666664" />
-        <entry key="..\:/Project/TouchNBuy/app/src/main/res/layout/activity_checkout_inshop.xml" value="0.271875" />
-        <entry key="..\:/Project/TouchNBuy/app/src/main/res/layout/activity_checkout_inshop_main.xml" value="0.271875" />
-        <entry key="..\:/Project/TouchNBuy/app/src/main/res/layout/activity_home_main.xml" value="0.271875" />
-        <entry key="..\:/Project/TouchNBuy/app/src/main/res/layout/activity_inshop.xml" value="0.271875" />
-        <entry key="..\:/Project/TouchNBuy/app/src/main/res/layout/activity_outshop.xml" value="0.27291666666666664" />
-        <entry key="..\:/Project/TouchNBuy/app/src/main/res/layout/activity_prescription_upload.xml" value="0.19479166666666667" />
-        <entry key="..\:/Project/TouchNBuy/app/src/main/res/layout/activity_prescription_upload_main.xml" value="0.19479166666666667" />
-        <entry key="..\:/Project/TouchNBuy/app/src/main/res/layout/activity_shopping_list.xml" value="0.271875" />
-        <entry key="..\:/Project/TouchNBuy/app/src/main/res/layout/activity_shopping_list_main.xml" value="0.271875" />
-        <entry key="..\:/Project/TouchNBuy/app/src/main/res/layout/activityhome.xml" value="0.271875" />
-        <entry key="..\:/Project/TouchNBuy/app/src/main/res/layout/orderconfirm_dialog.xml" value="0.2609375" />
+        <entry key="..\:/Project/TouchNBuy-Customer/app/src/main/res/layout/activity_custlogin.xml" value="0.25625" />
+        <entry key="..\:/Project/TouchNBuy-Customer/app/src/main/res/layout/activity_custregistration.xml" value="0.2640625" />
+        <entry key="..\:/Project/TouchNBuy-Customer/app/src/main/res/layout/activity_home_main.xml" value="0.13020833333333334" />
+        <entry key="..\:/Project/TouchNBuy-Customer/app/src/main/res/layout/activity_main_category.xml" value="0.3171875" />
+        <entry key="..\:/Project/TouchNBuy-Customer/app/src/main/res/layout/activity_splash.xml" value="0.36666666666666664" />
+        <entry key="..\:/Project/TouchNBuy-Customer/app/src/main/res/layout/activity_welcome.xml" value="0.36666666666666664" />
+        <entry key="..\:/Project/TouchNBuy-Customer/app/src/main/res/layout/activityhome.xml" value="0.25" />
+        <entry key="..\:/Project/TouchNBuy-Customer/app/src/main/res/layout/otp_popup.xml" value="0.2484375" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

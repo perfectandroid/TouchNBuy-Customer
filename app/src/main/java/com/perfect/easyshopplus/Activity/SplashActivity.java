@@ -104,7 +104,7 @@ public class SplashActivity extends AppCompatActivity {
 //            BaseurlprefEditor.putString("BaseURL", "https://202.164.150.65:14001/TouchNBuyAPI/api/");
 //
             BaseurlprefEditor.putString("BaseURL", "https://103.203.75.124:14002/api/");//Live New 23.08.2021
-            BaseurlprefEditor.putString("BaseURL", "https://202.164.150.65:14001/TouchNBuyAPI/api/");
+       //     BaseurlprefEditor.putString("BaseURL", "https://202.164.150.65:14001/TouchNBuyAPI/api/");
 //
 //            BaseurlprefEditor.putString("BaseURL", "https://103.203.75.124:14002/api/");//Live New 23.08.2021
 //            BaseurlprefEditor.putString("BaseURL", "https://shop.pulikkottilhypermarket.in/api/");//Live New 24.08.2021 domain
@@ -115,7 +115,7 @@ public class SplashActivity extends AppCompatActivity {
 //            ImageurlprefEditor.putString("ImageURL", "https://202.164.150.65:14001/TouchNBuyAPI");
 
             ImageurlprefEditor.putString("ImageURL", "https://103.203.75.124:14002"); //Live New 23.08.2021
-            ImageurlprefEditor.putString("ImageURL", "https://202.164.150.65:14001/TouchNBuyAPI");
+         //   ImageurlprefEditor.putString("ImageURL", "https://202.164.150.65:14001/TouchNBuyAPI");
 
 //            ImageurlprefEditor.putString("ImageURL", "https://103.203.75.124:14002"); //Live New 23.08.2021
 //            ImageurlprefEditor.putString("ImageURL", "https://shop.pulikkottilhypermarket.in"); //Live New 24.08.2021 domain
@@ -155,21 +155,6 @@ public class SplashActivity extends AppCompatActivity {
 //            getResellerDetails();
             versionCkecking();
         }
-        else if(getResources().getString(R.string.app_name).equals("TNB Demo")){
-            SharedPreferences Baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
-            SharedPreferences.Editor BaseurlprefEditor = Baseurlpref.edit();
-            BaseurlprefEditor.putString("BaseURL", "https://202.164.150.65:14001/TouchNBuyAPI/api/");
-            BaseurlprefEditor.commit();
-
-            SharedPreferences Imageurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF57, 0);
-            SharedPreferences.Editor ImageurlprefEditor = Imageurlpref.edit();
-            ImageurlprefEditor.putString("ImageURL", "https://202.164.150.65:14001/TouchNBuyAPI");
-
-            ImageurlprefEditor.commit();
-
-//            getResellerDetails();
-            versionCkecking();
-        }
         else if(getResources().getString(R.string.app_name).equals("NeethiCoOp")){
             SharedPreferences Baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
             SharedPreferences.Editor BaseurlprefEditor = Baseurlpref.edit();
@@ -181,6 +166,22 @@ public class SplashActivity extends AppCompatActivity {
             ImageurlprefEditor.putString("ImageURL", "https://117.241.72.188:14051/Touchnbuyapi");
 
             ImageurlprefEditor.commit();
+
+//            getResellerDetails();
+            versionCkecking();
+        }
+        else if(getResources().getString(R.string.app_name).equals("TNB QA")){
+            SharedPreferences Baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
+            SharedPreferences.Editor BaseurlprefEditor = Baseurlpref.edit();
+            BaseurlprefEditor.putString("BaseURL", "https://112.133.227.123:14019/TouchNBuyQAAPI/api/");
+            BaseurlprefEditor.commit();
+
+            SharedPreferences Imageurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF57, 0);
+            SharedPreferences.Editor ImageurlprefEditor = Imageurlpref.edit();
+            ImageurlprefEditor.putString("ImageURL", "https://112.133.227.123:14019/TouchNBuyQAAPI");
+
+            ImageurlprefEditor.commit();
+
 
 //            getResellerDetails();
             versionCkecking();
@@ -2476,7 +2477,7 @@ public class SplashActivity extends AppCompatActivity {
                                 SharedPreferences.Editor aboutuss = aboutus.edit();
                                 aboutuss.putString("AboutUs", jobj.getString("AboutUs"));
                                 aboutuss.commit();
-
+                                Log.e(TAG,"Exception   22291   ");
                                // getSplash1();
                                 getLanguages();
 
@@ -2489,7 +2490,7 @@ public class SplashActivity extends AppCompatActivity {
                             }
                         }
                         catch (Exception e) {
-                            Log.e(TAG,"Exception   2229   "+response.body());
+                            Log.e(TAG,"Exception   22292   "+e.toString());
                             e.printStackTrace();
                             progressDialog.dismiss();
                         }
@@ -2704,7 +2705,8 @@ public class SplashActivity extends AppCompatActivity {
                     SharedPreferences IDLanguages = getApplicationContext().getSharedPreferences(Config.SHARED_PREF80, 0);
                     requestObject1.put("ID_Languages",IDLanguages.getString("ID_Languages", null));
 
-                    Log.e(TAG,"requestObject1   2444    "+requestObject1);
+                    Log.e(TAG,"BASEURL   24440    "+BASEURL);
+                    Log.e(TAG,"requestObject1   24441   "+requestObject1);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -2714,7 +2716,7 @@ public class SplashActivity extends AppCompatActivity {
                 call.enqueue(new Callback<String>() {
                     @Override public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                         try {
-                            Log.e(TAG,"response   2454    "+response.body());
+                            Log.e(TAG,"response   24442    "+response.body());
 
                             JSONObject jObject = new JSONObject(response.body());
                             String StatusCode = jObject.getString("StatusCode");
