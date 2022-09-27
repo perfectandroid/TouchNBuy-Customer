@@ -159,6 +159,7 @@ public class ChooseStoreActivity extends AppCompatActivity implements Navigation
         etpin=(EditText)findViewById(R.id.etpin);
         imcart=(ImageView) findViewById(R.id.imcart);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         im = (ImageView) findViewById(R.id.im);
         lvNavMenu = (ListView) findViewById(R.id.lvNavMenu);
         tvPrdName = (TextView) findViewById(R.id.tvPrdName);

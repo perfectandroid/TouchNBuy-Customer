@@ -216,6 +216,7 @@ public class CheckoutshoppingListcounterpickupActivity extends AppCompatActivity
         ettime.setKeyListener(null);
         imcart=(ImageView) findViewById(R.id.imcart);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         im = (ImageView) findViewById(R.id.im);
         tvstorenote = (TextView) findViewById(R.id.tvstorenote);
         tvuser = (TextView) findViewById(R.id.tvuser);

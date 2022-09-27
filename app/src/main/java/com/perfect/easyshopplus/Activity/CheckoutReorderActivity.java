@@ -593,6 +593,7 @@ public class CheckoutReorderActivity extends AppCompatActivity implements Naviga
         ettime.setKeyListener(null);
         imcart=(ImageView) findViewById(R.id.imcart);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         im = (ImageView) findViewById(R.id.im);
         tvuser = (TextView) findViewById(R.id.tvuser);
         tvcart = (TextView) findViewById(R.id.tvcart);

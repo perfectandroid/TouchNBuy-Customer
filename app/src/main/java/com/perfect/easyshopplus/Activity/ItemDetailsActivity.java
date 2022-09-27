@@ -344,6 +344,7 @@ public class ItemDetailsActivity extends AppCompatActivity implements Navigation
         ivQtyMinus=(ImageView) findViewById(R.id.ivQtyMinus);
         ivQtyAdd=(ImageView) findViewById(R.id.ivQtyAdd);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         im = (ImageView) findViewById(R.id.im);
         ivFavourites = (ImageView) findViewById(R.id.ivFavourites);
         imaddcart = (ImageView) findViewById(R.id.imaddcart);

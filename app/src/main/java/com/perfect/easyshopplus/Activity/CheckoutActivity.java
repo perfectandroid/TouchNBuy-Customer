@@ -1109,6 +1109,7 @@ public class CheckoutActivity extends AppCompatActivity implements NavigationVie
         ettime.setKeyListener(null);
         imcart=(ImageView) findViewById(R.id.imcart);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         im = (ImageView) findViewById(R.id.im);
         tv_pricedetail = (TextView) findViewById(R.id.tv_pricedetail);
         tv_chooseyourpickupdateandtime = (TextView) findViewById(R.id.tv_chooseyourpickupdateandtime);

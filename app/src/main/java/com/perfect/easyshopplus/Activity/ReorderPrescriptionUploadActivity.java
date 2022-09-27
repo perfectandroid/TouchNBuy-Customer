@@ -158,6 +158,7 @@ public class ReorderPrescriptionUploadActivity extends AppCompatActivity impleme
         imgv1= (ImageView) findViewById(R.id.imgv1);
         im = (ImageView) findViewById(R.id.im);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         lvNavMenu = (ListView) findViewById(R.id.lvNavMenu);
         tvuser = (TextView) findViewById(R.id.tvuser);
         tvcart = (TextView) findViewById(R.id.tvcart);

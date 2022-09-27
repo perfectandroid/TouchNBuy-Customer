@@ -541,6 +541,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
         imcart=(ImageView) findViewById(R.id.imcart);
         imStatus=(ImageView) findViewById(R.id.imStatus);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         im = (ImageView) findViewById(R.id.im);
         tvAddnew = (TextView) findViewById(R.id.tvAddnew);
         tvuser = (TextView) findViewById(R.id.tvuser);

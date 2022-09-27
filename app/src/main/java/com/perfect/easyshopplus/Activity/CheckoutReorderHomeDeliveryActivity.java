@@ -1068,6 +1068,7 @@ public class CheckoutReorderHomeDeliveryActivity extends AppCompatActivity imple
         ettime1.setKeyListener(null);
         imcart = (ImageView) findViewById(R.id.imcart);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         btnEdit = (Button) findViewById(R.id.btEdit);
         im = (ImageView) findViewById(R.id.im);
         tvPin = (TextView) findViewById(R.id.tvPin);

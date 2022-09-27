@@ -857,6 +857,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ib_search = findViewById(R.id.ib_search);
         etSearch= findViewById(R.id.etSearch);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         lvNavMenu = (ListView) findViewById(R.id.lvNavMenu);
         im = (ImageView) findViewById(R.id.im);
         imcart = (ImageView) findViewById(R.id.imcart);
