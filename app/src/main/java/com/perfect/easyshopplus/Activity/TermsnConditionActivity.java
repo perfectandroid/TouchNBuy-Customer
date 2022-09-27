@@ -153,6 +153,7 @@ public class TermsnConditionActivity extends AppCompatActivity  implements Navig
         etSearch=(EditText)findViewById(R.id.etSearch);
         imcart=(ImageView) findViewById(R.id.imcart);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         im = (ImageView) findViewById(R.id.im);
         lvNavMenu = (ListView) findViewById(R.id.lvNavMenu);
         tvuser = (TextView) findViewById(R.id.tvuser);
