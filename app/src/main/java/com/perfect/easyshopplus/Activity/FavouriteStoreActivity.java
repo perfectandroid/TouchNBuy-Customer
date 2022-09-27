@@ -132,6 +132,7 @@ public class FavouriteStoreActivity extends AppCompatActivity implements Navigat
         etSearch=(EditText)findViewById(R.id.etSearch);
         imcart=(ImageView) findViewById(R.id.imcart);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         im = (ImageView) findViewById(R.id.im);
         lvNavMenu = (ListView) findViewById(R.id.lvNavMenu);
         tvuser = (TextView) findViewById(R.id.tvuser);

@@ -247,6 +247,7 @@ public class StoreInShopActivity extends AppCompatActivity implements Navigation
         rv_recentStoreList=(RecyclerView)findViewById(R.id.rv_recentStoreList);
         vSeperator=findViewById(R.id.vSeperator);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         im = (ImageView) findViewById(R.id.im);
         imcart = (ImageView) findViewById(R.id.imcart);
         lvNavMenu = (ListView) findViewById(R.id.lvNavMenu);

@@ -197,6 +197,7 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
 
     private void initiateViews() {
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         im = (ImageView) findViewById(R.id.im);
         // etSearch=(EditText)findViewById(R.id.etSearch);
         imcart=(ImageView) findViewById(R.id.imcart);
