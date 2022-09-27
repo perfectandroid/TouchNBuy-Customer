@@ -173,12 +173,13 @@ public class SplashActivity extends AppCompatActivity {
         else if(getResources().getString(R.string.app_name).equals("TNB QA")){
             SharedPreferences Baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
             SharedPreferences.Editor BaseurlprefEditor = Baseurlpref.edit();
-            BaseurlprefEditor.putString("BaseURL", "https://112.133.227.123:14019/TouchNBuyQAAPI/api/");
+            BaseurlprefEditor.putString("BaseURL", "https://112.133.227.123:14019/TouchNBuyQAAPI/api/");// https
+
             BaseurlprefEditor.commit();
 
             SharedPreferences Imageurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF57, 0);
             SharedPreferences.Editor ImageurlprefEditor = Imageurlpref.edit();
-            ImageurlprefEditor.putString("ImageURL", "https://112.133.227.123:14019/TouchNBuyQAAPI");
+            ImageurlprefEditor.putString("ImageURL", "https://112.133.227.123:14019/TouchNBuyQAAPI"); // https
 
             ImageurlprefEditor.commit();
 

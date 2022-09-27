@@ -345,6 +345,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         tvGetstarted.setText(" "+letsgo.getString("LetsGo", null)+" " );
 
 
+        Log.e(TAG,"setNptifications   34811  ");
         setNptifications();
         SharedPreferences pref3 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF10, 0);
         SharedPreferences pref4 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF11, 0);
@@ -3366,6 +3367,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             JSONObject jobj = jObject.getJSONObject("NotificationDetailsInfo");
                             if (jobj.getString("NotificationDetails").equals("null")) {
                             }else {
+                                notificationcount = 0;
                                 JSONArray jarray = jobj.getJSONArray("NotificationDetails");
                                 Log.e(TAG,"jarray  3153   "+jarray.length());
                                 for(int i=0; i<=jarray.length(); i++){
@@ -3378,6 +3380,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                     SharedPreferences.Editor notificationcounteditor1 = spnotificationcount.edit();
                                     notificationcounteditor1.putString("notificationcount", String.valueOf(notificationcount));
                                     notificationcounteditor1.commit();
+
+                                    Log.e(TAG,"setNptifications   34814  "+notificationcount);
+                                    Log.e(TAG,"notificationcount 3383  :  "+spnotificationcount.getString("notificationcount", null));
                                 }
 
 //                                SharedPreferences Inshoppref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF43, 0);
@@ -3770,6 +3775,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     protected void onRestart() {
         super.onRestart();
         navigation.getMenu().findItem(R.id.navigation_home).setChecked(true);
+        Log.e(TAG,"setNptifications   34812  ");
         setNptifications();
         HomeCategoryListInfo();
 
@@ -4192,7 +4198,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onPostResume() {
         super.onPostResume();
-
+        Log.e(TAG,"setNptifications   34813  ");
         setNptifications();
     }
 

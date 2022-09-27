@@ -96,6 +96,24 @@ public class NotificationDetailActivity extends AppCompatActivity implements Nav
         tvDetail.setText(in.getStringExtra("NotificationDetail"));
         tvDate.setText(in.getStringExtra("NotificationDate"));
         tvTime.setText(in.getStringExtra("NotificationTime"));
+        Log.e("TAG","IsRead   99   "+in.getStringExtra("IsRead"));
+
+        try {
+            SharedPreferences spnotificationcount = getApplicationContext().getSharedPreferences(Config.SHARED_PREF14, 0);
+            int notificationcount =Integer.parseInt( spnotificationcount.getString("notificationcount", null));
+            if (in.getStringExtra("IsRead").equals("false") || notificationcount > 0){
+                notificationcount = notificationcount-1;
+
+                SharedPreferences.Editor notificationcounteditor1 = spnotificationcount.edit();
+                notificationcounteditor1.putString("notificationcount", String.valueOf(notificationcount));
+                notificationcounteditor1.commit();
+            }
+
+        }catch (Exception e){
+
+        }
+
+
 
 
         SharedPreferences notifications = getApplicationContext().getSharedPreferences(Config.SHARED_PREF220, 0);

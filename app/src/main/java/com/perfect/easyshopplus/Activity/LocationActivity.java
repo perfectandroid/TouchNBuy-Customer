@@ -253,12 +253,12 @@ public class LocationActivity extends AppCompatActivity implements View.OnClickL
                         SharedPreferences Baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
                         SharedPreferences.Editor BaseurlprefEditor = Baseurlpref.edit();
                        // BaseurlprefEditor.putString("BaseURL", "https://112.133.227.123:14017/TNBAPI/api/");
-                        BaseurlprefEditor.putString("BaseURL", "https://112.133.227.123:14019/TouchNBuyQAAPI/api/");
+                        BaseurlprefEditor.putString("BaseURL", "https://112.133.227.123:14019/TouchNBuyQAAPI/api/"); //https working
                         BaseurlprefEditor.commit();
                         SharedPreferences Imageurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF57, 0);
                         SharedPreferences.Editor ImageurlprefEditor = Imageurlpref.edit();
                      //   ImageurlprefEditor.putString("ImageURL", "https://112.133.227.123:14017/TNBAPI");
-                        ImageurlprefEditor.putString("ImageURL", "https://112.133.227.123:14019/TouchNBuyQAAPI");
+                        ImageurlprefEditor.putString("ImageURL", "https://112.133.227.123:14019/TouchNBuyQAAPI"); //https  working
                         ImageurlprefEditor.commit();
 
                         getResellerDetails();
@@ -274,11 +274,13 @@ public class LocationActivity extends AppCompatActivity implements View.OnClickL
                     if(strCountry.equals("India")) {
                         SharedPreferences Baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
                         SharedPreferences.Editor BaseurlprefEditor = Baseurlpref.edit();
+                       // BaseurlprefEditor.putString("BaseURL", "https://202.164.150.65:14001/TouchNBuyAPI/api/");//local
                         BaseurlprefEditor.putString("BaseURL", "https://202.164.150.65:14001/TouchNBuyAPI/api/");//local
                         BaseurlprefEditor.commit();
 
                         SharedPreferences Imageurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF57, 0);
                         SharedPreferences.Editor ImageurlprefEditor = Imageurlpref.edit();
+                     //   ImageurlprefEditor.putString("ImageURL", "https://202.164.150.65:14001/TouchNBuyAPI");
                         ImageurlprefEditor.putString("ImageURL", "https://202.164.150.65:14001/TouchNBuyAPI");
                         ImageurlprefEditor.commit();
 

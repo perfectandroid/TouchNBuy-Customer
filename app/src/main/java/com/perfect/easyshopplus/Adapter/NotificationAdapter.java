@@ -174,6 +174,7 @@ public class NotificationAdapter extends RecyclerView.Adapter {
                             i.putExtra("NotificationDetail", jsonObject.getString("Description"));
                             i.putExtra("NotificationDate",strDate);
                             i.putExtra("NotificationTime",strTime);
+                            i.putExtra("IsRead",jsonObject.getString("IsRead"));
                             context.startActivity(i);
                             ((Activity)context).finish();
                         } catch (JSONException e) {
