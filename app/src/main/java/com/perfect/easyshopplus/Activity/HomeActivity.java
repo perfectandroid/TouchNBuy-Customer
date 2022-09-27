@@ -175,6 +175,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences Inshoppref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF43, 0);
 
         db=new DBHandler(this);
+        Log.e(TAG,"178   cart    "+db.selectCartCount());
         tvcart.setText(String.valueOf(db.selectCartCount()));
 
         cartChangedListener = this;

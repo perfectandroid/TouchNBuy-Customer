@@ -78,18 +78,19 @@
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
                         android:src="@drawable/shoppingcart" />
+
                     <TextView
                         android:id="@+id/tvcart"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:layout_marginBottom="7dp"
                         android:layout_marginLeft="25dp"
-                        android:gravity="center"
-                        android:textStyle="bold"
+                        android:layout_marginBottom="7dp"
                         android:background="@drawable/roundbg"
-                        android:textColor="@color/white"
+                        android:gravity="center"
                         android:text="0"
-                        android:textSize="10dp" />
+                        android:textColor="@color/white"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
                 </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>

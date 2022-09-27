@@ -374,7 +374,7 @@ public class CustRegistrationActivity extends AppCompatActivity implements View.
 
         if (etname.getText().toString().isEmpty()) {
             etname.setError(""+PleaseProvideyourname.getString("PleaseProvideyourname",null));
-        }else if (etphone.getText().toString().isEmpty()) {
+        }else if (etphone.getText().toString().isEmpty() || etphone.getText().toString().length() != 10) {
             etphone.setError(""+PleaseProvideyourPhoneNo.getString("PleaseProvideyourPhoneNo",null));
         }/*else if (etphone.getText().toString().length() != 10) {
             etphone.setError("Please provide 10 digit Phone No.");
@@ -392,6 +392,7 @@ public class CustRegistrationActivity extends AppCompatActivity implements View.
                 etemail.setError(""+PleaseprovideavalidEmailAddress.getString("PleaseprovideavalidEmailAddress",null));
             } else {
                 if(etpassword.getText().toString().equals(etconfirmpassword.getText().toString())) {
+                    Log.e(TAG,"REGISTER  3951");
                     getRegister();
                 }else{
                     setAlert(""+YourPasswordandconfirmationpassworddonotmatch.getString("YourPasswordandconfirmationpassworddonotmatch",""));
@@ -405,6 +406,7 @@ public class CustRegistrationActivity extends AppCompatActivity implements View.
 //                etemail.setError("Please provide your Email Address.");
             } else {
                 if(etpassword.getText().toString().equals(etconfirmpassword.getText().toString())) {
+                    Log.e(TAG,"REGISTER  3952");
                     getRegister();
                 }else{
                     setAlert(""+YourPasswordandconfirmationpassworddonotmatch.getString("YourPasswordandconfirmationpassworddonotmatch",""));
@@ -427,6 +429,7 @@ public class CustRegistrationActivity extends AppCompatActivity implements View.
                 etpassword.setError(""+PleaseProvideyourPassword.getString("PleaseProvideyourPassword",null));
             }
             else if(etpassword.getText().toString().equals(etconfirmpassword.getText().toString())) {
+                Log.e(TAG,"REGISTER  3953");
                 getRegister();
             }else{
                 setAlert(""+YourPasswordandconfirmationpassworddonotmatch.getString("YourPasswordandconfirmationpassworddonotmatch",""));
@@ -1035,6 +1038,7 @@ public class CustRegistrationActivity extends AppCompatActivity implements View.
                     @Override public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                         try {
                             progressDialog.dismiss();
+                            Log.e(TAG,"response  1041   "+response);
                             JSONObject jObject = new JSONObject(response.body());
                             if (jObject.getString("StatusCode").equals("0")){
                                 JSONObject jmember = jObject.getJSONObject("OTPverifyInfo");

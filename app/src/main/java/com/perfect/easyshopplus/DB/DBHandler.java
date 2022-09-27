@@ -21,6 +21,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "productManager";
+    String TAG = "DBHandler";
 
     private static final String TABLE_CART = "cart";
     private static final String KEY_ID_ITEMS= "ID_Items";
@@ -598,6 +599,7 @@ public class DBHandler extends SQLiteOpenHelper {
         if (cursor.moveToNext()) {
             cartcount = cursor.getInt(cursor.getColumnIndex("count"));
         }
+        Log.e(TAG,"cartcount  601  "+cartcount);
         cursor.close();
         return cartcount;
     }

@@ -225,6 +225,7 @@ public class CustLoginActivity extends AppCompatActivity implements View.OnClick
 
 //            etpass.setError("Please provide your Password.");
         }   else {
+            Log.e(TAG,"LOGIN   228   ");
             getlogin();
         }
     }
