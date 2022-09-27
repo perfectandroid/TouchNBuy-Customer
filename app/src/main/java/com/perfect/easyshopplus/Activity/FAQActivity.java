@@ -793,4 +793,14 @@ public class FAQActivity extends AppCompatActivity  implements NavigationView.On
         }
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        try {
+            SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF14, 0);
+            tv_notification.setText(pref.getString("notificationcount", null));
+        }catch (Exception e){
+
+        }
+    }
 }

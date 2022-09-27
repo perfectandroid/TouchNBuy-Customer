@@ -1126,5 +1126,16 @@ public class OrdersActivity extends AppCompatActivity implements NavigationView.
             e.printStackTrace();
         }
     }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        try {
+            SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF14, 0);
+            tv_notification.setText(pref.getString("notificationcount", null));
+        }catch (Exception e){
+
+        }
+    }
 }
 
