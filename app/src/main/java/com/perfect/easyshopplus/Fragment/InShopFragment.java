@@ -186,6 +186,7 @@ public class InShopFragment extends Fragment implements CartChangedListener{
 
     @Override
     public void onCartChanged() {
+        Log.e(TAG,"1891");
         db=new DBHandler(getContext());
         String string = "\u20B9";
         byte[] utf8 = new byte[0];
