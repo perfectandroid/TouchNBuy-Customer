@@ -149,6 +149,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     ImageView imcart;
     TextView tvcart;
     DBHandler db;
+    NavMenuAdapter adapter;
 
     public static CartChangedListener cartChangedListener = null;
 
@@ -903,7 +904,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 R.drawable.contact,  R.drawable.tnc, R.drawable.pp,
                 R.drawable.navsuggestion, R.drawable.navfaq,R.drawable.rate, R.drawable.navshare, R.drawable.navlgt
         };
-        NavMenuAdapter adapter = new NavMenuAdapter(HomeActivity.this, menulist, imageId);
+       // NavMenuAdapter adapter = new NavMenuAdapter(HomeActivity.this, menulist, imageId);
+         adapter = new NavMenuAdapter(HomeActivity.this, menulist, imageId);
         lvNavMenu.setAdapter(adapter);
         lvNavMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -3137,7 +3139,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 R.drawable.navsuggestion, R.drawable.navfaq, R.drawable.rate, R.drawable.navshare, R.drawable.navlgt
 
         };
-        NavMenuAdapter adapter = new NavMenuAdapter(HomeActivity.this, menulist, imageId);
+       // NavMenuAdapter adapter = new NavMenuAdapter(HomeActivity.this, menulist, imageId);
+        adapter = new NavMenuAdapter(HomeActivity.this, menulist, imageId);
         lvNavMenu.setAdapter(adapter);
         lvNavMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -3383,6 +3386,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                                     Log.e(TAG,"setNptifications   34814  "+notificationcount);
                                     Log.e(TAG,"notificationcount 3383  :  "+spnotificationcount.getString("notificationcount", null));
+                                    adapter.notifyDataSetChanged();
+
+
                                 }
 
 //                                SharedPreferences Inshoppref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF43, 0);
@@ -4200,6 +4206,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         super.onPostResume();
         Log.e(TAG,"setNptifications   34813  ");
         setNptifications();
+
     }
 
     private void getInitView(String [] imageDetails, final int size) {
@@ -4251,6 +4258,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 //        db=new DBHandler(this);
 //        db.selectCartCount()+db.selectInshopCartCount();
     }
+
+
+
+
+
 
 
 }

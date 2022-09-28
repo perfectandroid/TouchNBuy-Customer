@@ -840,7 +840,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
                         SharedPreferences EnterOldPasswordsp = getApplicationContext().getSharedPreferences(Config.SHARED_PREF353, 0);
                         String EnterOldPassword=EnterOldPasswordsp.getString("EnterOldPassword", null);
                         Toast.makeText(getApplicationContext(), EnterOldPassword+".",Toast.LENGTH_LONG).show();
-                        Toast.makeText(getApplicationContext(), "Enter Old Password",Toast.LENGTH_LONG).show();
+                       // Toast.makeText(getApplicationContext(), "Enter Old Password",Toast.LENGTH_LONG).show();
 
                     } else if (newpassword.getText().toString().isEmpty()) {
                         //newpassword.setError("Please provide your New Password.");
@@ -850,11 +850,12 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
                         Toast.makeText(getApplicationContext(), EnterNewPassword+"",Toast.LENGTH_LONG).show();
 //                        Toast.makeText(getApplicationContext(), "Enter New Password",Toast.LENGTH_LONG).show();
                     }   else {
+                        alertDialog.dismiss();
                         st_oldpassword=oldpassword.getText().toString();
                         st_newpassword=newpassword.getText().toString();
                         doChangePassword();
                     }
-                    alertDialog.dismiss();
+
                 }
             });
             alertDialog.show();
@@ -901,6 +902,8 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
                 requestObject1.put("Bank_Key", getResources().getString(R.string.BankKey));
                 SharedPreferences IDLanguages = getApplicationContext().getSharedPreferences(Config.SHARED_PREF80, 0);
                 requestObject1.put("ID_Languages",IDLanguages.getString("ID_Languages", null));
+
+                Log.e(TAG,"requestObject1  9061   "+requestObject1);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -910,6 +913,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
                 @Override public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                     try {
                         progressDialog.dismiss();
+                        Log.e(TAG,"response  9062   "+response.body());
                         JSONObject jObject = new JSONObject(response.body());
                         JSONObject jmember = jObject.getJSONObject("UserNameAndPasswordChk");
                         String ResponseCode = jmember.getString("ResponseCode");
