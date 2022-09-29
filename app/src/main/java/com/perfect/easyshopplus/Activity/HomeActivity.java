@@ -472,7 +472,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 Call<String> call = apiService.getOfferCategoryList(body);
                 call.enqueue(new Callback<String>() {
                     @Override public void onResponse(Call<String> call, retrofit2.Response<String> response) {
-                        try {progressDialog.dismiss();
+                        try {
+
+                            progressDialog.dismiss();
                             JSONObject jObject = new JSONObject(response.body());
                             JSONObject jmember = jObject.getJSONObject("HomeCategoryListInfo");
                             JSONObject object = new JSONObject(String.valueOf(jmember));
