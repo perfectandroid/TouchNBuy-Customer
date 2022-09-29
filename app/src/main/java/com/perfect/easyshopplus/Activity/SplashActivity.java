@@ -187,6 +187,23 @@ public class SplashActivity extends AppCompatActivity {
 //            getResellerDetails();
             versionCkecking();
         }
+        else if(getResources().getString(R.string.app_name).equals("ASCB")){
+            SharedPreferences Baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
+            SharedPreferences.Editor BaseurlprefEditor = Baseurlpref.edit();
+            BaseurlprefEditor.putString("BaseURL", "https://117.241.72.68:14002/TouchnbuyAPI/api/");// https
+
+            BaseurlprefEditor.commit();
+
+            SharedPreferences Imageurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF57, 0);
+            SharedPreferences.Editor ImageurlprefEditor = Imageurlpref.edit();
+            ImageurlprefEditor.putString("ImageURL", "https://117.241.72.68:14002/TouchnbuyAPI"); // https
+
+            ImageurlprefEditor.commit();
+
+
+//            getResellerDetails();
+            versionCkecking();
+        }
         else{
             getSplash();
         }

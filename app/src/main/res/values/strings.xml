@@ -2,6 +2,7 @@
 
 <!--    <string name="app_name">TNB QA</string>-->
    <string name="app_name">TNB Demo</string>
+<!--   <string name="app_name">ASCB</string>-->
 
     <!--
     <string name="app_name">Shop Away</string>
@@ -42,7 +43,7 @@
     <!--
     <string name="rs">\u20B9 0.00 </string>
 -->
-    <string name="BankKey">-500</string>
+<!--    <string name="BankKey">-500</string>-->
     <string name="faq"><b>What is In-shop?</b>
             \t\t\nIt is a feature which only can be used in the premise of the store. you can use this feature while shopping at the store. They can add the products as they add it to the cart. This enables you to avoid long queues and hassle-free billing and enhances the shopping experience at the store.
             \n\n<b>What is counter delivery?</b>
@@ -70,5 +71,10 @@
     <string name="some_error_occurred">Some error occurred...</string>
     <string name="transaction_cancelled_by_user">Transaction cancelled by user</string>
     <string name="tetms_and_condition">Terms And Conditions</string>
+
+
+<!--    <string name="BankKey">-500</string>-->  // DEVELOPMENT
+
+    <string name="BankKey">-500</string>  // ASCB
 
 </resources>

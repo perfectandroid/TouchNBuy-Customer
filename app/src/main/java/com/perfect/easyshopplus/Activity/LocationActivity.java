@@ -292,6 +292,29 @@ public class LocationActivity extends AppCompatActivity implements View.OnClickL
                     }
 
                 }
+                if(getResources().getString(R.string.app_name).equals("ASCB")){
+
+                    if(strCountry.equals("India")) {
+                        SharedPreferences Baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
+                        SharedPreferences.Editor BaseurlprefEditor = Baseurlpref.edit();
+                        // BaseurlprefEditor.putString("BaseURL", "https://202.164.150.65:14001/TouchNBuyAPI/api/");//local
+                        BaseurlprefEditor.putString("BaseURL", "https://117.241.72.68:14002/TouchnbuyAPI/api/");//local
+                        BaseurlprefEditor.commit();
+
+                        SharedPreferences Imageurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF57, 0);
+                        SharedPreferences.Editor ImageurlprefEditor = Imageurlpref.edit();
+                        //   ImageurlprefEditor.putString("ImageURL", "https://202.164.150.65:14001/TouchNBuyAPI");
+                        ImageurlprefEditor.putString("ImageURL", "https://117.241.72.68:14002/TouchnbuyAPI");
+                        ImageurlprefEditor.commit();
+
+                        getResellerDetails();
+                    }
+                    if(strCountry.equals("Malaysia")) {
+                        noService();
+
+                    }
+
+                }
                /* else {
                     SharedPreferences Baseurlpref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF56, 0);
                     SharedPreferences.Editor BaseurlprefEditor = Baseurlpref.edit();

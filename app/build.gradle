@@ -25,6 +25,7 @@ android {
 //        applicationId "com.perfect.NeethicoOp"
         applicationId "com.perfect.tnb"
 //        applicationId "com.perfect.tnbQa"
+//        applicationId "com.perfect.ascb"
         minSdkVersion 21
         targetSdkVersion 30
       /*  versionCode 11

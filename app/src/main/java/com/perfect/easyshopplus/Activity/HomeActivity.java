@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -160,6 +161,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_home_main);
+//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//        StrictMode.setThreadPolicy(policy);
         SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
         String loginsession = pref.getString("loginsession", null);
         initiateViews();
@@ -1034,12 +1037,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 //                        e.printStackTrace();
 //                    }
                 }else if (position == 15) {
+
                     Intent share = new Intent(Intent.ACTION_SEND);
                     share.setType("text/plain");
                     share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + "\t" + "Invite You  \n\n For Android Users \n http://play.google.com/store/apps/details?id=" + getPackageName() +
-                            "\n" );
+                    share.putExtra(Intent.EXTRA_TEXT, getString(R.string.app_name) + "\t" + "Invite You  \n For Android Users \n http://play.google.com/store/apps/details?id=" + getPackageName() + "\n" );
+                  //  share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + "\t" + "Invite You  \n\n For Android Users \n http://play.google.com/store/apps/details?id=" + getPackageName() + "\n" );
                     startActivity(Intent.createChooser(share, "Invite this App to your friends"));
+
                     drawer.closeDrawer(GravityCompat.START);
                 }else if (position == 16) {
                     doLogout();
@@ -3226,12 +3231,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     }
                 }
                 else if (position == 13) {
-                    Intent share = new Intent(Intent.ACTION_SEND);
-                    share.setType("text/plain");
-                    share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + "\t" + "Invite You  \n\n For Android Users \n http://play.google.com/store/apps/details?id=" + getPackageName() +
-                            "\n" );
-                    startActivity(Intent.createChooser(share, "Invite this App to your friends"));
+//                    Intent share = new Intent(Intent.ACTION_SEND);
+//                    share.setType("text/plain");
+//                    share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//                    share.putExtra(Intent.EXTRA_TEXT, getString(R.string.app_name) + "\t" + "Invite You  \n\n For Android Users \n http://play.google.com/store/apps/details?id=" + getPackageName() +
+//                            "\n" );
+//                    startActivity(Intent.createChooser(share, "Invite this App to your friends"));
+                    String url = "https://api.whatsapp.com/send/?phone=9846434015&text=" + "ADDON ERROR";
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setPackage("com.whatsapp");
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
                     drawer.closeDrawer(GravityCompat.START);
                 }
                 else if (position == 14) {
@@ -3846,7 +3856,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 //                    if(getResources().getString(R.string.app_name).equals("JZT CART")){
-                    if(getResources().getString(R.string.app_name).equals("JZT CART") || getResources().getString(R.string.app_name).equals("Pulikkottil Hypermarket") || getResources().getString(R.string.app_name).equals("NeethiMed")|| getResources().getString(R.string.app_name).equals("Touch n Buy") || getResources().getString(R.string.app_name).equals("TNB Demo") || getResources().getString(R.string.app_name).equals("NeethiCoOp")) {
+                    if(getResources().getString(R.string.app_name).equals("JZT CART") || getResources().getString(R.string.app_name).equals("Pulikkottil Hypermarket") || getResources().getString(R.string.app_name).equals("NeethiMed")|| getResources().getString(R.string.app_name).equals("Touch n Buy") || getResources().getString(R.string.app_name).equals("TNB Demo") || getResources().getString(R.string.app_name).equals("NeethiCoOp")|| getResources().getString(R.string.app_name).equals("ASCB")) {
 
                         startActivity(new Intent(HomeActivity.this,SplashActivity.class));
                         finish();
