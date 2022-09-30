@@ -485,6 +485,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                     GridLayoutManager lLayout = new GridLayoutManager(getApplicationContext(), 1);
                                     flrv_HomeCategoryListInfo.setLayoutManager(lLayout);
                                     flrv_HomeCategoryListInfo.setHasFixedSize(true);
+                                    flrv_HomeCategoryListInfo.setNestedScrollingEnabled(false);
                                     HomeCategoryListInfoAdapter adapter = new HomeCategoryListInfoAdapter(getApplicationContext(), Jarray);
                                     flrv_HomeCategoryListInfo.setAdapter(adapter);
                                 } else {

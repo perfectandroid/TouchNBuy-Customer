@@ -63,6 +63,7 @@ public class HomeCategoryListInfoAdapter extends RecyclerView.Adapter {
                 LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
                 ((MainViewHolder)holder).flrv_CategoryItemList.setLayoutManager(horizontalLayoutManagaer);
                 HomeCategoryItemInfoAdapter adapter = new HomeCategoryItemInfoAdapter(context.getApplicationContext(), CategoryItemList);
+                ((MainViewHolder)holder).flrv_CategoryItemList.setNestedScrollingEnabled(false);
                 ((MainViewHolder)holder).flrv_CategoryItemList.setAdapter(adapter);
 
                 ((MainViewHolder)holder).rlcat.setTag(position);

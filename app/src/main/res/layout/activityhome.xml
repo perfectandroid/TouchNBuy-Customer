@@ -539,7 +539,7 @@
                     android:id="@+id/flrv_HomeCategoryListInfo"
                     android:layout_gravity="bottom"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="wrap_content"    
                     tools:ignore="MissingClass" />
             </LinearLayout>
         </ScrollView>
