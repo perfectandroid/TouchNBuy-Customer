@@ -539,6 +539,7 @@ public class AddressListActivity extends AppCompatActivity implements Navigation
                     View layout = inflater1.inflate(R.layout.add_edit_address_popup, null);
 
 
+
                     SharedPreferences addaddress = getApplicationContext().getSharedPreferences(Config.SHARED_PREF203, 0);
                     SharedPreferences addressSP = getApplicationContext().getSharedPreferences(Config.SHARED_PREF94, 0);
                     SharedPreferences CustomerNamesp = getApplicationContext().getSharedPreferences(Config.SHARED_PREF88, 0);
@@ -654,8 +655,15 @@ public class AddressListActivity extends AppCompatActivity implements Navigation
                                                         if(phone.contains("+")){
                                                             phone = phone.replace("+","");
                                                         }
-                                                        addAddress(name.getText().toString(),address.getText().toString(),pinCode.getText().toString(),
-                                                                landmark.getText().toString(),areaId,phone);
+
+                                                    String  name1 = name.getText().toString().replaceAll("\\s+", " ");
+                                                    String  adrress1 = address.getText().toString().replaceAll("\\s+", " ");
+                                                    String  pinCode1 = pinCode.getText().toString().replaceAll("\\s+", " ");
+                                                    String  landmark1 = landmark.getText().toString().replaceAll("\\s+", " ");
+
+//                                                    addAddress(name.getText().toString(),address.getText().toString(),pinCode.getText().toString(),
+//                                                            landmark.getText().toString(),areaId,phone);
+                                                    addAddress(name1,adrress1,pinCode1, landmark1,areaId,phone);
                                                    /* }
                                                     else{
                                                         phoneNumber.setError("Please enter valid mobile number.");
@@ -667,8 +675,16 @@ public class AddressListActivity extends AppCompatActivity implements Navigation
                                                     if(phone.contains("+")){
                                                         phone = phone.replace("+","");
                                                     }
-                                                    addAddress(name.getText().toString(),address.getText().toString(),pinCode.getText().toString(),
-                                                            landmark.getText().toString(),areaId,phone);                                                }
+                                                    String  name1 = name.getText().toString().replaceAll("\\s+", " ");
+                                                    String  adrress1 = address.getText().toString().replaceAll("\\s+", " ");
+                                                    String  pinCode1 = pinCode.getText().toString().replaceAll("\\s+", " ");
+                                                    String  landmark1 = landmark.getText().toString().replaceAll("\\s+", " ");
+
+//                                                    addAddress(name.getText().toString(),address.getText().toString(),pinCode.getText().toString(),
+//                                                            landmark.getText().toString(),areaId,phone);
+
+                                                    addAddress(name1,adrress1,pinCode1, landmark1,areaId,phone);
+                                                }
                                             }
                                             else{
                                                 SharedPreferences Pleaseenterlandmark = getApplicationContext().getSharedPreferences(Config.SHARED_PREF297, 0);
@@ -698,6 +714,9 @@ public class AddressListActivity extends AppCompatActivity implements Navigation
                   */
                         }
                     });
+
+                    alertDialog.getWindow().setSoftInputMode(
+                            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
                     alertDialog.show();
                 }
                 catch (Exception e) {

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -439,9 +440,15 @@ public class AddressListAdapter extends RecyclerView.Adapter {
                                                                     if(phone.contains("+")){
                                                                         phone = phone.replace("+","");
                                                                     }
-                                                                    editAddress(jsonObject.getString("ID_CustomerAddress"),name.getText().toString(),
-                                                                            address.getText().toString(),pinCode.getText().toString(),
-                                                                            areaId,landmark.getText().toString(),phone);
+                                                                    String  name1 = name.getText().toString().replaceAll("\\s+", " ");
+                                                                    String  adrress1 = address.getText().toString().replaceAll("\\s+", " ");
+                                                                    String  pinCode1 = pinCode.getText().toString().replaceAll("\\s+", " ");
+                                                                    String  landmark1 = landmark.getText().toString().replaceAll("\\s+", " ");
+//                                                                    editAddress(jsonObject.getString("ID_CustomerAddress"),name.getText().toString(),
+//                                                                            adrress1,pinCode.getText().toString(),
+//                                                                            areaId,landmark.getText().toString(),phone);
+
+                                                                    editAddress(jsonObject.getString("ID_CustomerAddress"),name1,adrress1,pinCode1,areaId, landmark1,phone);
                                                                 } catch (JSONException e) {
                                                                     e.printStackTrace();
                                                                 }
@@ -457,9 +464,15 @@ public class AddressListAdapter extends RecyclerView.Adapter {
                                                                 if(phone.contains("+")){
                                                                     phone = phone.replace("+","");
                                                                 }
-                                                                editAddress(jsonObject.getString("ID_CustomerAddress"),name.getText().toString(),
-                                                                        address.getText().toString(),pinCode.getText().toString(),
-                                                                        areaId,landmark.getText().toString(),phone);
+                                                                String  name1 = name.getText().toString().replaceAll("\\s+", " ");
+                                                                String  adrress1 = address.getText().toString().replaceAll("\\s+", " ");
+                                                                String  pinCode1 = pinCode.getText().toString().replaceAll("\\s+", " ");
+                                                                String  landmark1 = landmark.getText().toString().replaceAll("\\s+", " ");
+//                                                                editAddress(jsonObject.getString("ID_CustomerAddress"),name.getText().toString(),
+//                                                                        adrress1,pinCode.getText().toString(),
+//                                                                        areaId,landmark.getText().toString(),phone);
+
+                                                                editAddress(jsonObject.getString("ID_CustomerAddress"),name1,adrress1,pinCode1,areaId, landmark1,phone);
                                                             } catch (JSONException e) {
                                                                 e.printStackTrace();
                                                             }                                              }
@@ -511,6 +524,8 @@ public class AddressListAdapter extends RecyclerView.Adapter {
                                     }*/
                                 }
                             });
+                            alertDialog.getWindow().setSoftInputMode(
+                                    WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
                             alertDialog.show();
                         } catch (Exception e) {
                             e.printStackTrace();

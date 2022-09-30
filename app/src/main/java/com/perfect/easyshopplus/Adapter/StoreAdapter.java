@@ -300,6 +300,7 @@ public class StoreAdapter extends RecyclerView.Adapter {
 
 
 
+
 //
 //                                Intent intent = new Intent(context, OutShopActivity.class);
 //                                intent.putExtra("from", "store");
@@ -649,8 +650,9 @@ public class StoreAdapter extends RecyclerView.Adapter {
 //                            }
 
                             // Hide 07.09.2021
-                        } catch (JSONException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
+                            Log.e(TAG,"Exception  655    "+e.toString());
                         }
                     }
                 });

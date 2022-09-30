@@ -245,14 +245,15 @@
             </LinearLayout>
 
         </ScrollView>
-            <Button
-                android:id="@+id/btnAddAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/ll_bottomnavigation"
-                android:textSize="15dp"
-                android:text="ADD ADDRESS"
-                android:textColor="@color/black"/>
+
+        <Button
+            android:id="@+id/btnAddAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/ll_bottomnavigation"
+            android:text="ADD ADDRESS"
+            android:textColor="@color/black"
+            android:textSize="15dp" />
 
         <LinearLayout
             android:id="@+id/ll_bottomnavigation"
