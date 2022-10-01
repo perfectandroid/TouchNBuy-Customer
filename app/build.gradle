@@ -23,8 +23,8 @@ android {
 //        applicationId "com.perfect.Juzcart"
 //        applicationId "com.perfect.Neetimed"
 //        applicationId "com.perfect.NeethicoOp"
-        applicationId "com.perfect.tnb"
-//        applicationId "com.perfect.tnbQa"
+//        applicationId "com.perfect.tnb"
+        applicationId "com.perfect.tnbQa"
 //        applicationId "com.perfect.ascb"
         minSdkVersion 21
         targetSdkVersion 30
@@ -32,7 +32,7 @@ android {
         versionName "2.0.9"*/
 //        versionCode 12
 //        versionName "4.0.0"
-        versionCode 1
+        versionCode 12
         versionName "4.0.0"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         multiDexEnabled true

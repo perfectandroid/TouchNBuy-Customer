@@ -1,7 +1,7 @@
 <resources>
 
-<!--    <string name="app_name">TNB QA</string>-->
-   <string name="app_name">TNB Demo</string>
+    <string name="app_name">TNB QA</string>
+<!--   <string name="app_name">TNB Demo</string>-->
 <!--   <string name="app_name">ASCB</string>-->
 
     <!--

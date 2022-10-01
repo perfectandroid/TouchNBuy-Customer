@@ -488,6 +488,8 @@ public class OrderItemListAdapter extends RecyclerView.Adapter {
                         SharedPreferences IDLanguages = context.getSharedPreferences(Config.SHARED_PREF80, 0);
                         requestObject1.put("ID_Languages",IDLanguages.getString("ID_Languages", null));
 
+                        Log.e("TAG","requestObject1    4911   "+requestObject1);
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -497,6 +499,7 @@ public class OrderItemListAdapter extends RecyclerView.Adapter {
                         @Override public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                             try {
                                 progressDialog.dismiss();
+                                Log.e("TAG","response    4912   "+response.body());
                                 JSONObject jObject = new JSONObject(response.body());
                                 if(jObject.getString("StatusCode").equals("5")){
                                     SharedPreferences ItemAddedToYourOrderList = context.getSharedPreferences(Config.SHARED_PREF333, 0);

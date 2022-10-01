@@ -2456,9 +2456,19 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
                     requestObject1.put("Fk_PaymentMethod", Utils.encryptStart(strPaymentId));
                     requestObject1.put("ID_SalesOrder", Utils.encryptStart(FK_SalesOrder));
 
-                    Log.e(TAG,"requestObject1   1681    "+strPaymentId);
+                    Log.e(TAG,"requestObject1   16801    "+strPaymentId);
 
-                    Log.e(TAG,"requestObject1   1680    "+requestObject1);
+                    Log.e(TAG,"requestObject1   16802    "+requestObject1);
+                    Log.e(TAG,"VEIFYCHECKSUM    16803 \n"
+                            +"MerchantID         :  "+MerchantID+"\n"
+                            +"Amount             :  "+finalamount+"\n"
+                            +"SecurityID         :  "+SecurityID+"\n"
+                            +"MobileNumber       :  "+pref4.getString("userphoneno", null)+"\n"
+                            +"UserID             :  "+pref1.getString("userid", null)+"\n"
+                            +"CustName           :  "+pref3.getString("username", null)+"\n"
+                            +"StoreName          :  "+storeName+"\n"
+                            +"Fk_PaymentMethod   :  "+strPaymentId+"\n"
+                            +"ID_SalesOrder      :  "+FK_SalesOrder);
 
 
                 } catch (JSONException e) {
@@ -2470,12 +2480,12 @@ public class OrderDetailsActivity extends AppCompatActivity implements Navigatio
                     @Override public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                         try {
                             progressDialog.dismiss();
-                            Log.e(TAG,"response   1680    "+response.body());
+                            Log.e(TAG,"response   16804    "+response.body());
                             JSONObject jObject = new JSONObject(response.body());
 
                             if(jObject.getString("StatusCode").equals("0")){
                                 JSONObject jobj = jObject.getJSONObject("AccountTransferStatus");
-                                Log.e(TAG,"msg   1697   "+jobj.getString("msg"));
+                                Log.e(TAG,"msg   16805   "+jobj.getString("msg"));
 
 //                                String strPGMsg = "BDSKUATY|BDSK1004|NA|2|NA|NA|NA|INR|NA|R|bdskuaty|NA|NA|F|NA|NA|NA|NA|NA|NA|NA|http://localhost:51953/Home/PaymentGateWayResult|984BABE1F1214D9DED3FA8151D7C002EC675E44A376D16580E4805D119776FDB";
                                 // String strPGMsg = "AIRMTST|ARP1553593909862|NA|2|NA|NA|NA|INR|NA|R|airmtst|NA|NA|F|NA|NA|NA|NA|NA|NA|NA|https://uat.billdesk.com/pgidsk/pgmerc/pg_dump.jsp|892409133";
