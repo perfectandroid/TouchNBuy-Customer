@@ -240,6 +240,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         memberid=pref5.getString("memberid", null);
         SharedPreferences pref6 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF15, 0);
         address=pref6.getString("Address", null);
+        Log.e(TAG,"address   243     "+address);
         SharedPreferences pref7 = getApplicationContext().getSharedPreferences(Config.SHARED_PREF16, 0);
         PIN=pref7.getString("PIN", null);
 

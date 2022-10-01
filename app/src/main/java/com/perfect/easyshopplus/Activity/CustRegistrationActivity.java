@@ -372,9 +372,11 @@ public class CustRegistrationActivity extends AppCompatActivity implements View.
         SharedPreferences PleaseProvideyourPassword = getApplicationContext().getSharedPreferences(Config.SHARED_PREF111, 0);
         SharedPreferences PleaseprovideyourConfirmPassword = getApplicationContext().getSharedPreferences(Config.SHARED_PREF366, 0);
 
-        if (etname.getText().toString().isEmpty()) {
+        String strEtname = etname.getText().toString();
+        //strEtname.startsWith(" ");
+        if (etname.getText().toString().isEmpty() || etname.getText().toString().length() == 0 || etname.getText().toString().startsWith(" ")) {
             etname.setError(""+PleaseProvideyourname.getString("PleaseProvideyourname",null));
-        }else if (etphone.getText().toString().isEmpty() || etphone.getText().toString().length() != 10) {
+        }else if (etphone.getText().toString().isEmpty() || etphone.getText().toString().length() == 0) {
             etphone.setError(""+PleaseProvideyourPhoneNo.getString("PleaseProvideyourPhoneNo",null));
         }/*else if (etphone.getText().toString().length() != 10) {
             etphone.setError("Please provide 10 digit Phone No.");
@@ -387,7 +389,7 @@ public class CustRegistrationActivity extends AppCompatActivity implements View.
             etpassword.setError(""+PleaseProvideyourPassword.getString("PleaseProvideyourPassword",null));
         }
         else if (!etemail.getText().toString().isEmpty()) {
-            if (!isValidEmaillId(etemail.getText().toString().trim())) {
+            if (!isValidEmaillId(etemail.getText().toString().trim()) || etemail.getText().toString().startsWith(" ")) {
 //                etemail.setError("Please provide a valid Email Address.");
                 etemail.setError(""+PleaseprovideavalidEmailAddress.getString("PleaseprovideavalidEmailAddress",null));
             } else {
@@ -633,13 +635,18 @@ public class CustRegistrationActivity extends AppCompatActivity implements View.
                         phone = etphone.getText().toString().replace("+","");
                     }*/
 
+                    String  adrress1 = etaddress.getText().toString().replaceAll("\\s+", " ");
+                    String  etLandmark1 = etLandmark.getText().toString().replaceAll("\\s+", " ");
+
                     requestObject1.put("ReqMode", "16");
                     requestObject1.put("CustomerMobile", phone);
                     requestObject1.put("CustomerEmail", etemail.getText().toString());
                     requestObject1.put("CustomerName", etname.getText().toString());
                     requestObject1.put("CustomerPassword", etpassword.getText().toString());
-                    requestObject1.put("LandMark", etLandmark.getText().toString());
-                    requestObject1.put("CustomerAddress", etaddress.getText().toString());
+                   // requestObject1.put("LandMark", etLandmark.getText().toString());
+                    requestObject1.put("LandMark", etLandmark1);
+                  //  requestObject1.put("CustomerAddress", etaddress.getText().toString());
+                    requestObject1.put("CustomerAddress", adrress1);
                    // requestObject1.put("FK_Area", areaId);
                     requestObject1.put("Bank_Key", getResources().getString(R.string.BankKey));
                     SharedPreferences IDLanguages = getApplicationContext().getSharedPreferences(Config.SHARED_PREF80, 0);
@@ -1038,7 +1045,7 @@ public class CustRegistrationActivity extends AppCompatActivity implements View.
                     @Override public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                         try {
                             progressDialog.dismiss();
-                            Log.e(TAG,"response  1041   "+response);
+                            Log.e(TAG,"response  1041   "+response.body());
                             JSONObject jObject = new JSONObject(response.body());
                             if (jObject.getString("StatusCode").equals("0")){
                                 JSONObject jmember = jObject.getJSONObject("OTPverifyInfo");
