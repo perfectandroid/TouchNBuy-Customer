@@ -1205,7 +1205,7 @@ public class ItemDetailsActivity extends AppCompatActivity implements Navigation
         share.setType("text/plain");
         share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         share.putExtra(Intent.EXTRA_SUBJECT,  "Item Details." );
-        share.putExtra(Intent.EXTRA_TEXT, ItemName + "\n\nMRP : "+ MRP+ "\n\nSales Price : "+ SalesPrice );
+        share.putExtra(Intent.EXTRA_TEXT, ItemName + "\n\nMRP : "+ MRP+ "\nSales Price : "+ SalesPrice );
         startActivity(Intent.createChooser(share, "Item Details"));
         drawer.closeDrawer(GravityCompat.START);
     }

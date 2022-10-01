@@ -1044,6 +1044,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     Intent share = new Intent(Intent.ACTION_SEND);
                     share.setType("text/plain");
                     share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    share.putExtra(Intent.EXTRA_SUBJECT,  "Play Store Link" );
                     share.putExtra(Intent.EXTRA_TEXT, getString(R.string.app_name) + "\t" + "Invite You  \n For Android Users \n http://play.google.com/store/apps/details?id=" + getPackageName() + "\n" );
                   //  share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + "\t" + "Invite You  \n\n For Android Users \n http://play.google.com/store/apps/details?id=" + getPackageName() + "\n" );
                     startActivity(Intent.createChooser(share, "Invite this App to your friends"));
