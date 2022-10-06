@@ -372,9 +372,11 @@ public class CustRegistrationActivity extends AppCompatActivity implements View.
         SharedPreferences PleaseProvideyourPassword = getApplicationContext().getSharedPreferences(Config.SHARED_PREF111, 0);
         SharedPreferences PleaseprovideyourConfirmPassword = getApplicationContext().getSharedPreferences(Config.SHARED_PREF366, 0);
 
-        String strEtname = etname.getText().toString();
+        String strEtname = etname.getText().toString().trim();
         //strEtname.startsWith(" ");
-        if (etname.getText().toString().isEmpty() || etname.getText().toString().length() == 0 || etname.getText().toString().startsWith(" ")) {
+        Log.e(TAG,"377   :"+strEtname+"   :   "+strEtname.length());
+//        if (etname.getText().toString().isEmpty() || etname.getText().toString().length() == 0) {
+        if (strEtname.isEmpty() || strEtname.length() == 0) {
             etname.setError(""+PleaseProvideyourname.getString("PleaseProvideyourname",null));
         }else if (etphone.getText().toString().isEmpty() || etphone.getText().toString().length() == 0) {
             etphone.setError(""+PleaseProvideyourPhoneNo.getString("PleaseProvideyourPhoneNo",null));
@@ -637,14 +639,16 @@ public class CustRegistrationActivity extends AppCompatActivity implements View.
 
                     String  adrress1 = etaddress.getText().toString().replaceAll("\\s+", " ");
                     String  etLandmark1 = etLandmark.getText().toString().replaceAll("\\s+", " ");
+                    String  etemail1 = etemail.getText().toString().replaceAll("\\s+", " ");
+                    String  etname1 = etname.getText().toString().replaceAll("\\s+", " ");
 
                     requestObject1.put("ReqMode", "16");
                     requestObject1.put("CustomerMobile", phone);
-                    requestObject1.put("CustomerEmail", etemail.getText().toString());
-                    requestObject1.put("CustomerName", etname.getText().toString());
+                    requestObject1.put("CustomerEmail", etemail1.trim());
+                    requestObject1.put("CustomerName", etname1.trim());
                     requestObject1.put("CustomerPassword", etpassword.getText().toString());
                    // requestObject1.put("LandMark", etLandmark.getText().toString());
-                    requestObject1.put("LandMark", etLandmark1);
+                    requestObject1.put("LandMark", etLandmark1.trim());
                   //  requestObject1.put("CustomerAddress", etaddress.getText().toString());
                     requestObject1.put("CustomerAddress", adrress1);
                    // requestObject1.put("FK_Area", areaId);
