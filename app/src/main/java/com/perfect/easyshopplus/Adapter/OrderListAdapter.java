@@ -67,6 +67,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class OrderListAdapter extends RecyclerView.Adapter {
 
+    String TAG = "OrderListAdapter";
     JSONArray jsonArray;
     JSONObject jsonObject=null;
     Context context;
@@ -714,7 +715,8 @@ public class OrderListAdapter extends RecyclerView.Adapter {
                 final JSONObject requestObject1 = new JSONObject();
                 try {
                     SharedPreferences pref = context.getSharedPreferences(Config.SHARED_PREF1, 0);
-                    //     requestObject1.put("FK_SalesOrder", Id_order);
+
+                    requestObject1.put("FK_SalesOrder", Id_order);
                     String date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
                     requestObject1.put("TransDate",date);
                     requestObject1.put("Rate", rating);
@@ -722,6 +724,8 @@ public class OrderListAdapter extends RecyclerView.Adapter {
                     requestObject1.put("Bank_Key", context.getString(R.string.BankKey));
                     SharedPreferences IDLanguages = context.getSharedPreferences(Config.SHARED_PREF80, 0);
                     requestObject1.put("ID_Languages",IDLanguages.getString("ID_Languages", null));
+
+                    Log.e(TAG,"requestObject1  7271   "+requestObject1);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -733,10 +737,11 @@ public class OrderListAdapter extends RecyclerView.Adapter {
                         try {
                             progressDialog.dismiss();
                             JSONObject jObject = new JSONObject(response.body());
-                            Log.i("Response",response.body());
+                            Log.e(TAG,"response  7272   "+response.body());
+
                             JSONObject jobj = jObject.getJSONObject("StoreRate");
                             String msg = jobj.getString("ResponseMessage");
-                            Toast.makeText(context,"Thank you for your support",Toast.LENGTH_LONG).show();
+                            Toast.makeText(context,""+msg,Toast.LENGTH_LONG).show();
 
                         } catch (JSONException e) {
                             e.printStackTrace();

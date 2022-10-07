@@ -27,6 +27,7 @@
         <entry key="..\:/Project/TouchNBuy-Customer/app/src/main/res/layout/activity_order_details.xml" value="0.36666666666666664" />
         <entry key="..\:/Project/TouchNBuy-Customer/app/src/main/res/layout/activity_order_item_list.xml" value="0.16927083333333334" />
         <entry key="..\:/Project/TouchNBuy-Customer/app/src/main/res/layout/activity_order_item_listing1.xml" value="0.16510416666666666" />
+        <entry key="..\:/Project/TouchNBuy-Customer/app/src/main/res/layout/activity_orders_list.xml" value="0.21927083333333333" />
         <entry key="..\:/Project/TouchNBuy-Customer/app/src/main/res/layout/activity_out_shop.xml" value="0.24583333333333332" />
         <entry key="..\:/Project/TouchNBuy-Customer/app/src/main/res/layout/activity_out_shop_main.xml" value="0.24583333333333332" />
         <entry key="..\:/Project/TouchNBuy-Customer/app/src/main/res/layout/activity_outshop.xml" value="0.24583333333333332" />
@@ -48,6 +49,7 @@
         <entry key="..\:/Project/TouchNBuy-Customer/app/src/main/res/layout/navmenuitems.xml" value="0.2760416666666667" />
         <entry key="..\:/Project/TouchNBuy-Customer/app/src/main/res/layout/otp_popup.xml" value="0.2484375" />
         <entry key="..\:/Project/TouchNBuy-Customer/app/src/main/res/layout/rate_us_pop_up.xml" value="0.246875" />
+        <entry key="..\:/Project/TouchNBuy-Customer/app/src/main/res/layout/ratingbarpopup.xml" value="0.21927083333333333" />
       </map>
     </option>
   </component>
