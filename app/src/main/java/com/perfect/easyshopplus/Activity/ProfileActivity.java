@@ -1131,9 +1131,30 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
             AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
             LayoutInflater inflater1 = (LayoutInflater) ProfileActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View layout = inflater1.inflate(R.layout.edit_address_popup, null);
+            final TextView tv_popupchange = (TextView) layout.findViewById(R.id.tv_popupchange);
+            builder.setCancelable(false);
+
             final EditText addres = (EditText) layout.findViewById(R.id.etaddress);
             final EditText landmark = (EditText) layout.findViewById(R.id.etLandmark);
             final EditText area = (EditText) layout.findViewById(R.id.etArea);
+
+            SharedPreferences editadress = getApplicationContext().getSharedPreferences(Config.SHARED_PREF204, 0);
+            SharedPreferences addressSp = getApplicationContext().getSharedPreferences(Config.SHARED_PREF94, 0);
+            SharedPreferences areaSp = getApplicationContext().getSharedPreferences(Config.SHARED_PREF223, 0);
+            SharedPreferences LandmarkSp = getApplicationContext().getSharedPreferences(Config.SHARED_PREF96, 0);
+            SharedPreferences OKsp = getApplicationContext().getSharedPreferences(Config.SHARED_PREF104, 0);
+            SharedPreferences CancelSp = getApplicationContext().getSharedPreferences(Config.SHARED_PREF105, 0);
+            SharedPreferences AreaIdSp = getApplicationContext().getSharedPreferences(Config.SHARED_PREF64, 0);
+
+            tv_popupchange.setText(editadress.getString("editadress",""));
+            addres.setHint(addressSp.getString("address",""));
+            area.setHint(areaSp.getString("area",""));
+            landmark.setHint(LandmarkSp.getString("LandmarkS",""));
+
+            Log.e(TAG,"Landmark   1149   "+LandmarkSp.getString("LandmarkS",""));
+            AreaID = AreaIdSp.getString("AreaId","");
+            Log.e(TAG,"AreaIdSp   11492   "+AreaIdSp.getString("AreaId",""));
+
             landmark.setText(Landmark);
             addres.setText(address);
             area.setText(Area);
@@ -1142,6 +1163,12 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
             pop_getlocation.setVisibility(View.GONE);
             Button ok = (Button) layout.findViewById(R.id.btn_changesave);
             Button cancel = (Button) layout.findViewById(R.id.pop_changecancel);
+            ok.setText(OKsp.getString("OK",""));
+            cancel.setText(CancelSp.getString("Cancel",""));
+
+
+
+        //    ok.setText();
             builder.setView(layout);
             final AlertDialog alertDialog = builder.create();
             builder.setCancelable(false);
@@ -1169,12 +1196,17 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
                 public void onClick(View view) {
                     if(addres.getText().toString().length()!=0){
                         if(area.getText().toString().length()!=0){
-                            if(landmark.getText().toString().length()!=0){
-                                alertDialog.dismiss();
-                                addAddress(addres.getText().toString(), landmark.getText().toString(), AreaID);
+                            if(!AreaID.equals("0")){
+                                if(landmark.getText().toString().length()!=0){
+                                    alertDialog.dismiss();
+                                    addAddress(addres.getText().toString(), landmark.getText().toString(), AreaID);
+                                }
+                                else{
+                                    landmark.setError("Please enter landmark.");
+                                }
                             }
                             else{
-                                landmark.setError("Please enter landmark.");
+                                area.setError("Please select area.");
                             }
                         }
                         else{
@@ -1254,6 +1286,8 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
                     SharedPreferences IDLanguages = getApplicationContext().getSharedPreferences(Config.SHARED_PREF80, 0);
                     requestObject1.put("ID_Languages",IDLanguages.getString("ID_Languages", null));
 
+                    Log.e(TAG,"requestObject1   1279    "+requestObject1);
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -1265,7 +1299,8 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
                         try {
                             progressDialog.dismiss();
                             JSONObject jObject = new JSONObject(response.body());
-                            Log.i("Response",jObject.toString());
+                            Log.e(TAG,"Response  1290   "+response.body());
+
 
                             JSONObject jmember = jObject.getJSONObject("CustomerAddressDetails");
                             JSONObject object = new JSONObject(String.valueOf(jmember));
@@ -1303,6 +1338,10 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
                                     LandmarkeditorId.commit();
 
                                     getSharedPreferences();
+
+
+                                    Toast.makeText(getApplicationContext(),""+object.getString("ResponseMessage"),Toast.LENGTH_SHORT).show();
+
 
                                 }
                             }
